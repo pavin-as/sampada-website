@@ -1,0 +1,17 @@
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://sampadavr.com/sitemap.xml
+
+# Disallow admin areas
+Disallow: /wp-admin/
+Disallow: /wp-includes/
+Disallow: /wp-content/plugins/
+Disallow: /wp-content/themes/
+Disallow: /wp-content/uploads/elementor/
+
+# Allow important directories
+Allow: /wp-content/uploads/
+Allow: /wp-content/uploads/2024/
+Allow: /wp-content/uploads/2021/ 
