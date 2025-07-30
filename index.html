@@ -192,7 +192,29 @@ window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/16
 
 								}
 	         </style>
-	         
+<style id="responsive-slider-styles">
+/* Responsive Slider Image - Mobile First Approach */
+.bdt-ps-slide-img-responsive {
+    background-image: url('/wp-content/uploads/2024/02/2t.webp'); /* Mobile default - 300x169 */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+/* Tablet - 768px and up */
+@media (min-width: 768px) {
+    .bdt-ps-slide-img-responsive {
+        background-image: url('/wp-content/uploads/2024/02/2m.webp'); /* 1024x576 */
+    }
+}
+
+/* Desktop - 1200px and up */
+@media (min-width: 1200px) {
+    .bdt-ps-slide-img-responsive {
+        background-image: url('/wp-content/uploads/2024/02/2f.webp'); /* 1920x1080 */
+    }
+}
+</style>	         
 	         <!-- Schema Markup -->
 	         <script type="application/ld+json">
 	         {
@@ -438,7 +460,7 @@ window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/16
             <li class="bdt-slideshow-item bdt-flex bdt-flex-middle elementor-repeater-item-6a7dccc">
 
 				
-        <div class="bdt-ps-slide-img" style="background-image: url('/wp-content/uploads/2024/02/2.png')"></div>
+        <div class="bdt-ps-slide-img bdt-ps-slide-img-responsive"></div>
 
         
 								
