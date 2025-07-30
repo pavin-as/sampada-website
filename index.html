@@ -215,6 +215,29 @@ window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/16
     }
 }
 </style>	         
+<style id="tidio-position-fix">
+/* Fix Tidio Chat Button Position to align with WhatsApp icon */
+#tidio-chat {
+    top: 160px !important;
+    right: 20px !important;
+    bottom: auto !important;
+    position: fixed !important;
+    z-index: 9999 !important;
+}
+
+/* Ensure Tidio button doesn't overlap with slider navigation */
+#tidio-chat iframe {
+    pointer-events: auto !important;
+}
+
+/* Mobile responsive adjustments */
+@media (max-width: 768px) {
+    #tidio-chat {
+        top: 120px !important;
+        right: 15px !important;
+    }
+}
+</style>
 	         <!-- Schema Markup -->
 	         <script type="application/ld+json">
 	         {
