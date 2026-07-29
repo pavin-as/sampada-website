@@ -7,6 +7,7 @@ const blogSchema = z.object({
   publishDate: z.string().transform((str) => new Date(str)),
   heroImage: z.string().optional(),
   category: z.string().optional(),
+  author: z.string().optional(),
 });
 
 const blog = defineCollection({

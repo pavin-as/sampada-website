@@ -424,9 +424,12 @@ window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/16
 								<h3 style="font-size: 1.25rem; margin: 0 0 10px 0; color: #333; font-weight: 600;">{post.data.title}</h3>
 								<p style="color: #666; font-size: 0.9rem; margin-bottom: 15px; line-height: 1.5;">{post.data.description}</p>
 								<div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem; color: #999;">
-									<time datetime={post.data.publishDate.toISOString()}>
-										{post.data.publishDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
-									</time>
+									<span>
+										{post.data.author && <>{post.data.author} · </>}
+										<time datetime={post.data.publishDate.toISOString()}>
+											{post.data.publishDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+										</time>
+									</span>
 									{post.data.category && (
 										<span style="background: #667eea; color: white; padding: 4px 12px; border-radius: 12px; font-size: 0.75rem; text-transform: capitalize;">{post.data.category}</span>
 									)}

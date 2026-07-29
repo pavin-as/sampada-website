@@ -10,7 +10,7 @@ type Props = CollectionEntry<'blog'>['data'] & {
   altLabel?: string;
 };
 
-const { title, description, publishDate, heroImage, slug, lang = 'en', altHref, altLabel } = Astro.props;
+const { title, description, publishDate, heroImage, slug, lang = 'en', altHref, altLabel, author } = Astro.props;
 const htmlLang = lang === 'ml' ? 'ml' : 'en-US';
 const canonicalPath = lang === 'ml' ? `/ml/blog/${slug}/` : `/blog/${slug}/`;
 ---
@@ -384,9 +384,14 @@ window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/16
 					<article style="line-height: 1.8; font-size: 1.1rem; color: #333;">
 						<h1 style="font-size: 2.5rem; margin-bottom: 20px; color: #222;">{title}</h1>
 						<div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; color: #666; font-size: 0.9rem; margin-bottom: 30px; padding-bottom: 20px; border-bottom: 1px solid #eee;">
-							<time datetime={publishDate.toISOString()}>
-								{publishDate.toLocaleDateString(lang === 'ml' ? 'ml-IN' : 'en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
-							</time>
+							<span>
+								{author && (
+									<>{lang === 'ml' ? 'എഴുതിയത്: ' : 'By '}{author} · </>
+								)}
+								<time datetime={publishDate.toISOString()}>
+									{publishDate.toLocaleDateString(lang === 'ml' ? 'ml-IN' : 'en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+								</time>
+							</span>
 							{altHref && (
 								<a href={altHref} style="display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; border: 1px solid #667eea; border-radius: 20px; color: #667eea; text-decoration: none; font-weight: 600; font-size: 0.85rem;">
 									🌐 {altLabel}
