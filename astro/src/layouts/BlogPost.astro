@@ -1,16 +1,17 @@
 ---
 import type { CollectionEntry } from 'astro:content';
 
-type Props = CollectionEntry<'blog'>['data'];
+type Props = CollectionEntry<'blog'>['data'] & { slug: string };
 
-const { title, description, publishDate, heroImage } = Astro.props;
+const { title, description, publishDate, heroImage, slug } = Astro.props;
 ---
 
 <!DOCTYPE html>
 <html lang="en-US">
 <head>
 	<meta charset="UTF-8">
-		<title>OCT: The Essential Eye Exam Tool You Didn&rsquo;t Know You Needed &ndash; sampadavr</title>
+		<title>{title} &ndash; sampadavr</title>
+<meta name="description" content={description}>
 <meta name="robots" content="max-image-preview:large">
 	<style>img:is([sizes="auto" i], [sizes^="auto," i]) { contain-intrinsic-size: 3000px 1500px }</style>
 	<link rel="alternate" type="application/rss+xml" title="sampadavr &raquo; Feed" href="/feed/">
@@ -81,7 +82,7 @@ window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/16
 <script type="text/javascript" data-cfasync="false" src="/wp-includes/js/jquery/jquery-migrate.min.js?ver=3.4.1" id="jquery-migrate-js"></script>
 <link rel="https://api.w.org/" href="/wp-json/"><link rel="alternate" title="JSON" type="application/json" href="/wp-json/wp/v2/posts/1660"><link rel="EditURI" type="application/rsd+xml" title="RSD" href="/xmlrpc.php?rsd">
 <meta name="generator" content="WordPress 6.8.2">
-<link rel="canonical" href="/oct-the-essential-eye-exam-tool-you-didnt-know-you-needed/">
+<link rel="canonical" href={`/blog/${slug}/`}>
 <link rel="shortlink" href="/?p=1660">
 <link rel="alternate" title="oEmbed (JSON)" type="application/json+oembed" href="/wp-json/oembed/1.0/embed?url=http%3A%2F%2F%2Foct-the-essential-eye-exam-tool-you-didnt-know-you-needed%2F">
 <link rel="alternate" title="oEmbed (XML)" type="text/xml+oembed" href="/wp-json/oembed/1.0/embed?url=http%3A%2F%2F%2Foct-the-essential-eye-exam-tool-you-didnt-know-you-needed%2F&amp;format=xml">

@@ -2,13 +2,13 @@
 
 ## Adding a New Blog Post (5 Steps)
 
-### 1. Copy the Template
+### 1. Create the File
 ```bash
 cd astro/src/content/blog
-cp _template.md my-new-post.md
+touch my-new-post.md
 ```
 
-### 2. Edit the Frontmatter
+### 2. Add the Frontmatter
 ```yaml
 ---
 title: "Your Post Title"

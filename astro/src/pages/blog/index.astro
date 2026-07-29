@@ -6,7 +6,7 @@ const sortedPosts = posts.sort((a, b) => b.data.publishDate.getTime() - a.data.p
 
 // Prepare searchable data for client-side filtering
 const searchableData = sortedPosts.map(post => ({
-	slug: post.slug,
+	slug: post.id,
 	title: post.data.title,
 	description: post.data.description,
 	category: post.data.category || '',
@@ -400,7 +400,7 @@ window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/16
 				<div id="blogGrid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 30px;">
 					{sortedPosts.map((post) => (
 						<a 
-							href={`/blog/${post.slug}/`} 
+							href={`/blog/${post.id}/`}
 							class="blog-post-card"
 							data-title={post.data.title.toLowerCase()}
 							data-description={post.data.description.toLowerCase()}
