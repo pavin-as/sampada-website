@@ -35,6 +35,16 @@ npm run preview
 - `src/layouts/BlogPost.astro` is a large (~630 line) WordPress-export template. The `<head>` still carries a lot of dead WordPress cruft (fake `/wp-json/` oEmbed links, RSD, shortlink with a stale numeric post ID, an RSS "comments feed" link, a WhatsApp chat prefill string) that references the original OCT post by name — none of it is functional on this static site, but it's not yet fully cleaned up. `title`, `description` (meta), `canonical`, `h1`, and hero `<img>` **do** correctly use the post's own data/`slug` prop — trust those; be skeptical of anything else in that file's `<head>` claiming to be post-specific.
 - `_template.md` no longer exists — it used to be a copy-paste starting point but was accidentally being published as a live (broken-looking) post on `/blog/`. `QUICK_START.md` now documents creating the frontmatter directly instead.
 
+## Malayalam Blog (i18n)
+- Most patients are Malayalam speakers, so blog posts can have a Malayalam translation, toggleable from the English version. The rest of the site (nav, footer, non-blog pages) is **not** translated — this is a deliberate, blog-only scope; see the tradeoffs noted in commit history / conversation before expanding it site-wide.
+- Structure mirrors the English blog one level down:
+  - Content: `src/content/blog-ml/*.md` — same schema as `blog`, registered as collection key `'blog-ml'` in `src/content.config.ts`.
+  - Routes: `src/pages/ml/blog/index.astro` (listing) and `src/pages/ml/blog/[...slug].astro` (post), both mirroring their English counterparts under `src/pages/blog/`.
+- **A Malayalam post's filename must exactly match the English post's filename** (i.e. its `.id`/slug) it translates — that's how the language-toggle link is derived on both sides (`/blog/<slug>/` ↔ `/ml/blog/<slug>/`). A translation is optional per post: `getStaticPaths` in `src/pages/blog/[...slug].astro` checks `blog-ml` for a matching id and only renders the toggle link when one exists, so untranslated English posts (and vice versa) render fine with no dead link.
+- `src/layouts/BlogPost.astro` takes optional `lang` (`'en' | 'ml'`), `altHref`, `altLabel` props — this drives `<html lang>`, the canonical URL, an `hreflang` alternate tag, Malayalam web font loading (Noto Sans Malayalam, loaded only when `lang === 'ml'`), and the visible toggle link near the H1.
+- New Malayalam post checklist: translate the English post's frontmatter + body into a new file at `src/content/blog-ml/<same-slug>.md`, then `npm run build` and confirm `dist/ml/blog/<slug>/index.html` exists and the English post's page now shows the "മലയാളത്തിൽ വായിക്കുക" toggle.
+- Translation quality matters here — this is patient-facing medical content. Treat translations as a first draft that should get a native/clinical review pass, not a final artifact.
+
 ## Conventions
 - No component framework — everything is server-rendered `.astro` with the original Elementor-era inline CSS/JS preserved. Don't try to "componentize" this without a deliberate, separately-scoped refactor; the WordPress export is deeply repetitive (header/nav markup is duplicated verbatim across most pages in `src/pages/`) and safe extraction needs care.
 - Images live under `public/wp-content/uploads/<year>/<month>/...webp`, matching the old WordPress upload path structure so existing hardcoded references keep working.

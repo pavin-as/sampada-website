@@ -1,0 +1,30 @@
+---
+import { getCollection, render } from 'astro:content';
+import BlogPost from '../../../layouts/BlogPost.astro';
+
+export async function getStaticPaths() {
+  const [mlPosts, enPosts] = await Promise.all([
+    getCollection('blog-ml'),
+    getCollection('blog'),
+  ]);
+  const enSlugs = new Set(enPosts.map((post) => post.id));
+
+  return mlPosts.map((post) => ({
+    params: { slug: post.id },
+    props: { post, hasEnglish: enSlugs.has(post.id) },
+  }));
+}
+
+const { post, hasEnglish } = Astro.props;
+const { Content } = await render(post);
+---
+
+<BlogPost
+  {...post.data}
+  slug={post.id}
+  lang="ml"
+  altHref={hasEnglish ? `/blog/${post.id}/` : undefined}
+  altLabel={hasEnglish ? 'Read in English' : undefined}
+>
+  <Content />
+</BlogPost>
