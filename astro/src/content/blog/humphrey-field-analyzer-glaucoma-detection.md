@@ -76,8 +76,15 @@ At Sampada VR, we use the HFA as part of a **comprehensive diagnostic approach**
 
 This is especially important for patients with diabetes and hypertension — two conditions that are highly prevalent in Kerala and can silently damage both the retina and the optic nerve.
 
+**Blue-on-Yellow Perimetry — Earlier Detection**
+
+Beyond standard testing, our HFA features advanced **Blue-on-Yellow perimetry** (also known as SWAP — Short-Wavelength Automated Perimetry). While routine white-on-white testing uses white lights on a white background, Blue-on-Yellow uses a blue stimulus on a yellow background. This targets the specific retinal ganglion cells that are most vulnerable to early glaucomatous damage, allowing us to detect changes **even before a standard HFA would pick them up**.
+
+This gives patients and their referring doctors a critical advantage: glaucoma detected at its very earliest stages can be managed far more effectively, often preserving vision for years longer.
+
 Our HFA testing includes:
 - **24-2, 10-2, and 30-2 testing programs** — tailored to your specific condition
+- **Blue-on-Yellow (SWAP) perimetry** — detects glaucoma earlier than standard white-on-white testing
 - **Reliable progression analysis** — tracks changes over multiple visits
 - **Expert interpretation** — by a fellowship-trained retina specialist
 
