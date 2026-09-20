@@ -5,14 +5,14 @@ export const PHONE_TEL = '+919188572412';
 export const INSTAGRAM_HANDLE = '@sampadavr';
 export const INSTAGRAM_URL = 'https://www.instagram.com/sampadavr/';
 
-/** The 8 dedicated treatment pages, in the order they appear in the header dropdown, homepage grid and /treatments/. */
+/** The 8 dedicated treatment pages (retina first, cataract last), in the order they appear in the header dropdown, homepage grid and /treatments/. */
 export const TREATMENT_ORDER = [
-  'cataract-surgery-tirur',
-  'retinal-detachment-surgery',
   'diabetic-retinopathy-treatment',
-  'glaucoma-treatment',
+  'retinal-detachment-surgery',
   'intravitreal-injections',
   'vitrectomy',
   'oct-scan',
+  'glaucoma-treatment',
   'eye-check-up',
+  'cataract-surgery-tirur',
 ] as const;

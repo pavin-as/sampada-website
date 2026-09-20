@@ -14,6 +14,7 @@ Goal: a simpler, more trustworthy site that ranks for "eye hospital Tirur" and i
 | 5 | Homepage | Mission/Vision and homepage FAQ removed. Latest updates now three featured blog articles with real hero images and "Read Article". Instagram grid added under it. Kept: Tirur H1 hero, local intro, Dr. Sameera spotlight, Google reviews. Stock coverflow replaced by a compact 8-card treatment grid. | Done |
 | 6 | Verify | `npm run build`: no warnings. All 28 pages crawled at 1366px and 390px: no 404s for local assets, no horizontal overflow. Dead WordPress head tags (feeds, wp-json, oEmbed, RSD, shortlink) removed from touched pages. | Done |
 | 7 | Local landing page | `/eye-hospital-in-tirur/` added: surgeon-led/retina-first positioning, 8 treatment cards, symptoms and emergency box, NAP + hours + map, Google reviews, 9-question FAQ with FAQPage schema, new lean `Footer.astro`. Linked from the homepage intro H2 and all footer navs. | Done, awaiting review |
+| 8 | Homepage order + retina-first treatments | Homepage sequence: hero, intro, surgeon, Instagram, reviews, latest updates, treatment grid, footer. `TREATMENT_ORDER` reordered: DR, RD, injections, vitrectomy, OCT, glaucoma, check-up, cataract. | Done |
 
 ## Decisions worth knowing
 - Everything new is scoped under `.svr-page` in `src/styles/site.css`, so legacy Elementor CSS cannot override it.
