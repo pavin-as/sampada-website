@@ -24,3 +24,6 @@ pnpm-debug.log*
 .idea/
 node_modules
 dist
+
+# local archive of deprecated pages/images (kept on disk, not in repo/build)
+archive/

@@ -5,6 +5,8 @@ description: "Retinal detachment is an emergency. Symptoms, how it is diagnosed,
 procedureName: "Retinal Detachment Surgery"
 procedureType: "MedicalProcedure"
 summary: "Retinal detachment is one of the few true emergencies in eye care. The retina separates from the wall of the eye, and unless it is reattached, the vision it carries is lost permanently. Treated early, the outlook is far better."
+navLabel: "Retinal Detachment Surgery"
+cardSummary: "A sight-threatening emergency. Prompt surgery gives the best chance of saving vision."
 order: 20
 reviewedOn: "2026-09-20"
 faqs:

@@ -5,6 +5,8 @@ description: "What a full eye examination includes, how long it takes, how often
 procedureName: "Comprehensive Eye Examination"
 procedureType: "MedicalTest"
 summary: "A complete eye examination is not just a vision test for glasses. It checks the health of the eye front to back, and it is how the conditions that cause permanent sight loss get caught while they are still silent."
+navLabel: "Eye Check-Up"
+cardSummary: "A complete dilated exam, front to back, to catch silent eye disease early."
 order: 80
 reviewedOn: "2026-09-20"
 faqs:

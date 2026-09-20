@@ -45,6 +45,18 @@ npm run preview
 - New Malayalam post checklist: translate the English post's frontmatter + body into a new file at `src/content/blog-ml/<same-slug>.md`, then `npm run build` and confirm `dist/ml/blog/<slug>/index.html` exists and the English post's page now shows the "മലയാളത്തിൽ വായിക്കുക" toggle.
 - Translation quality matters here — this is patient-facing medical content. Treat translations as a first draft that should get a native/clinical review pass, not a final artifact.
 
+## Sitewide Header, Shared Styles & Redesigned Pages (Sept 2026 redesign)
+- **Header**: one component, `src/components/Header.astro`, is used by every page and layout (the old per-page Elementor header markup is gone). 5 items: Home, Treatments (dropdown fed by the `treatments` collection in the order of `TREATMENT_ORDER`), About Us, Blog, Contact Us, plus a "Book Appointment / Call: +91 91885 72412" button. Active state comes from `Astro.url.pathname`. Footer "Quick Links" are the same 5 links in a `.svr-footer-nav` list.
+- **Shared constants**: `src/data/site.ts` (phone, Instagram URL, `TREATMENT_ORDER`). Change the phone number or the treatment order there, not per page.
+- **Shared styles**: `src/styles/site.css`, everything scoped under `.svr-page` (so it beats the legacy Elementor CSS). Import it in a page's frontmatter and wrap redesigned sections in `<main class="svr-page">` (or `<div class="svr-page">` on legacy Elementor pages). Palette: navy `#04092A`, accent `#F28738`, "DM Serif Display" headings.
+- **Treatment cards**: `src/components/TreatmentGrid.astro` (used on `/` compact, and on `/treatments/`). Card text comes from each treatment's frontmatter: `navLabel` (short name, also used in the header dropdown) and `cardSummary` (one short clinical sentence).
+- **/about/** now holds the clinic story, Dr. Sameera's credentials, equipment, "Why Sampada VR" and Mission/Vision/Patient Promise. `/why-sampada-vr/` is an Astro `redirects` entry in `astro.config.mjs` (emits a meta-refresh + canonical page pointing at `/about/`).
+- **/treatments/** = 8-card grid + FAQ accordion (`<details>`, with FAQPage JSON-LD built from the same `faqs` array in the page frontmatter). Edit FAQs there.
+- **Homepage "Latest updates"** slides are defined in `src/pages/index.astro` frontmatter (`featured`); the build throws if a slug no longer exists in the blog collection.
+- **Instagram**: `src/data/instagram.json` feeds the homepage "Life at Sampada VR" grid. `scripts/fetch-instagram.mjs` refreshes it (CI step in `deploy.yml`) from `INSTAGRAM_FEED_URL` (JSON feed service) or `INSTAGRAM_ACCESS_TOKEN` (Instagram API), downloads images to `public/instagram/`, and is a silent no-op if neither secret is set. The committed JSON is a **fallback set** (clinic photos linking to the profile), not real posts.
+- **`archive/`** (git-ignored, project root of this folder): deprecated pages and stock images moved out of the build instead of deleted (`archive/pages/`, `archive/images/`, `archive/components/`). Restore by moving a file back to its original path.
+- **Verifying changes locally on a non-macOS box**: `node_modules` here is macOS-native; build from a copy (`rsync` the project, exclude `node_modules`/`dist`, `npm ci`, `npm run build`).
+
 ## Conventions
 - No component framework — everything is server-rendered `.astro` with the original Elementor-era inline CSS/JS preserved. Don't try to "componentize" this without a deliberate, separately-scoped refactor; the WordPress export is deeply repetitive (header/nav markup is duplicated verbatim across most pages in `src/pages/`) and safe extraction needs care.
 - Images live under `public/wp-content/uploads/<year>/<month>/...webp`, matching the old WordPress upload path structure so existing hardcoded references keep working.
@@ -53,4 +65,4 @@ npm run preview
 ## Known Gaps (not yet fixed, worth flagging if touched)
 - `BlogPost.astro` `<head>` still has stale WordPress meta (oEmbed/RSD/shortlink/RSS-comments/WhatsApp-prefill) hardcoded to the original OCT post — cosmetic/SEO issue, not a functional blocker.
 - No Open Graph / Twitter Card meta tags anywhere in the blog layout.
-- Most non-blog pages (`about`, `treatments`, `why-sampada-vr`, etc.) duplicate the full header/nav/footer markup inline rather than sharing a layout — a future refactor candidate, not something to change opportunistically mid-task.
+- The header is now shared (`Header.astro`), but non-blog pages still inline the Elementor footer markup and load the full Elementor CSS/JS bundle. `contact-us`, `blog/index` and `about-dr-sameera-v-v` still use the legacy Elementor page bodies.

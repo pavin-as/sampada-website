@@ -32,6 +32,8 @@ const treatments = defineCollection({
     procedureName: z.string(),    // schema.org name
     procedureType: z.enum(['MedicalProcedure', 'MedicalTest']).default('MedicalProcedure'),
     summary: z.string(),          // lead paragraph under the H1
+    navLabel: z.string().optional(),     // short label for the header dropdown
+    cardSummary: z.string().optional(),  // 2-line summary for cards on / and /treatments/
     order: z.number().default(50),
     heroImage: z.string().optional(),
     reviewedBy: z.string().default('Dr Sameera V V'),

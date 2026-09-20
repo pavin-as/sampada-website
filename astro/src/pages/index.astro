@@ -1,4 +1,37 @@
 ---
+import Header from '../components/Header.astro';
+import TreatmentGrid from '../components/TreatmentGrid.astro';
+import '../styles/site.css';
+import { getCollection } from 'astro:content';
+import instagram from '../data/instagram.json';
+import { INSTAGRAM_URL, INSTAGRAM_HANDLE } from '../data/site';
+
+// "Latest updates": each slide is a featured article. Titles/excerpts are editorial; hero image,
+// category, date and URL come from the blog collection, and the build fails if a post goes missing.
+const blogPosts = await getCollection('blog');
+const featured = [
+  { slug: 'diabetic-retinopathy-retinal-imaging', title: 'Diabetic Retinopathy Screening in Tirur',
+    excerpt: 'Diabetic eye damage is often silent. Quick, painless retinal imaging catches it early, before vision is affected.' },
+  { slug: 'oct-essential-eye-exam-tool', title: 'OCT: The Essential Eye Exam Tool',
+    excerpt: 'A cross-sectional scan of the retina that reveals problems long before symptoms appear.' },
+  { slug: 'humphrey-field-analyzer-glaucoma-detection', title: 'Humphrey Field Analyzer for Glaucoma',
+    excerpt: 'The gold standard in visual field testing, used to detect glaucoma before vision is lost.' },
+].map((f) => {
+  const post = blogPosts.find((p) => p.id === f.slug);
+  if (!post) throw new Error(`Homepage featured blog post not found: ${f.slug}`);
+  const cat = post.data.category ?? 'article';
+  return {
+    ...f,
+    href: `/blog/${post.id}/`,
+    image: post.data.heroImage ?? '/wp-content/uploads/2024/02/sampadavrblogoct.webp',
+    category: cat.charAt(0).toUpperCase() + cat.slice(1),
+    dateLabel: post.data.publishDate.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }),
+  };
+});
+
+// Instagram grid: 6 posts (or 4 if fewer are available) from src/data/instagram.json.
+const igAll = instagram.posts ?? [];
+const igPosts = igAll.slice(0, igAll.length >= 6 ? 6 : igAll.length >= 4 ? 4 : igAll.length);
 import reviewData from '../data/reviews.json';
 const reviews = reviewData.reviews ?? [];
 const initials = (name) =>
@@ -26,8 +59,6 @@ const initials = (name) =>
 		<meta name="twitter:image" content="https://sampadavr.com/wp-content/uploads/2024/02/drsameera.webp">
 <meta name="robots" content="max-image-preview:large">
 	<style>img:is([sizes="auto" i], [sizes^="auto," i]) { contain-intrinsic-size: 3000px 1500px }</style>
-	<link rel="alternate" type="application/rss+xml" title="sampadavr &raquo; Feed" href="/feed/">
-<link rel="alternate" type="application/rss+xml" title="sampadavr &raquo; Comments Feed" href="/comments/feed/">
 <script type="text/javascript">
 /* <![CDATA[ */
 window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/16.0.1\/72x72\/","ext":".png","svgUrl":"https:\/\/s.w.org\/images\/core\/emoji\/16.0.1\/svg\/","svgExt":".svg","source":{"concatemoji":"\/wp-includes\/js\/wp-emoji-release.min.js?ver=6.8.2"}};
@@ -85,12 +116,8 @@ window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/16
 <link rel="stylesheet" id="google-fonts-1-css" href="https://fonts.googleapis.com/css?family=Roboto%3A100%2C100italic%2C200%2C200italic%2C300%2C300italic%2C400%2C400italic%2C500%2C500italic%2C600%2C600italic%2C700%2C700italic%2C800%2C800italic%2C900%2C900italic%7CRoboto+Slab%3A100%2C100italic%2C200%2C200italic%2C300%2C300italic%2C400%2C400italic%2C500%2C500italic%2C600%2C600italic%2C700%2C700italic%2C800%2C800italic%2C900%2C900italic%7COpen+Sans%3A100%2C100italic%2C200%2C200italic%2C300%2C300italic%2C400%2C400italic%2C500%2C500italic%2C600%2C600italic%2C700%2C700italic%2C800%2C800italic%2C900%2C900italic%7CDM+Serif+Display%3A100%2C100italic%2C200%2C200italic%2C300%2C300italic%2C400%2C400italic%2C500%2C500italic%2C600%2C600italic%2C700%2C700italic%2C800%2C800italic%2C900%2C900italic%7CPoppins%3A100%2C100italic%2C200%2C200italic%2C300%2C300italic%2C400%2C400italic%2C500%2C500italic%2C600%2C600italic%2C700%2C700italic%2C800%2C800italic%2C900%2C900italic%7CPlayfair+Display%3A100%2C100italic%2C200%2C200italic%2C300%2C300italic%2C400%2C400italic%2C500%2C500italic%2C600%2C600italic%2C700%2C700italic%2C800%2C800italic%2C900%2C900italic%7CLato%3A100%2C100italic%2C200%2C200italic%2C300%2C300italic%2C400%2C400italic%2C500%2C500italic%2C600%2C600italic%2C700%2C700italic%2C800%2C800italic%2C900%2C900italic&amp;display=swap&amp;ver=6.8.2" type="text/css" media="all">
 <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin><script type="text/javascript" data-cfasync="false" src="/wp-includes/js/jquery/jquery.min.js?ver=3.7.1" id="jquery-core-js"></script>
 <script type="text/javascript" data-cfasync="false" src="/wp-includes/js/jquery/jquery-migrate.min.js?ver=3.4.1" id="jquery-migrate-js"></script>
-<link rel="https://api.w.org/" href="/wp-json/"><link rel="alternate" title="JSON" type="application/json" href="/wp-json/wp/v2/pages/12"><link rel="EditURI" type="application/rsd+xml" title="RSD" href="/xmlrpc.php?rsd">
 <meta name="generator" content="WordPress 6.8.2">
 <link rel="canonical" href="https://sampadavr.com/">
-<link rel="shortlink" href="/">
-<link rel="alternate" title="oEmbed (JSON)" type="application/json+oembed" href="/wp-json/oembed/1.0/embed?url=http%3A%2F%2F%2F">
-<link rel="alternate" title="oEmbed (XML)" type="text/xml+oembed" href="/wp-json/oembed/1.0/embed?url=http%3A%2F%2F%2F&amp;format=xml">
 <!-- start Simple Custom CSS and JS -->
 <script src="//code.tidio.co/edxk0h03o8pzd1iyij5ncishcrdqgney.js" async></script><!-- end Simple Custom CSS and JS -->
 <style id="sticky-social-icons-styles">#sticky-social-icons-container{top: 160px}#sticky-social-icons-container li a{font-size: 16px; width: 35px; height:35px; }#sticky-social-icons-container.with-animation li a:hover{width: 45px; }#sticky-social-icons-container li a.fab-fa-facebook-f{color: #0a0a0a; background: #ffffff; }#sticky-social-icons-container li a.fab-fa-facebook-f:hover{color: #ffffff; background: #0a0a0a; }#sticky-social-icons-container li a.fab-fa-instagram{color: #0a0a0a; background: #ffffff; }#sticky-social-icons-container li a.fab-fa-instagram:hover{color: #ffffff; background: #0a0a0a; }#sticky-social-icons-container li a.fab-fa-youtube{color: #0a0a0a; background: #ffffff; }#sticky-social-icons-container li a.fab-fa-youtube:hover{color: #ffffff; background: #0a0a0a; }@media( max-width: 415px ){#sticky-social-icons-container li a{font-size: 13.6px; width: 29.75px; height:29.75px; }}</style><meta name="generator" content="Elementor 3.19.0; features: e_optimized_assets_loading, e_optimized_css_loading, e_font_icon_svg, additional_custom_breakpoints, block_editor_assets_optimize, e_image_loading_optimization; settings: css_print_method-external, google_font-enabled, font_display-swap">
@@ -420,170 +447,7 @@ window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/16
 	         
 	         <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"></head>
 <body class="home wp-singular page-template page-template-elementor_canvas page page-id-12 wp-custom-logo wp-embed-responsive wp-theme-royal-elementor-kit elementor-default elementor-template-canvas elementor-kit-7 elementor-page elementor-page-12">
-			<div data-elementor-type="wp-post" data-elementor-id="236" class="elementor elementor-236" data-elementor-post-type="wpr_templates">
-						<section class="elementor-section elementor-top-section elementor-element elementor-element-57a04762 header-1 elementor-section-boxed elementor-section-height-default elementor-section-height-default wpr-particle-no wpr-jarallax-no wpr-parallax-no" data-id="57a04762" data-element_type="section" data-settings='{"background_background":"classic","background_motion_fx_motion_fx_scrolling":"yes","background_motion_fx_opacity_effect":"yes","background_motion_fx_opacity_range":{"unit":"%","size":"","sizes":{"start":23,"end":87}},"background_motion_fx_opacity_direction":"out-in","background_motion_fx_opacity_level":{"unit":"px","size":10,"sizes":[]},"background_motion_fx_devices":["desktop","tablet","mobile"]}'>
-						<div class="elementor-container elementor-column-gap-default">
-					<div class="elementor-column elementor-col-33 elementor-top-column elementor-element elementor-element-2d6510d" data-id="2d6510d" data-element_type="column">
-			<div class="elementor-widget-wrap elementor-element-populated">
-						<div class="elementor-element elementor-element-e251e1c elementor-widget-mobile__width-initial elementor-widget__width-initial wpr-logo-position-center elementor-widget elementor-widget-wpr-logo" data-id="e251e1c" data-element_type="widget" data-widget_type="wpr-logo.default">
-				<div class="elementor-widget-container">
-				
-	<div class="wpr-logo elementor-clearfix">
-
-				<picture class="wpr-logo-image">
-						<source media="(max-width: 767px)" srcset="/wp-content/uploads/2021/12/logo-new-sampadavr.png">	
-			
-						<source srcset="/wp-content/uploads/2021/12/logo-new-sampadavr.png 1x, /wp-content/uploads/2021/12/logo-new-sampadavr.png 2x">	
-						
-			<img src="/wp-content/uploads/2021/12/logo-new-sampadavr.png" alt="Sampada VR Speciality Eye Care, eye hospital in Tirur">
-
-							<a class="wpr-logo-url" rel="home" href="/"></a>
-					</source></source></picture>
-		
-		
-					<a class="wpr-logo-url" rel="home" href="/"></a>
-		
-	</div>
-		
-		</div>
-				</div>
-					</div>
-		</div>
-				<div class="elementor-column elementor-col-33 elementor-top-column elementor-element elementor-element-748234c1" data-id="748234c1" data-element_type="column">
-			<div class="elementor-widget-wrap elementor-element-populated">
-						<div class="elementor-element elementor-element-077a1f7 wpr-main-menu-align-right wpr-main-menu-align--tabletcenter wpr-mobile-toggle-v2 wpr-main-menu-align--mobilecenter elementor-widget-mobile__width-initial wpr-pointer-underline wpr-pointer-line-fx wpr-pointer-fx-fade wpr-sub-icon-caret-down wpr-sub-menu-fx-fade wpr-nav-menu-bp-mobile wpr-mobile-menu-full-width wpr-mobile-menu-item-align-center wpr-sub-divider-yes elementor-widget elementor-widget-wpr-nav-menu" data-id="077a1f7" data-element_type="widget" data-settings='{"menu_layout":"horizontal"}' data-widget_type="wpr-nav-menu.default">
-				<div class="elementor-widget-container">
-			<nav class="wpr-nav-menu-container wpr-nav-menu-horizontal" data-trigger="hover"><ul id="menu-1-077a1f7" class="wpr-nav-menu"><li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-home current-menu-item page_item page-item-12 current_page_item menu-item-695"><a href="/" aria-current="page" class="wpr-menu-item wpr-pointer-item wpr-active-menu-item">Home</a></li>
-<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-696"><a href="/about/" class="wpr-menu-item wpr-pointer-item">About<i class="wpr-sub-icon fas" aria-hidden="true"></i></a>
-<ul class="sub-menu wpr-sub-menu">
-	<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-1562"><a href="/about-dr-sameera-v-v/" class="wpr-sub-menu-item">About Dr. Sameera V V</a></li>
-</ul>
-</li>
-<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-698"><a href="/why-sampada-vr/" class="wpr-menu-item wpr-pointer-item">Why Sampada VR</a></li>
-<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-1080"><a href="/treatments/" class="wpr-menu-item wpr-pointer-item">Treatments</a></li>
-<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-699"><a href="/blog/" class="wpr-menu-item wpr-pointer-item">Blog</a></li>
-<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-697"><a href="/contact-us/" class="wpr-menu-item wpr-pointer-item">Contact Us</a></li>
-</ul></nav><nav class="wpr-mobile-nav-menu-container"><div class="wpr-mobile-toggle-wrap"><div class="wpr-mobile-toggle"><span class="wpr-mobile-toggle-line"></span><span class="wpr-mobile-toggle-line"></span><span class="wpr-mobile-toggle-line"></span></div></div><ul id="mobile-menu-2-077a1f7" class="wpr-mobile-nav-menu"><li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-home current-menu-item page_item page-item-12 current_page_item menu-item-695"><a href="/" aria-current="page" class="wpr-mobile-menu-item wpr-active-menu-item">Home</a></li>
-<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-696"><a href="/about/" class="wpr-mobile-menu-item">About</a>
-<ul class="sub-menu wpr-sub-menu">
-	<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-1562"><a href="/about-dr-sameera-v-v/" class="wpr-mobile-sub-menu-item">About Dr. Sameera V V</a></li>
-</ul>
-</li>
-<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-698"><a href="/why-sampada-vr/" class="wpr-mobile-menu-item">Why Sampada VR</a></li>
-<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-1080"><a href="/treatments/" class="wpr-mobile-menu-item">Treatments</a></li>
-<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-699"><a href="/blog/" class="wpr-mobile-menu-item">Blog</a></li>
-<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-697"><a href="/contact-us/" class="wpr-mobile-menu-item">Contact Us</a></li>
-</ul></nav>		</div>
-				</div>
-					</div>
-		</div>
-				<div class="elementor-column elementor-col-33 elementor-top-column elementor-element elementor-element-66fd7f1d" data-id="66fd7f1d" data-element_type="column">
-			<div class="elementor-widget-wrap elementor-element-populated">
-						<div class="elementor-element elementor-element-29d551cd elementor-hidden-mobile wpr-button-icon-style-inline wpr-button-icon-position-right elementor-widget elementor-widget-wpr-button" data-id="29d551cd" data-element_type="widget" data-widget_type="wpr-button.default">
-				<div class="elementor-widget-container">
-				
-			
-		
-		<div class="wpr-button-wrap elementor-clearfix">
-		<a class="wpr-button wpr-button-effect wpr-button-none" data-text="Go" href="/contact-us/">
-			
-			<span class="wpr-button-content">
-									<span class="wpr-button-text">Get Started</span>
-								
-							</span>
-		</a>
-
-				</div>
-	
-	
-			</div>
-				</div>
-					</div>
-		</div>
-					</div>
-		</section>
-				<section class="elementor-section elementor-top-section elementor-element elementor-element-35f2723 header-2 elementor-hidden-mobile elementor-hidden-tablet elementor-hidden-desktop elementor-section-boxed elementor-section-height-default elementor-section-height-default wpr-particle-no wpr-jarallax-no wpr-parallax-no" data-id="35f2723" data-element_type="section" data-settings='{"background_background":"classic","background_motion_fx_motion_fx_scrolling":"yes","background_motion_fx_opacity_effect":"yes","background_motion_fx_opacity_range":{"unit":"%","size":"","sizes":{"start":23,"end":87}},"sticky":"top","sticky_on":["desktop","tablet"],"sticky_effects_offset":200,"sticky_effects_offset_mobile":100,"background_motion_fx_opacity_direction":"out-in","background_motion_fx_opacity_level":{"unit":"px","size":10,"sizes":[]},"background_motion_fx_devices":["desktop","tablet","mobile"],"sticky_offset":0}'>
-						<div class="elementor-container elementor-column-gap-default">
-					<div class="elementor-column elementor-col-33 elementor-top-column elementor-element elementor-element-33ebceb elementor-hidden-tablet" data-id="33ebceb" data-element_type="column">
-			<div class="elementor-widget-wrap elementor-element-populated">
-						<div class="elementor-element elementor-element-8d6f852 elementor-widget__width-initial wpr-logo-position-center elementor-widget elementor-widget-wpr-logo" data-id="8d6f852" data-element_type="widget" data-widget_type="wpr-logo.default">
-				<div class="elementor-widget-container">
-				
-	<div class="wpr-logo elementor-clearfix">
-
-				<picture class="wpr-logo-image">
-						<source media="(max-width: 767px)" srcset="/wp-content/uploads/2021/12/logo-new-sampadavr.png">	
-			
-						<source srcset="/wp-content/uploads/2021/12/logo-new-sampadavr.png 1x, /wp-content/uploads/2021/12/logo-new-sampadavr.png 2x">	
-						
-			<img src="/wp-content/uploads/2021/12/logo-new-sampadavr.png" alt="Sampada VR Speciality Eye Care, eye hospital in Tirur">
-
-							<a class="wpr-logo-url" rel="home" href="/"></a>
-					</source></source></picture>
-		
-		
-					<a class="wpr-logo-url" rel="home" href="/"></a>
-		
-	</div>
-		
-		</div>
-				</div>
-					</div>
-		</div>
-				<div class="elementor-column elementor-col-33 elementor-top-column elementor-element elementor-element-5ed8c31 elementor-hidden-mobile" data-id="5ed8c31" data-element_type="column">
-			<div class="elementor-widget-wrap elementor-element-populated">
-						<div class="elementor-element elementor-element-41274e6b wpr-main-menu-align-right wpr-main-menu-align--tabletcenter wpr-mobile-toggle-v2 wpr-main-menu-align--mobileleft wpr-pointer-underline wpr-pointer-line-fx wpr-pointer-fx-fade wpr-sub-icon-caret-down wpr-sub-menu-fx-fade wpr-nav-menu-bp-mobile wpr-mobile-menu-full-width wpr-mobile-menu-item-align-center wpr-sub-divider-yes elementor-widget elementor-widget-wpr-nav-menu" data-id="41274e6b" data-element_type="widget" data-settings='{"menu_layout":"horizontal"}' data-widget_type="wpr-nav-menu.default">
-				<div class="elementor-widget-container">
-			<nav class="wpr-nav-menu-container wpr-nav-menu-horizontal" data-trigger="hover"><ul id="menu-1-41274e6b" class="wpr-nav-menu"><li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-home current-menu-item page_item page-item-12 current_page_item menu-item-695"><a href="/" aria-current="page" class="wpr-menu-item wpr-pointer-item wpr-active-menu-item">Home</a></li>
-<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-696"><a href="/about/" class="wpr-menu-item wpr-pointer-item">About<i class="wpr-sub-icon fas" aria-hidden="true"></i></a>
-<ul class="sub-menu wpr-sub-menu">
-	<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-1562"><a href="/about-dr-sameera-v-v/" class="wpr-sub-menu-item">About Dr. Sameera V V</a></li>
-</ul>
-</li>
-<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-698"><a href="/why-sampada-vr/" class="wpr-menu-item wpr-pointer-item">Why Sampada VR</a></li>
-<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-1080"><a href="/treatments/" class="wpr-menu-item wpr-pointer-item">Treatments</a></li>
-<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-699"><a href="/blog/" class="wpr-menu-item wpr-pointer-item">Blog</a></li>
-<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-697"><a href="/contact-us/" class="wpr-menu-item wpr-pointer-item">Contact Us</a></li>
-</ul></nav><nav class="wpr-mobile-nav-menu-container"><div class="wpr-mobile-toggle-wrap"><div class="wpr-mobile-toggle"><span class="wpr-mobile-toggle-line"></span><span class="wpr-mobile-toggle-line"></span><span class="wpr-mobile-toggle-line"></span></div></div><ul id="mobile-menu-2-41274e6b" class="wpr-mobile-nav-menu"><li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-home current-menu-item page_item page-item-12 current_page_item menu-item-695"><a href="/" aria-current="page" class="wpr-mobile-menu-item wpr-active-menu-item">Home</a></li>
-<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-696"><a href="/about/" class="wpr-mobile-menu-item">About</a>
-<ul class="sub-menu wpr-sub-menu">
-	<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-1562"><a href="/about-dr-sameera-v-v/" class="wpr-mobile-sub-menu-item">About Dr. Sameera V V</a></li>
-</ul>
-</li>
-<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-698"><a href="/why-sampada-vr/" class="wpr-mobile-menu-item">Why Sampada VR</a></li>
-<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-1080"><a href="/treatments/" class="wpr-mobile-menu-item">Treatments</a></li>
-<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-699"><a href="/blog/" class="wpr-mobile-menu-item">Blog</a></li>
-<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-697"><a href="/contact-us/" class="wpr-mobile-menu-item">Contact Us</a></li>
-</ul></nav>		</div>
-				</div>
-					</div>
-		</div>
-				<div class="elementor-column elementor-col-33 elementor-top-column elementor-element elementor-element-7f2f3a4 elementor-hidden-tablet" data-id="7f2f3a4" data-element_type="column">
-			<div class="elementor-widget-wrap elementor-element-populated">
-						<div class="elementor-element elementor-element-2f0814a wpr-button-icon-style-inline wpr-button-icon-position-right elementor-widget elementor-widget-wpr-button" data-id="2f0814a" data-element_type="widget" data-widget_type="wpr-button.default">
-				<div class="elementor-widget-container">
-				
-			
-		
-		<div class="wpr-button-wrap elementor-clearfix">
-		<a class="wpr-button wpr-button-effect wpr-button-none" data-text="Go" href="/contact-us/">
-			
-			<span class="wpr-button-content">
-									<span class="wpr-button-text">Get Started</span>
-								
-							</span>
-		</a>
-
-				</div>
-	
-	
-			</div>
-				</div>
-					</div>
-		</div>
-					</div>
-		</section>
-				</div>
+			<Header />
 				<div data-elementor-type="wp-page" data-elementor-id="12" class="elementor elementor-12" data-elementor-post-type="page">
 						<section class="elementor-section elementor-top-section elementor-element elementor-element-ecf5633 elementor-section-full_width elementor-section-height-default elementor-section-height-default wpr-particle-no wpr-jarallax-no wpr-parallax-no wpr-sticky-section-no" data-id="ecf5633" data-element_type="section">
 						<div class="elementor-container elementor-column-gap-no">
@@ -770,482 +634,41 @@ window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/16
 @media (max-width:767px){.svr-intro{padding:40px 16px;}.svr-intro h2{font-size:25px;}.svr-intro p{font-size:16px;}}
 </style>
 
-				<section class="elementor-section elementor-top-section elementor-element elementor-element-1430627c elementor-section-boxed elementor-section-height-default elementor-section-height-default wpr-particle-no wpr-jarallax-no wpr-parallax-no wpr-sticky-section-no" data-id="1430627c" data-element_type="section" data-settings='{"background_background":"classic"}'>
-							<div class="elementor-background-overlay"></div>
-							<div class="elementor-container elementor-column-gap-wide">
-					<div class="elementor-column elementor-col-50 elementor-top-column elementor-element elementor-element-44b7fd77" data-id="44b7fd77" data-element_type="column">
-			<div class="elementor-widget-wrap elementor-element-populated">
-						<div class="elementor-element elementor-element-3fa0362a elementor-invisible elementor-widget elementor-widget-image" data-id="3fa0362a" data-element_type="widget" data-settings='{"_animation":"fadeInUp"}' data-widget_type="image.default">
-				<div class="elementor-widget-container">
-			<style>/*! elementor - v3.19.0 - 29-01-2024 */
-.elementor-widget-image{text-align:center}.elementor-widget-image a{display:inline-block}.elementor-widget-image a img[src$=".svg"]{width:48px}.elementor-widget-image img{vertical-align:middle;display:inline-block}</style>										<img fetchpriority="high" decoding="async" width="433" height="577" src="/wp-content/uploads/2024/02/drsameera.webp" class="attachment-large size-large wp-image-1829" alt="" srcset="/wp-content/uploads/2024/02/drsameera.webp 433w, /wp-content/uploads/2024/02/drsameera-225x300.webp 225w" sizes="(max-width: 433px) 100vw, 433px">													</div>
-				</div>
-					</div>
-		</div>
-				<div class="elementor-column elementor-col-50 elementor-top-column elementor-element elementor-element-3318ae02 elementor-invisible" data-id="3318ae02" data-element_type="column" data-settings='{"animation":"fadeInRight"}'>
-			<div class="elementor-widget-wrap elementor-element-populated">
-						<div class="elementor-element elementor-element-6fb1332f elementor-widget elementor-widget-heading" data-id="6fb1332f" data-element_type="widget" data-widget_type="heading.default">
-				<div class="elementor-widget-container">
-			<style>/*! elementor - v3.19.0 - 29-01-2024 */
-.elementor-heading-title{padding:0;margin:0;line-height:1}.elementor-widget-heading .elementor-heading-title[class*=elementor-size-]>a{color:inherit;font-size:inherit;line-height:inherit}.elementor-widget-heading .elementor-heading-title.elementor-size-small{font-size:15px}.elementor-widget-heading .elementor-heading-title.elementor-size-medium{font-size:19px}.elementor-widget-heading .elementor-heading-title.elementor-size-large{font-size:29px}.elementor-widget-heading .elementor-heading-title.elementor-size-xl{font-size:39px}.elementor-widget-heading .elementor-heading-title.elementor-size-xxl{font-size:59px}</style><h2 class="elementor-heading-title elementor-size-default">Mission</h2>		</div>
-				</div>
-				<div class="elementor-element elementor-element-5f0102b elementor-widget elementor-widget-heading" data-id="5f0102b" data-element_type="widget" data-widget_type="heading.default">
-				<div class="elementor-widget-container">
-			<h2 class="elementor-heading-title elementor-size-default">Illuminating Lives through Compassionate Innovation at Sampada VR Specialty Eye Care</h2>		</div>
-				</div>
-				<div class="elementor-element elementor-element-18ed5405 elementor-widget elementor-widget-text-editor" data-id="18ed5405" data-element_type="widget" data-widget_type="text-editor.default">
-				<div class="elementor-widget-container">
-			<style>/*! elementor - v3.19.0 - 29-01-2024 */
-.elementor-widget-text-editor.elementor-drop-cap-view-stacked .elementor-drop-cap{background-color:#69727d;color:#fff}.elementor-widget-text-editor.elementor-drop-cap-view-framed .elementor-drop-cap{color:#69727d;border:3px solid;background-color:transparent}.elementor-widget-text-editor:not(.elementor-drop-cap-view-default) .elementor-drop-cap{margin-top:8px}.elementor-widget-text-editor:not(.elementor-drop-cap-view-default) .elementor-drop-cap-letter{width:1em;height:1em}.elementor-widget-text-editor .elementor-drop-cap{float:left;text-align:center;line-height:1;font-size:50px}.elementor-widget-text-editor .elementor-drop-cap-letter{display:inline-block}</style>				<p>At Sampada VR Specialty Eye Care, we are on a mission to redefine retinal health care by embodying the principles of Compassionate Innovation, Empowered Healing, and a Brighter Horizon. Our dedication is to merge cutting-edge technology with personalized, holistic care, making advanced treatments for retinal diseases accessible and effective. We commit to transforming the experience of eye care, where each patient&rsquo;s journey not only restores their vision but enlightens their spirit. Upholding the highest standards of integrity, compassion, and excellence, we aim to illuminate lives, empowering individuals to see the world with clarity and confidence. This singular focus drives our every action, ensuring that Sampada VR Specialty Eye Care stands as a beacon of hope and progress in the eye health community.</p>						</div>
-				</div>
-				<div class="elementor-element elementor-element-25bf4e2c wpr-button-icon-style-inline wpr-button-icon-position-right elementor-widget elementor-widget-wpr-button" data-id="25bf4e2c" data-element_type="widget" data-widget_type="wpr-button.default">
-				<div class="elementor-widget-container">
-				
-			
-		
-		<div class="wpr-button-wrap elementor-clearfix">
-		<a class="wpr-button wpr-button-effect wpr-button-none" data-text="Go" href="/about-dr-sameera-v-v/">
-			
-			<span class="wpr-button-content">
-									<span class="wpr-button-text">Read More</span>
-								
-							</span>
-		</a>
-
-				</div>
-	
-	
-			</div>
-				</div>
-					</div>
-		</div>
-					</div>
-		</section>
-				<section class="elementor-section elementor-top-section elementor-element elementor-element-1579d53 elementor-section-content-middle elementor-section-boxed elementor-section-height-default elementor-section-height-default wpr-particle-no wpr-jarallax-no wpr-parallax-no wpr-sticky-section-no" data-id="1579d53" data-element_type="section">
-						<div class="elementor-container elementor-column-gap-no">
-					<div class="elementor-column elementor-col-100 elementor-top-column elementor-element elementor-element-c566be7" data-id="c566be7" data-element_type="column">
-			<div class="elementor-widget-wrap elementor-element-populated">
-						<div class="elementor-element elementor-element-fae9065 elementor-invisible elementor-widget elementor-widget-heading" data-id="fae9065" data-element_type="widget" data-settings='{"_animation":"zoomIn"}' data-widget_type="heading.default">
-				<div class="elementor-widget-container">
-			<h4 class="elementor-heading-title elementor-size-default">Our Treatments</h4>		</div>
-				</div>
-				<div class="elementor-element elementor-element-b5b8b03 elementor-invisible elementor-widget elementor-widget-heading" data-id="b5b8b03" data-element_type="widget" data-settings='{"_animation":"zoomIn"}' data-widget_type="heading.default">
-				<div class="elementor-widget-container">
-			<h5 class="elementor-heading-title elementor-size-default">Take a peek inside our Wonderworld</h5>		</div>
-				</div>
-				<div class="elementor-element elementor-element-f3189fa elementor-skin-coverflow elementor-arrows-yes elementor-invisible elementor-widget elementor-widget-media-carousel" data-id="f3189fa" data-element_type="widget" data-settings='{"space_between":{"unit":"px","size":29,"sizes":[]},"slides_per_view":"3","skin":"coverflow","_animation":"fadeInUp","show_arrows":"yes","speed":500,"autoplay":"yes","autoplay_speed":5000,"loop":"yes","pause_on_hover":"yes","pause_on_interaction":"yes","space_between_tablet":{"unit":"px","size":10,"sizes":[]},"space_between_mobile":{"unit":"px","size":10,"sizes":[]}}' data-widget_type="media-carousel.default">
-				<div class="elementor-widget-container">
-			<link rel="stylesheet" href="/wp-content/plugins/elementor-pro/assets/css/widget-carousel.min.css">		<div class="elementor-swiper">
-			<div class="elementor-main-swiper swiper">
-				<div class="swiper-wrapper">
-											<div class="swiper-slide">
-									<div class="elementor-carousel-image" role="img" aria-label="1" style="background-image: url('/wp-content/uploads/2024/02/1-2.png')">
-
-			
-					</div>
-					<div class="elementor-carousel-image-overlay e-overlay-animation-fade">
-				<svg class="e-font-icon-svg e-fas-search-plus" viewbox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><path d="M304 192v32c0 6.6-5.4 12-12 12h-56v56c0 6.6-5.4 12-12 12h-32c-6.6 0-12-5.4-12-12v-56h-56c-6.6 0-12-5.4-12-12v-32c0-6.6 5.4-12 12-12h56v-56c0-6.6 5.4-12 12-12h32c6.6 0 12 5.4 12 12v56h56c6.6 0 12 5.4 12 12zm201 284.7L476.7 505c-9.4 9.4-24.6 9.4-33.9 0L343 405.3c-4.5-4.5-7-10.6-7-17V372c-35.3 27.6-79.7 44-128 44C93.1 416 0 322.9 0 208S93.1 0 208 0s208 93.1 208 208c0 48.3-16.4 92.7-44 128h16.3c6.4 0 12.5 2.5 17 7l99.7 99.7c9.3 9.4 9.3 24.6 0 34zM344 208c0-75.2-60.8-136-136-136S72 132.8 72 208s60.8 136 136 136 136-60.8 136-136z"></path></svg>			</div>
-									</div>
-											<div class="swiper-slide">
-									<div class="elementor-carousel-image" role="img" aria-label="2" style="background-image: url('/wp-content/uploads/2024/02/2-2.png')">
-
-			
-					</div>
-					<div class="elementor-carousel-image-overlay e-overlay-animation-fade">
-				<svg class="e-font-icon-svg e-fas-search-plus" viewbox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><path d="M304 192v32c0 6.6-5.4 12-12 12h-56v56c0 6.6-5.4 12-12 12h-32c-6.6 0-12-5.4-12-12v-56h-56c-6.6 0-12-5.4-12-12v-32c0-6.6 5.4-12 12-12h56v-56c0-6.6 5.4-12 12-12h32c6.6 0 12 5.4 12 12v56h56c6.6 0 12 5.4 12 12zm201 284.7L476.7 505c-9.4 9.4-24.6 9.4-33.9 0L343 405.3c-4.5-4.5-7-10.6-7-17V372c-35.3 27.6-79.7 44-128 44C93.1 416 0 322.9 0 208S93.1 0 208 0s208 93.1 208 208c0 48.3-16.4 92.7-44 128h16.3c6.4 0 12.5 2.5 17 7l99.7 99.7c9.3 9.4 9.3 24.6 0 34zM344 208c0-75.2-60.8-136-136-136S72 132.8 72 208s60.8 136 136 136 136-60.8 136-136z"></path></svg>			</div>
-									</div>
-											<div class="swiper-slide">
-									<div class="elementor-carousel-image" role="img" aria-label="3" style="background-image: url('/wp-content/uploads/2024/02/3-2.png')">
-
-			
-					</div>
-					<div class="elementor-carousel-image-overlay e-overlay-animation-fade">
-				<svg class="e-font-icon-svg e-fas-search-plus" viewbox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><path d="M304 192v32c0 6.6-5.4 12-12 12h-56v56c0 6.6-5.4 12-12 12h-32c-6.6 0-12-5.4-12-12v-56h-56c-6.6 0-12-5.4-12-12v-32c0-6.6 5.4-12 12-12h56v-56c0-6.6 5.4-12 12-12h32c6.6 0 12 5.4 12 12v56h56c6.6 0 12 5.4 12 12zm201 284.7L476.7 505c-9.4 9.4-24.6 9.4-33.9 0L343 405.3c-4.5-4.5-7-10.6-7-17V372c-35.3 27.6-79.7 44-128 44C93.1 416 0 322.9 0 208S93.1 0 208 0s208 93.1 208 208c0 48.3-16.4 92.7-44 128h16.3c6.4 0 12.5 2.5 17 7l99.7 99.7c9.3 9.4 9.3 24.6 0 34zM344 208c0-75.2-60.8-136-136-136S72 132.8 72 208s60.8 136 136 136 136-60.8 136-136z"></path></svg>			</div>
-									</div>
-											<div class="swiper-slide">
-									<div class="elementor-carousel-image" role="img" aria-label="4" style="background-image: url('/wp-content/uploads/2024/02/4-2.png')">
-
-			
-					</div>
-					<div class="elementor-carousel-image-overlay e-overlay-animation-fade">
-				<svg class="e-font-icon-svg e-fas-search-plus" viewbox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><path d="M304 192v32c0 6.6-5.4 12-12 12h-56v56c0 6.6-5.4 12-12 12h-32c-6.6 0-12-5.4-12-12v-56h-56c-6.6 0-12-5.4-12-12v-32c0-6.6 5.4-12 12-12h56v-56c0-6.6 5.4-12 12-12h32c6.6 0 12 5.4 12 12v56h56c6.6 0 12 5.4 12 12zm201 284.7L476.7 505c-9.4 9.4-24.6 9.4-33.9 0L343 405.3c-4.5-4.5-7-10.6-7-17V372c-35.3 27.6-79.7 44-128 44C93.1 416 0 322.9 0 208S93.1 0 208 0s208 93.1 208 208c0 48.3-16.4 92.7-44 128h16.3c6.4 0 12.5 2.5 17 7l99.7 99.7c9.3 9.4 9.3 24.6 0 34zM344 208c0-75.2-60.8-136-136-136S72 132.8 72 208s60.8 136 136 136 136-60.8 136-136z"></path></svg>			</div>
-									</div>
-											<div class="swiper-slide">
-									<div class="elementor-carousel-image" role="img" aria-label="5" style="background-image: url('/wp-content/uploads/2024/02/5-2.png')">
-
-			
-					</div>
-					<div class="elementor-carousel-image-overlay e-overlay-animation-fade">
-				<svg class="e-font-icon-svg e-fas-search-plus" viewbox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><path d="M304 192v32c0 6.6-5.4 12-12 12h-56v56c0 6.6-5.4 12-12 12h-32c-6.6 0-12-5.4-12-12v-56h-56c-6.6 0-12-5.4-12-12v-32c0-6.6 5.4-12 12-12h56v-56c0-6.6 5.4-12 12-12h32c6.6 0 12 5.4 12 12v56h56c6.6 0 12 5.4 12 12zm201 284.7L476.7 505c-9.4 9.4-24.6 9.4-33.9 0L343 405.3c-4.5-4.5-7-10.6-7-17V372c-35.3 27.6-79.7 44-128 44C93.1 416 0 322.9 0 208S93.1 0 208 0s208 93.1 208 208c0 48.3-16.4 92.7-44 128h16.3c6.4 0 12.5 2.5 17 7l99.7 99.7c9.3 9.4 9.3 24.6 0 34zM344 208c0-75.2-60.8-136-136-136S72 132.8 72 208s60.8 136 136 136 136-60.8 136-136z"></path></svg>			</div>
-									</div>
-											<div class="swiper-slide">
-									<div class="elementor-carousel-image" role="img" aria-label="6" style="background-image: url('/wp-content/uploads/2024/02/6.png')">
-
-			
-					</div>
-					<div class="elementor-carousel-image-overlay e-overlay-animation-fade">
-				<svg class="e-font-icon-svg e-fas-search-plus" viewbox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><path d="M304 192v32c0 6.6-5.4 12-12 12h-56v56c0 6.6-5.4 12-12 12h-32c-6.6 0-12-5.4-12-12v-56h-56c-6.6 0-12-5.4-12-12v-32c0-6.6 5.4-12 12-12h56v-56c0-6.6 5.4-12 12-12h32c6.6 0 12 5.4 12 12v56h56c6.6 0 12 5.4 12 12zm201 284.7L476.7 505c-9.4 9.4-24.6 9.4-33.9 0L343 405.3c-4.5-4.5-7-10.6-7-17V372c-35.3 27.6-79.7 44-128 44C93.1 416 0 322.9 0 208S93.1 0 208 0s208 93.1 208 208c0 48.3-16.4 92.7-44 128h16.3c6.4 0 12.5 2.5 17 7l99.7 99.7c9.3 9.4 9.3 24.6 0 34zM344 208c0-75.2-60.8-136-136-136S72 132.8 72 208s60.8 136 136 136 136-60.8 136-136z"></path></svg>			</div>
-									</div>
-									</div>
-																				<div class="elementor-swiper-button elementor-swiper-button-prev" role="button" tabindex="0">
-							<svg aria-hidden="true" class="e-font-icon-svg e-eicon-chevron-left" viewbox="0 0 1000 1000" xmlns="http://www.w3.org/2000/svg"><path d="M646 125C629 125 613 133 604 142L308 442C296 454 292 471 292 487 292 504 296 521 308 533L604 854C617 867 629 875 646 875 663 875 679 871 692 858 704 846 713 829 713 812 713 796 708 779 692 767L438 487 692 225C700 217 708 204 708 187 708 171 704 154 692 142 675 129 663 125 646 125Z"></path></svg>							<span class="elementor-screen-only">Previous</span>
+				<div class="svr-page">
+				<section class="svr-sec" aria-labelledby="home-doc-h">
+					<div class="svr-wrap svr-spot">
+						<div class="svr-spot__img">
+							<img src="/wp-content/uploads/2024/02/drsameera.webp" alt="Dr. Sameera V V, vitreoretinal surgeon at Sampada VR" width="433" height="577" loading="lazy">
 						</div>
-						<div class="elementor-swiper-button elementor-swiper-button-next" role="button" tabindex="0">
-							<svg aria-hidden="true" class="e-font-icon-svg e-eicon-chevron-right" viewbox="0 0 1000 1000" xmlns="http://www.w3.org/2000/svg"><path d="M696 533C708 521 713 504 713 487 713 471 708 454 696 446L400 146C388 133 375 125 354 125 338 125 325 129 313 142 300 154 292 171 292 187 292 204 296 221 308 233L563 492 304 771C292 783 288 800 288 817 288 833 296 850 308 863 321 871 338 875 354 875 371 875 388 867 400 854L696 533Z"></path></svg>							<span class="elementor-screen-only">Next</span>
+						<div>
+							<span class="svr-eyebrow">Meet Your Retina Surgeon</span>
+							<h2 class="svr-h2" id="home-doc-h">Dr. Sameera V V</h2>
+							<p class="svr-lead" style="margin-bottom:18px">Medical Director and vitreoretinal surgeon with 14 years of experience, leading every retinal case at Sampada VR.</p>
+							<ul class="svr-cred">
+								<li><strong>Trained at:</strong> Calicut Medical College (Ophthalmology), MM Joshi Eye Institute and AFEH, Palakkad (vitreoretinal and anterior segment fellowships), Aravind Eye Hospital, Madurai (retinal lasers).</li>
+								<li><strong>Experience:</strong> Consultant Phaco and Retina Surgeon in Hubli and Hyderabad; head of the Vitreo Retinal Department across three Rayhan Eye Hospital branches.</li>
+								<li><strong>Memberships:</strong> Vitreo Retinal Society of India, Indian Medical Association, Asia Pacific Academy of Ophthalmology.</li>
+							</ul>
+							<p style="margin:26px 0 0;display:flex;flex-wrap:wrap;gap:12px">
+								<a class="svr-btn svr-btn--primary" href="/about-dr-sameera-v-v/">Read her profile</a>
+								<a class="svr-btn svr-btn--outline" href="/about/">Our story, mission and vision</a>
+							</p>
 						</div>
-												</div>
-		</div>
-				</div>
-				</div>
 					</div>
-		</div>
+				</section>
+				</div>
+				<div class="svr-page">
+				<section class="svr-sec svr-sec--mist" id="treatments" aria-labelledby="home-treat-h">
+					<div class="svr-wrap">
+						<div class="svr-sechead svr-sechead--center">
+							<span class="svr-eyebrow">Our Treatments</span>
+							<h2 class="svr-h2" id="home-treat-h">Retina and eye care, from screening to surgery</h2>
+							<p class="svr-lead">Eight procedures and tests, each explained in detail and medically reviewed by Dr Sameera V V.</p>
+						</div>
+						<TreatmentGrid compact />
+						<p style="text-align:center;margin:36px 0 0"><a class="svr-btn svr-btn--outline" href="/treatments/">See all treatments</a></p>
 					</div>
-		</section>
-				<section class="elementor-section elementor-top-section elementor-element elementor-element-3291434e elementor-section-boxed elementor-section-height-default elementor-section-height-default wpr-particle-no wpr-jarallax-no wpr-parallax-no wpr-sticky-section-no" data-id="3291434e" data-element_type="section" data-settings='{"background_background":"classic"}'>
-							<div class="elementor-background-overlay"></div>
-							<div class="elementor-container elementor-column-gap-wide">
-					<div class="elementor-column elementor-col-100 elementor-top-column elementor-element elementor-element-71432ca1" data-id="71432ca1" data-element_type="column">
-			<div class="elementor-widget-wrap elementor-element-populated">
-						<div class="elementor-element elementor-element-2794216a elementor-invisible elementor-widget elementor-widget-heading" data-id="2794216a" data-element_type="widget" data-settings='{"_animation":"fadeInDown"}' data-widget_type="heading.default">
-				<div class="elementor-widget-container">
-			<h2 class="elementor-heading-title elementor-size-default">Vision</h2>		</div>
-				</div>
-				<div class="elementor-element elementor-element-703b6477 elementor-invisible elementor-widget elementor-widget-heading" data-id="703b6477" data-element_type="widget" data-settings='{"_animation":"fadeInDown"}' data-widget_type="heading.default">
-				<div class="elementor-widget-container">
-			<h2 class="elementor-heading-title elementor-size-default">Envisioning a Healthier<br> Future</h2>		</div>
-				</div>
-				<section class="elementor-section elementor-inner-section elementor-element elementor-element-277f0043 elementor-section-boxed elementor-section-height-default elementor-section-height-default wpr-particle-no wpr-jarallax-no wpr-parallax-no wpr-sticky-section-no elementor-invisible" data-id="277f0043" data-element_type="section" data-settings='{"animation":"fadeInUp"}'>
-						<div class="elementor-container elementor-column-gap-default">
-					<div class="elementor-column elementor-col-33 elementor-inner-column elementor-element elementor-element-4161c597" data-id="4161c597" data-element_type="column">
-			<div class="elementor-widget-wrap elementor-element-populated">
-						<div class="elementor-element elementor-element-3c9ada2 wpr-flip-box-animation-flip wpr-flip-box-animation-3d-yes wpr-flip-box-anim-direction-right wpr-flip-box-front-align-center wpr-flip-box-back-align-center elementor-widget elementor-widget-wpr-flip-box" data-id="3c9ada2" data-element_type="widget" data-widget_type="wpr-flip-box.default">
-				<div class="elementor-widget-container">
-						
-		<div class="wpr-flip-box" data-trigger="hover">
-			
-			<div class="wpr-flip-box-item wpr-flip-box-front wpr-anim-timing-ease-default">
-
-				<div class="wpr-flip-box-overlay"></div>
-
-				<div class="wpr-flip-box-content">
-					
-										<div class="wpr-flip-box-icon">
-						<i class="fas fa-angle-double-up"></i>
-					</div>
-										
-											<h3 class="wpr-flip-box-title">Compassionate Innovation</h3>
-					
-											<div class="wpr-flip-box-description"><p>Revolutionizing Retinal Health with Compassion and Innovation at Sampada VR Specialty Eye Care.</p></div>						
-						
-
-						
-
-				</div>
-			</div>
-
-			<div class="wpr-flip-box-item wpr-flip-box-back wpr-anim-timing-ease-default">
-
-				<div class="wpr-flip-box-overlay"></div>
-				
-				<div class="wpr-flip-box-content">
-					
-					
-										
-											<h3 class="wpr-flip-box-title">
-							In the journey toward pioneering advancements in retinal health, Sampada VR Specialty Eye Care envisions becoming the quintessential haven for those navigating the challenges of retinal diseases. Our vision transcends traditional boundaries to offer a sanctuary where the fusion of compassionate care and groundbreaking innovation illuminates the path to healing and well-being. We dream of a future where every individual facing the specter of retinal conditions finds hope, solutions, and relief within the welcoming embrace of our clinic.						</h3>
-					
-						
-
-						
-
-				</div>
-			</div>
-		</div>
-
-				</div>
-				</div>
-					</div>
-		</div>
-				<div class="elementor-column elementor-col-33 elementor-inner-column elementor-element elementor-element-3d54978f" data-id="3d54978f" data-element_type="column">
-			<div class="elementor-widget-wrap elementor-element-populated">
-						<div class="elementor-element elementor-element-17063f9c wpr-flip-box-animation-flip wpr-flip-box-animation-3d-yes wpr-flip-box-anim-direction-right wpr-flip-box-front-align-center wpr-flip-box-back-align-center elementor-widget elementor-widget-wpr-flip-box" data-id="17063f9c" data-element_type="widget" data-widget_type="wpr-flip-box.default">
-				<div class="elementor-widget-container">
-						
-		<div class="wpr-flip-box" data-trigger="hover">
-			
-			<div class="wpr-flip-box-item wpr-flip-box-front wpr-anim-timing-ease-default">
-
-				<div class="wpr-flip-box-overlay"></div>
-
-				<div class="wpr-flip-box-content">
-					
-										<div class="wpr-flip-box-icon">
-						<i class="fas fa-shield-alt"></i>
-					</div>
-										
-											<h3 class="wpr-flip-box-title">Empowered Healing</h3>
-					
-											<div class="wpr-flip-box-description"><p>Redefining Retinal Care with Expertise and Personalized Touch at Sampada VR Specialty Eye Care.</p></div>						
-						
-
-						
-
-				</div>
-			</div>
-
-			<div class="wpr-flip-box-item wpr-flip-box-back wpr-anim-timing-ease-default">
-
-				<div class="wpr-flip-box-overlay"></div>
-				
-				<div class="wpr-flip-box-content">
-					
-					
-										
-											<h3 class="wpr-flip-box-title">
-							Our goal is to craft a realm where the complexities of retinal diseases are met with unparalleled expertise and a comprehensive spectrum of care that mirrors the facilities of a multispecialty eye hospital, yet with the intimacy and personalized touch of a clinic. We see ourselves as the architects of a future where the confluence of visionary technologies and holistic health strategies empowers individuals to navigate their health journey with confidence and dignity.						</h3>
-					
-						
-
-						
-
-				</div>
-			</div>
-		</div>
-
-				</div>
-				</div>
-					</div>
-		</div>
-				<div class="elementor-column elementor-col-33 elementor-inner-column elementor-element elementor-element-55513e07" data-id="55513e07" data-element_type="column">
-			<div class="elementor-widget-wrap elementor-element-populated">
-						<div class="elementor-element elementor-element-3509599d wpr-flip-box-animation-flip wpr-flip-box-animation-3d-yes wpr-flip-box-anim-direction-right wpr-flip-box-front-align-center wpr-flip-box-back-align-center elementor-widget elementor-widget-wpr-flip-box" data-id="3509599d" data-element_type="widget" data-widget_type="wpr-flip-box.default">
-				<div class="elementor-widget-container">
-						
-		<div class="wpr-flip-box" data-trigger="hover">
-			
-			<div class="wpr-flip-box-item wpr-flip-box-front wpr-anim-timing-ease-default">
-
-				<div class="wpr-flip-box-overlay"></div>
-
-				<div class="wpr-flip-box-content">
-					
-										<div class="wpr-flip-box-icon">
-						<i class="far fa-eye"></i>
-					</div>
-										
-											<h3 class="wpr-flip-box-title">Brighter Horizon</h3>
-					
-											<div class="wpr-flip-box-description"><p>Illuminating Futures with Innovative, Empathetic Retinal Care at Sampada VR Specialty Eye Care.</p></div>						
-						
-
-						
-
-				</div>
-			</div>
-
-			<div class="wpr-flip-box-item wpr-flip-box-back wpr-anim-timing-ease-default">
-
-				<div class="wpr-flip-box-overlay"></div>
-				
-				<div class="wpr-flip-box-content">
-					
-					
-										
-											<h3 class="wpr-flip-box-title">
-							At the heart of our vision lies the commitment to transforming the landscape of retinal care through innovation, empathy, and excellence. Sampada VR Specialty Eye Care aspires to be a beacon of progress, offering a beacon of light to those in search of clarity, understanding, and a new dawn for their eye health. It is our highest aspiration to ensure that no one with retinal diseases feels alone in their journey, making every breakthrough in care a step towards a brighter, more hopeful horizon.						</h3>
-					
-						
-
-						
-
-				</div>
-			</div>
-		</div>
-
-				</div>
-				</div>
-					</div>
-		</div>
-					</div>
-		</section>
-					</div>
-		</div>
-					</div>
-		</section>
-				<section class="elementor-section elementor-top-section elementor-element elementor-element-5388c36e elementor-section-boxed elementor-section-height-default elementor-section-height-default wpr-particle-no wpr-jarallax-no wpr-parallax-no wpr-sticky-section-no" data-id="5388c36e" data-element_type="section">
-						<div class="elementor-container elementor-column-gap-default">
-					<div class="elementor-column elementor-col-100 elementor-top-column elementor-element elementor-element-65ea0d9e" data-id="65ea0d9e" data-element_type="column">
-			<div class="elementor-widget-wrap elementor-element-populated">
-						<div class="elementor-element elementor-element-150cf8a0 elementor-widget-divider--view-line elementor-widget elementor-widget-divider" data-id="150cf8a0" data-element_type="widget" data-widget_type="divider.default">
-				<div class="elementor-widget-container">
-			<style>/*! elementor - v3.19.0 - 29-01-2024 */
-.elementor-widget-divider{--divider-border-style:none;--divider-border-width:1px;--divider-color:#0c0d0e;--divider-icon-size:20px;--divider-element-spacing:10px;--divider-pattern-height:24px;--divider-pattern-size:20px;--divider-pattern-url:none;--divider-pattern-repeat:repeat-x}.elementor-widget-divider .elementor-divider{display:flex}.elementor-widget-divider .elementor-divider__text{font-size:15px;line-height:1;max-width:95%}.elementor-widget-divider .elementor-divider__element{margin:0 var(--divider-element-spacing);flex-shrink:0}.elementor-widget-divider .elementor-icon{font-size:var(--divider-icon-size)}.elementor-widget-divider .elementor-divider-separator{display:flex;margin:0;direction:ltr}.elementor-widget-divider--view-line_icon .elementor-divider-separator,.elementor-widget-divider--view-line_text .elementor-divider-separator{align-items:center}.elementor-widget-divider--view-line_icon .elementor-divider-separator:after,.elementor-widget-divider--view-line_icon .elementor-divider-separator:before,.elementor-widget-divider--view-line_text .elementor-divider-separator:after,.elementor-widget-divider--view-line_text .elementor-divider-separator:before{display:block;content:"";border-block-end:0;flex-grow:1;border-block-start:var(--divider-border-width) var(--divider-border-style) var(--divider-color)}.elementor-widget-divider--element-align-left .elementor-divider .elementor-divider-separator>.elementor-divider__svg:first-of-type{flex-grow:0;flex-shrink:100}.elementor-widget-divider--element-align-left .elementor-divider-separator:before{content:none}.elementor-widget-divider--element-align-left .elementor-divider__element{margin-left:0}.elementor-widget-divider--element-align-right .elementor-divider .elementor-divider-separator>.elementor-divider__svg:last-of-type{flex-grow:0;flex-shrink:100}.elementor-widget-divider--element-align-right .elementor-divider-separator:after{content:none}.elementor-widget-divider--element-align-right .elementor-divider__element{margin-right:0}.elementor-widget-divider--element-align-start .elementor-divider .elementor-divider-separator>.elementor-divider__svg:first-of-type{flex-grow:0;flex-shrink:100}.elementor-widget-divider--element-align-start .elementor-divider-separator:before{content:none}.elementor-widget-divider--element-align-start .elementor-divider__element{margin-inline-start:0}.elementor-widget-divider--element-align-end .elementor-divider .elementor-divider-separator>.elementor-divider__svg:last-of-type{flex-grow:0;flex-shrink:100}.elementor-widget-divider--element-align-end .elementor-divider-separator:after{content:none}.elementor-widget-divider--element-align-end .elementor-divider__element{margin-inline-end:0}.elementor-widget-divider:not(.elementor-widget-divider--view-line_text):not(.elementor-widget-divider--view-line_icon) .elementor-divider-separator{border-block-start:var(--divider-border-width) var(--divider-border-style) var(--divider-color)}.elementor-widget-divider--separator-type-pattern{--divider-border-style:none}.elementor-widget-divider--separator-type-pattern.elementor-widget-divider--view-line .elementor-divider-separator,.elementor-widget-divider--separator-type-pattern:not(.elementor-widget-divider--view-line) .elementor-divider-separator:after,.elementor-widget-divider--separator-type-pattern:not(.elementor-widget-divider--view-line) .elementor-divider-separator:before,.elementor-widget-divider--separator-type-pattern:not([class*=elementor-widget-divider--view]) .elementor-divider-separator{width:100%;min-height:var(--divider-pattern-height);-webkit-mask-size:var(--divider-pattern-size) 100%;mask-size:var(--divider-pattern-size) 100%;-webkit-mask-repeat:var(--divider-pattern-repeat);mask-repeat:var(--divider-pattern-repeat);background-color:var(--divider-color);-webkit-mask-image:var(--divider-pattern-url);mask-image:var(--divider-pattern-url)}.elementor-widget-divider--no-spacing{--divider-pattern-size:auto}.elementor-widget-divider--bg-round{--divider-pattern-repeat:round}.rtl .elementor-widget-divider .elementor-divider__text{direction:rtl}.e-con-inner>.elementor-widget-divider,.e-con>.elementor-widget-divider{width:var(--container-widget-width,100%);--flex-grow:var(--container-widget-flex-grow)}</style>		<div class="elementor-divider">
-			<span class="elementor-divider-separator">
-						</span>
-		</div>
-				</div>
-				</div>
-					</div>
-		</div>
-					</div>
-		</section>
-		<div class="elementor-element elementor-element-df51b17 e-flex e-con-boxed wpr-particle-no wpr-jarallax-no wpr-parallax-no wpr-sticky-section-no e-con e-parent" data-id="df51b17" data-element_type="container" data-settings='{"content_width":"boxed"}' data-core-v316-plus="true">
-					<div class="e-con-inner">
-				<div class="elementor-element elementor-element-4f3ce258 elementor-invisible elementor-widget elementor-widget-heading" data-id="4f3ce258" data-element_type="widget" data-settings='{"_animation":"fadeInDown"}' data-widget_type="heading.default">
-				<div class="elementor-widget-container">
-			<p class="elementor-heading-title elementor-size-default">Your questions answered</p>		</div>
-				</div>
-				<div class="elementor-element elementor-element-c49fc99 elementor-invisible elementor-widget elementor-widget-heading" data-id="c49fc99" data-element_type="widget" data-settings='{"_animation":"fadeInDown"}' data-widget_type="heading.default">
-				<div class="elementor-widget-container">
-			<h2 class="elementor-heading-title elementor-size-default">Common questions</h2>		</div>
-				</div>
-					</div>
-				</div>
-		<div class="elementor-element elementor-element-25eedd0 e-flex e-con-boxed wpr-particle-no wpr-jarallax-no wpr-parallax-no wpr-sticky-section-no e-con e-parent" data-id="25eedd0" data-element_type="container" data-settings='{"content_width":"boxed"}' data-core-v316-plus="true">
-					<div class="e-con-inner">
-		<div class="elementor-element elementor-element-2d41e19 e-flex e-con-boxed wpr-particle-no wpr-jarallax-no wpr-parallax-no wpr-sticky-section-no e-con e-child" data-id="2d41e19" data-element_type="container" data-settings='{"content_width":"boxed"}'>
-					<div class="e-con-inner">
-				<div class="elementor-element elementor-element-339e8e2 elementor-widget elementor-widget-toggle" data-id="339e8e2" data-element_type="widget" data-widget_type="toggle.default">
-				<div class="elementor-widget-container">
-			<style>/*! elementor - v3.19.0 - 29-01-2024 */
-.elementor-toggle{text-align:left}.elementor-toggle .elementor-tab-title{font-weight:700;line-height:1;margin:0;padding:15px;border-bottom:1px solid #d5d8dc;cursor:pointer;outline:none}.elementor-toggle .elementor-tab-title .elementor-toggle-icon{display:inline-block;width:1em}.elementor-toggle .elementor-tab-title .elementor-toggle-icon svg{margin-inline-start:-5px;width:1em;height:1em}.elementor-toggle .elementor-tab-title .elementor-toggle-icon.elementor-toggle-icon-right{float:right;text-align:right}.elementor-toggle .elementor-tab-title .elementor-toggle-icon.elementor-toggle-icon-left{float:left;text-align:left}.elementor-toggle .elementor-tab-title .elementor-toggle-icon .elementor-toggle-icon-closed{display:block}.elementor-toggle .elementor-tab-title .elementor-toggle-icon .elementor-toggle-icon-opened{display:none}.elementor-toggle .elementor-tab-title.elementor-active{border-bottom:none}.elementor-toggle .elementor-tab-title.elementor-active .elementor-toggle-icon-closed{display:none}.elementor-toggle .elementor-tab-title.elementor-active .elementor-toggle-icon-opened{display:block}.elementor-toggle .elementor-tab-content{padding:15px;border-bottom:1px solid #d5d8dc;display:none}@media (max-width:767px){.elementor-toggle .elementor-tab-title{padding:12px}.elementor-toggle .elementor-tab-content{padding:12px 10px}}.e-con-inner>.elementor-widget-toggle,.e-con>.elementor-widget-toggle{width:var(--container-widget-width);--flex-grow:var(--container-widget-flex-grow)}</style>		<div class="elementor-toggle">
-							<div class="elementor-toggle-item">
-					<h4 id="elementor-tab-title-5411" class="elementor-tab-title" data-tab="1" role="button" aria-controls="elementor-tab-content-5411" aria-expanded="false">
-												<span class="elementor-toggle-icon elementor-toggle-icon-right" aria-hidden="true">
-															<span class="elementor-toggle-icon-closed"><svg class="e-font-icon-svg e-fas-angle-down" viewbox="0 0 320 512" xmlns="http://www.w3.org/2000/svg"><path d="M143 352.3L7 216.3c-9.4-9.4-9.4-24.6 0-33.9l22.6-22.6c9.4-9.4 24.6-9.4 33.9 0l96.4 96.4 96.4-96.4c9.4-9.4 24.6-9.4 33.9 0l22.6 22.6c9.4 9.4 9.4 24.6 0 33.9l-136 136c-9.2 9.4-24.4 9.4-33.8 0z"></path></svg></span>
-								<span class="elementor-toggle-icon-opened"><svg class="elementor-toggle-icon-opened e-font-icon-svg e-fas-angle-up" viewbox="0 0 320 512" xmlns="http://www.w3.org/2000/svg"><path d="M177 159.7l136 136c9.4 9.4 9.4 24.6 0 33.9l-22.6 22.6c-9.4 9.4-24.6 9.4-33.9 0L160 255.9l-96.4 96.4c-9.4 9.4-24.6 9.4-33.9 0L7 329.7c-9.4-9.4-9.4-24.6 0-33.9l136-136c9.4-9.5 24.6-9.5 34-.1z"></path></svg></span>
-													</span>
-												<a class="elementor-toggle-title" tabindex="0">What are Vitreoretinal diseases?</a>
-					</h4>
-
-					<div id="elementor-tab-content-5411" class="elementor-tab-content elementor-clearfix" data-tab="1" role="region" aria-labelledby="elementor-tab-title-5411"><p>Vitreoretinal diseases are conditions that affect the vitreous and retina of the eye, which can lead to vision impairment or loss. Common examples include diabetic retinopathy, retinal detachment, and macular degeneration.</p></div>
-				</div>
-							<div class="elementor-toggle-item">
-					<h4 id="elementor-tab-title-5412" class="elementor-tab-title" data-tab="2" role="button" aria-controls="elementor-tab-content-5412" aria-expanded="false">
-												<span class="elementor-toggle-icon elementor-toggle-icon-right" aria-hidden="true">
-															<span class="elementor-toggle-icon-closed"><svg class="e-font-icon-svg e-fas-angle-down" viewbox="0 0 320 512" xmlns="http://www.w3.org/2000/svg"><path d="M143 352.3L7 216.3c-9.4-9.4-9.4-24.6 0-33.9l22.6-22.6c9.4-9.4 24.6-9.4 33.9 0l96.4 96.4 96.4-96.4c9.4-9.4 24.6-9.4 33.9 0l22.6 22.6c9.4 9.4 9.4 24.6 0 33.9l-136 136c-9.2 9.4-24.4 9.4-33.8 0z"></path></svg></span>
-								<span class="elementor-toggle-icon-opened"><svg class="elementor-toggle-icon-opened e-font-icon-svg e-fas-angle-up" viewbox="0 0 320 512" xmlns="http://www.w3.org/2000/svg"><path d="M177 159.7l136 136c9.4 9.4 9.4 24.6 0 33.9l-22.6 22.6c-9.4 9.4-24.6 9.4-33.9 0L160 255.9l-96.4 96.4c-9.4 9.4-24.6 9.4-33.9 0L7 329.7c-9.4-9.4-9.4-24.6 0-33.9l136-136c9.4-9.5 24.6-9.5 34-.1z"></path></svg></span>
-													</span>
-												<a class="elementor-toggle-title" tabindex="0">How do I know if I need to see a Vitreoretinal specialist?</a>
-					</h4>
-
-					<div id="elementor-tab-content-5412" class="elementor-tab-content elementor-clearfix" data-tab="2" role="region" aria-labelledby="elementor-tab-title-5412"><p>If you experience symptoms such as sudden vision loss, floaters, flashes of light, or a shadow appearing in your field of vision, it&rsquo;s crucial to consult a vitreoretinal specialist immediately.</p></div>
-				</div>
-							<div class="elementor-toggle-item">
-					<h4 id="elementor-tab-title-5413" class="elementor-tab-title" data-tab="3" role="button" aria-controls="elementor-tab-content-5413" aria-expanded="false">
-												<span class="elementor-toggle-icon elementor-toggle-icon-right" aria-hidden="true">
-															<span class="elementor-toggle-icon-closed"><svg class="e-font-icon-svg e-fas-angle-down" viewbox="0 0 320 512" xmlns="http://www.w3.org/2000/svg"><path d="M143 352.3L7 216.3c-9.4-9.4-9.4-24.6 0-33.9l22.6-22.6c9.4-9.4 24.6-9.4 33.9 0l96.4 96.4 96.4-96.4c9.4-9.4 24.6-9.4 33.9 0l22.6 22.6c9.4 9.4 9.4 24.6 0 33.9l-136 136c-9.2 9.4-24.4 9.4-33.8 0z"></path></svg></span>
-								<span class="elementor-toggle-icon-opened"><svg class="elementor-toggle-icon-opened e-font-icon-svg e-fas-angle-up" viewbox="0 0 320 512" xmlns="http://www.w3.org/2000/svg"><path d="M177 159.7l136 136c9.4 9.4 9.4 24.6 0 33.9l-22.6 22.6c-9.4 9.4-24.6 9.4-33.9 0L160 255.9l-96.4 96.4c-9.4 9.4-24.6 9.4-33.9 0L7 329.7c-9.4-9.4-9.4-24.6 0-33.9l136-136c9.4-9.5 24.6-9.5 34-.1z"></path></svg></span>
-													</span>
-												<a class="elementor-toggle-title" tabindex="0">What technologies are used in diagnosing and treating retinal diseases at Sampada VR?</a>
-					</h4>
-
-					<div id="elementor-tab-content-5413" class="elementor-tab-content elementor-clearfix" data-tab="3" role="region" aria-labelledby="elementor-tab-title-5413"><p>At Sampada VR, we are committed to utilizing the forefront of medical technology to diagnose and treat vitreoretinal diseases. , Apart from&nbsp; surgical techniques for retinal repair, our arsenal of advanced equipment includes, but is not limited to:</p><ul><li>Laser Treatment: We employ precision laser therapy for a variety of retinal conditions, offering minimally invasive solutions with optimal outcomes.</li><li>Humphrey Field Analyzer: A critical tool in our diagnostic suite, the Humphrey Field Analyzer allows us to assess the visual field, crucial for diagnosing and managing glaucoma alongside retinal diseases.</li><li>OCT: This state-of-the-art imaging system is integral to our practice, capable of performing a wide range of imaging required for comprehensive assessment of retinal diseases, glaucoma, and corneal conditions. Its multifunctional capabilities allow for detailed visualization and measurement, aiding in accurate diagnosis and tailored treatment plans.</li></ul></div>
-				</div>
-							<div class="elementor-toggle-item">
-					<h4 id="elementor-tab-title-5414" class="elementor-tab-title" data-tab="4" role="button" aria-controls="elementor-tab-content-5414" aria-expanded="false">
-												<span class="elementor-toggle-icon elementor-toggle-icon-right" aria-hidden="true">
-															<span class="elementor-toggle-icon-closed"><svg class="e-font-icon-svg e-fas-angle-down" viewbox="0 0 320 512" xmlns="http://www.w3.org/2000/svg"><path d="M143 352.3L7 216.3c-9.4-9.4-9.4-24.6 0-33.9l22.6-22.6c9.4-9.4 24.6-9.4 33.9 0l96.4 96.4 96.4-96.4c9.4-9.4 24.6-9.4 33.9 0l22.6 22.6c9.4 9.4 9.4 24.6 0 33.9l-136 136c-9.2 9.4-24.4 9.4-33.8 0z"></path></svg></span>
-								<span class="elementor-toggle-icon-opened"><svg class="elementor-toggle-icon-opened e-font-icon-svg e-fas-angle-up" viewbox="0 0 320 512" xmlns="http://www.w3.org/2000/svg"><path d="M177 159.7l136 136c9.4 9.4 9.4 24.6 0 33.9l-22.6 22.6c-9.4 9.4-24.6 9.4-33.9 0L160 255.9l-96.4 96.4c-9.4 9.4-24.6 9.4-33.9 0L7 329.7c-9.4-9.4-9.4-24.6 0-33.9l136-136c9.4-9.5 24.6-9.5 34-.1z"></path></svg></span>
-													</span>
-												<a class="elementor-toggle-title" tabindex="0">Can Diabetic eye diseases be treated?</a>
-					</h4>
-
-					<div id="elementor-tab-content-5414" class="elementor-tab-content elementor-clearfix" data-tab="4" role="region" aria-labelledby="elementor-tab-title-5414"><p>Yes, with early detection and proper management, treatments such as laser surgery, vitrectomy, and injections can effectively control the progression of diabetic eye diseases and preserve vision.</p></div>
-				</div>
-							<div class="elementor-toggle-item">
-					<h4 id="elementor-tab-title-5415" class="elementor-tab-title" data-tab="5" role="button" aria-controls="elementor-tab-content-5415" aria-expanded="false">
-												<span class="elementor-toggle-icon elementor-toggle-icon-right" aria-hidden="true">
-															<span class="elementor-toggle-icon-closed"><svg class="e-font-icon-svg e-fas-angle-down" viewbox="0 0 320 512" xmlns="http://www.w3.org/2000/svg"><path d="M143 352.3L7 216.3c-9.4-9.4-9.4-24.6 0-33.9l22.6-22.6c9.4-9.4 24.6-9.4 33.9 0l96.4 96.4 96.4-96.4c9.4-9.4 24.6-9.4 33.9 0l22.6 22.6c9.4 9.4 9.4 24.6 0 33.9l-136 136c-9.2 9.4-24.4 9.4-33.8 0z"></path></svg></span>
-								<span class="elementor-toggle-icon-opened"><svg class="elementor-toggle-icon-opened e-font-icon-svg e-fas-angle-up" viewbox="0 0 320 512" xmlns="http://www.w3.org/2000/svg"><path d="M177 159.7l136 136c9.4 9.4 9.4 24.6 0 33.9l-22.6 22.6c-9.4 9.4-24.6 9.4-33.9 0L160 255.9l-96.4 96.4c-9.4 9.4-24.6 9.4-33.9 0L7 329.7c-9.4-9.4-9.4-24.6 0-33.9l136-136c9.4-9.5 24.6-9.5 34-.1z"></path></svg></span>
-													</span>
-												<a class="elementor-toggle-title" tabindex="0">What is tele-consultation and how does it work?</a>
-					</h4>
-
-					<div id="elementor-tab-content-5415" class="elementor-tab-content elementor-clearfix" data-tab="5" role="region" aria-labelledby="elementor-tab-title-5415"><p>Tele-consultation allows patients to consult with our specialized national and international experts remotely, using digital communication tools. It&rsquo;s especially beneficial for follow-up visits or for patients with mobility issues.</p></div>
-				</div>
-							<div class="elementor-toggle-item">
-					<h4 id="elementor-tab-title-5416" class="elementor-tab-title" data-tab="6" role="button" aria-controls="elementor-tab-content-5416" aria-expanded="false">
-												<span class="elementor-toggle-icon elementor-toggle-icon-right" aria-hidden="true">
-															<span class="elementor-toggle-icon-closed"><svg class="e-font-icon-svg e-fas-angle-down" viewbox="0 0 320 512" xmlns="http://www.w3.org/2000/svg"><path d="M143 352.3L7 216.3c-9.4-9.4-9.4-24.6 0-33.9l22.6-22.6c9.4-9.4 24.6-9.4 33.9 0l96.4 96.4 96.4-96.4c9.4-9.4 24.6-9.4 33.9 0l22.6 22.6c9.4 9.4 9.4 24.6 0 33.9l-136 136c-9.2 9.4-24.4 9.4-33.8 0z"></path></svg></span>
-								<span class="elementor-toggle-icon-opened"><svg class="elementor-toggle-icon-opened e-font-icon-svg e-fas-angle-up" viewbox="0 0 320 512" xmlns="http://www.w3.org/2000/svg"><path d="M177 159.7l136 136c9.4 9.4 9.4 24.6 0 33.9l-22.6 22.6c-9.4 9.4-24.6 9.4-33.9 0L160 255.9l-96.4 96.4c-9.4 9.4-24.6 9.4-33.9 0L7 329.7c-9.4-9.4-9.4-24.6 0-33.9l136-136c9.4-9.5 24.6-9.5 34-.1z"></path></svg></span>
-													</span>
-												<a class="elementor-toggle-title" tabindex="0">What makes Sampada VR different from other eye care centers?</a>
-					</h4>
-
-					<div id="elementor-tab-content-5416" class="elementor-tab-content elementor-clearfix" data-tab="6" role="region" aria-labelledby="elementor-tab-title-5416"><p>Sampada VR is a boutique consultation and surgery center, focusing exclusively on vitreoretinal diseases. We offer a holistic approach to patient care, combining the latest technologies with a compassionate, patient-centric service model.</p></div>
-				</div>
-								</div>
-				</div>
-				</div>
-					</div>
-				</div>
-		<div class="elementor-element elementor-element-7747538 e-flex e-con-boxed wpr-particle-no wpr-jarallax-no wpr-parallax-no wpr-sticky-section-no e-con e-child" data-id="7747538" data-element_type="container" data-settings='{"content_width":"boxed"}'>
-					<div class="e-con-inner">
-				<div class="elementor-element elementor-element-cf36179 elementor-widget elementor-widget-toggle" data-id="cf36179" data-element_type="widget" data-widget_type="toggle.default">
-				<div class="elementor-widget-container">
-					<div class="elementor-toggle">
-							<div class="elementor-toggle-item">
-					<h4 id="elementor-tab-title-2171" class="elementor-tab-title" data-tab="1" role="button" aria-controls="elementor-tab-content-2171" aria-expanded="false">
-												<span class="elementor-toggle-icon elementor-toggle-icon-right" aria-hidden="true">
-															<span class="elementor-toggle-icon-closed"><svg class="e-font-icon-svg e-fas-angle-down" viewbox="0 0 320 512" xmlns="http://www.w3.org/2000/svg"><path d="M143 352.3L7 216.3c-9.4-9.4-9.4-24.6 0-33.9l22.6-22.6c9.4-9.4 24.6-9.4 33.9 0l96.4 96.4 96.4-96.4c9.4-9.4 24.6-9.4 33.9 0l22.6 22.6c9.4 9.4 9.4 24.6 0 33.9l-136 136c-9.2 9.4-24.4 9.4-33.8 0z"></path></svg></span>
-								<span class="elementor-toggle-icon-opened"><svg class="elementor-toggle-icon-opened e-font-icon-svg e-fas-angle-up" viewbox="0 0 320 512" xmlns="http://www.w3.org/2000/svg"><path d="M177 159.7l136 136c9.4 9.4 9.4 24.6 0 33.9l-22.6 22.6c-9.4 9.4-24.6 9.4-33.9 0L160 255.9l-96.4 96.4c-9.4 9.4-24.6 9.4-33.9 0L7 329.7c-9.4-9.4-9.4-24.6 0-33.9l136-136c9.4-9.5 24.6-9.5 34-.1z"></path></svg></span>
-													</span>
-												<a class="elementor-toggle-title" tabindex="0">Do you offer services for children and elderly patients?</a>
-					</h4>
-
-					<div id="elementor-tab-content-2171" class="elementor-tab-content elementor-clearfix" data-tab="1" role="region" aria-labelledby="elementor-tab-title-2171"><p>Yes, our center is designed to cater to patients of all ages, including the unique needs of elderly patients and premature babies, ensuring a comfortable and stress-free experience for our most vulnerable patients.</p></div>
-				</div>
-							<div class="elementor-toggle-item">
-					<h4 id="elementor-tab-title-2172" class="elementor-tab-title" data-tab="2" role="button" aria-controls="elementor-tab-content-2172" aria-expanded="false">
-												<span class="elementor-toggle-icon elementor-toggle-icon-right" aria-hidden="true">
-															<span class="elementor-toggle-icon-closed"><svg class="e-font-icon-svg e-fas-angle-down" viewbox="0 0 320 512" xmlns="http://www.w3.org/2000/svg"><path d="M143 352.3L7 216.3c-9.4-9.4-9.4-24.6 0-33.9l22.6-22.6c9.4-9.4 24.6-9.4 33.9 0l96.4 96.4 96.4-96.4c9.4-9.4 24.6-9.4 33.9 0l22.6 22.6c9.4 9.4 9.4 24.6 0 33.9l-136 136c-9.2 9.4-24.4 9.4-33.8 0z"></path></svg></span>
-								<span class="elementor-toggle-icon-opened"><svg class="elementor-toggle-icon-opened e-font-icon-svg e-fas-angle-up" viewbox="0 0 320 512" xmlns="http://www.w3.org/2000/svg"><path d="M177 159.7l136 136c9.4 9.4 9.4 24.6 0 33.9l-22.6 22.6c-9.4 9.4-24.6 9.4-33.9 0L160 255.9l-96.4 96.4c-9.4 9.4-24.6 9.4-33.9 0L7 329.7c-9.4-9.4-9.4-24.6 0-33.9l136-136c9.4-9.5 24.6-9.5 34-.1z"></path></svg></span>
-													</span>
-												<a class="elementor-toggle-title" tabindex="0">How can I book an appointment?</a>
-					</h4>
-
-					<div id="elementor-tab-content-2172" class="elementor-tab-content elementor-clearfix" data-tab="2" role="region" aria-labelledby="elementor-tab-title-2172"><p>Appointments can be booked directly through our website, by phone, or in person at our clinic. We also offer the convenience of booking tele-consultation appointments online.</p></div>
-				</div>
-							<div class="elementor-toggle-item">
-					<h4 id="elementor-tab-title-2173" class="elementor-tab-title" data-tab="3" role="button" aria-controls="elementor-tab-content-2173" aria-expanded="false">
-												<span class="elementor-toggle-icon elementor-toggle-icon-right" aria-hidden="true">
-															<span class="elementor-toggle-icon-closed"><svg class="e-font-icon-svg e-fas-angle-down" viewbox="0 0 320 512" xmlns="http://www.w3.org/2000/svg"><path d="M143 352.3L7 216.3c-9.4-9.4-9.4-24.6 0-33.9l22.6-22.6c9.4-9.4 24.6-9.4 33.9 0l96.4 96.4 96.4-96.4c9.4-9.4 24.6-9.4 33.9 0l22.6 22.6c9.4 9.4 9.4 24.6 0 33.9l-136 136c-9.2 9.4-24.4 9.4-33.8 0z"></path></svg></span>
-								<span class="elementor-toggle-icon-opened"><svg class="elementor-toggle-icon-opened e-font-icon-svg e-fas-angle-up" viewbox="0 0 320 512" xmlns="http://www.w3.org/2000/svg"><path d="M177 159.7l136 136c9.4 9.4 9.4 24.6 0 33.9l-22.6 22.6c-9.4 9.4-24.6 9.4-33.9 0L160 255.9l-96.4 96.4c-9.4 9.4-24.6 9.4-33.9 0L7 329.7c-9.4-9.4-9.4-24.6 0-33.9l136-136c9.4-9.5 24.6-9.5 34-.1z"></path></svg></span>
-													</span>
-												<a class="elementor-toggle-title" tabindex="0">What is the Retinopathy of Prematurity clinic at Sampada VR and how does it support affected infants?</a>
-					</h4>
-
-					<div id="elementor-tab-content-2173" class="elementor-tab-content elementor-clearfix" data-tab="3" role="region" aria-labelledby="elementor-tab-title-2173"><p>The Retinopathy of Prematurity (ROP) clinic at Sampada VR Specialty Eye Care is dedicated to the early detection and treatment of ROP, a potentially blinding condition affecting premature infants. Our clinic is equipped with the latest diagnostic tools and treatment methods to ensure the best possible outcomes. Through comprehensive screenings, expert evaluations, and timely interventions, we strive to preserve and protect the vision of our youngest patients, offering hope and support to families navigating this challenging condition.</p></div>
-				</div>
-							<div class="elementor-toggle-item">
-					<h4 id="elementor-tab-title-2174" class="elementor-tab-title" data-tab="4" role="button" aria-controls="elementor-tab-content-2174" aria-expanded="false">
-												<span class="elementor-toggle-icon elementor-toggle-icon-right" aria-hidden="true">
-															<span class="elementor-toggle-icon-closed"><svg class="e-font-icon-svg e-fas-angle-down" viewbox="0 0 320 512" xmlns="http://www.w3.org/2000/svg"><path d="M143 352.3L7 216.3c-9.4-9.4-9.4-24.6 0-33.9l22.6-22.6c9.4-9.4 24.6-9.4 33.9 0l96.4 96.4 96.4-96.4c9.4-9.4 24.6-9.4 33.9 0l22.6 22.6c9.4 9.4 9.4 24.6 0 33.9l-136 136c-9.2 9.4-24.4 9.4-33.8 0z"></path></svg></span>
-								<span class="elementor-toggle-icon-opened"><svg class="elementor-toggle-icon-opened e-font-icon-svg e-fas-angle-up" viewbox="0 0 320 512" xmlns="http://www.w3.org/2000/svg"><path d="M177 159.7l136 136c9.4 9.4 9.4 24.6 0 33.9l-22.6 22.6c-9.4 9.4-24.6 9.4-33.9 0L160 255.9l-96.4 96.4c-9.4 9.4-24.6 9.4-33.9 0L7 329.7c-9.4-9.4-9.4-24.6 0-33.9l136-136c9.4-9.5 24.6-9.5 34-.1z"></path></svg></span>
-													</span>
-												<a class="elementor-toggle-title" tabindex="0">How does the Myopia Clinic at Sampada VR help manage and treat myopia in children and adults?</a>
-					</h4>
-
-					<div id="elementor-tab-content-2174" class="elementor-tab-content elementor-clearfix" data-tab="4" role="region" aria-labelledby="elementor-tab-title-2174"><p>Our Myopia Clinic at Sampada VR Specialty Eye Care focuses on the specialized management and treatment of myopia (nearsightedness) in both children and adults. Utilizing advanced diagnostic tools, we assess the progression of myopia and implement personalized treatment strategies, including orthokeratology (ortho-k) lenses, multifocal contact lenses, and atropine eye drops. Our goal is to slow myopia progression, thereby reducing the risk of associated complications later in life. Our dedicated team provides education, support, and innovative solutions to help our patients achieve optimal visual health.</p></div>
-				</div>
-							<div class="elementor-toggle-item">
-					<h4 id="elementor-tab-title-2175" class="elementor-tab-title" data-tab="5" role="button" aria-controls="elementor-tab-content-2175" aria-expanded="false">
-												<span class="elementor-toggle-icon elementor-toggle-icon-right" aria-hidden="true">
-															<span class="elementor-toggle-icon-closed"><svg class="e-font-icon-svg e-fas-angle-down" viewbox="0 0 320 512" xmlns="http://www.w3.org/2000/svg"><path d="M143 352.3L7 216.3c-9.4-9.4-9.4-24.6 0-33.9l22.6-22.6c9.4-9.4 24.6-9.4 33.9 0l96.4 96.4 96.4-96.4c9.4-9.4 24.6-9.4 33.9 0l22.6 22.6c9.4 9.4 9.4 24.6 0 33.9l-136 136c-9.2 9.4-24.4 9.4-33.8 0z"></path></svg></span>
-								<span class="elementor-toggle-icon-opened"><svg class="elementor-toggle-icon-opened e-font-icon-svg e-fas-angle-up" viewbox="0 0 320 512" xmlns="http://www.w3.org/2000/svg"><path d="M177 159.7l136 136c9.4 9.4 9.4 24.6 0 33.9l-22.6 22.6c-9.4 9.4-24.6 9.4-33.9 0L160 255.9l-96.4 96.4c-9.4 9.4-24.6 9.4-33.9 0L7 329.7c-9.4-9.4-9.4-24.6 0-33.9l136-136c9.4-9.5 24.6-9.5 34-.1z"></path></svg></span>
-													</span>
-												<a class="elementor-toggle-title" tabindex="0">How can I prepare for my first visit?</a>
-					</h4>
-
-					<div id="elementor-tab-content-2175" class="elementor-tab-content elementor-clearfix" data-tab="5" role="region" aria-labelledby="elementor-tab-title-2175"><p>Please bring any previous medical records related to your eye health, a list of current medications. .Arriving 15 minutes early to complete any necessary paperwork is also recommended.</p></div>
-				</div>
-								</div>
-				</div>
-				</div>
-					</div>
-				</div>
-					</div>
+				</section>
 				</div>
 				<section class="elementor-section elementor-top-section elementor-element elementor-element-7896906 elementor-section-boxed elementor-section-height-default elementor-section-height-default wpr-particle-no wpr-jarallax-no wpr-parallax-no wpr-sticky-section-no" data-id="7896906" data-element_type="section">
 						<div class="elementor-container elementor-column-gap-default">
@@ -1320,41 +743,92 @@ window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/16
 		</div>
 					</div>
 		</section>
-				<section class="elementor-section elementor-top-section elementor-element elementor-element-1fb617650 elementor-section-boxed elementor-section-height-default elementor-section-height-default wpr-particle-no wpr-jarallax-no wpr-parallax-no wpr-sticky-section-no" data-id="1fb617650" data-element_type="section">
-						<div class="elementor-container elementor-column-gap-default">
-					<div class="elementor-column elementor-col-100 elementor-top-column elementor-element elementor-element-12d016a" data-id="12d016a" data-element_type="column">
-			<div class="elementor-widget-wrap elementor-element-populated">
-						<div class="elementor-element elementor-element-e09f596 elementor-invisible elementor-widget elementor-widget-heading" data-id="e09f596" data-element_type="widget" data-settings='{"_animation":"fadeInDown"}' data-widget_type="heading.default">
-				<div class="elementor-widget-container">
-			<h2 class="elementor-heading-title elementor-size-default">Latest updates</h2>		</div>
-				</div>
-				<div class="elementor-element elementor-element-25c742b2 wpr-adv-slider-columns-2 wpr-adv-slider-columns--tablet1 wpr-adv-slider-columns--mobile1 wpr-adv-slides-to-scroll-1 wpr-slider-dots-horizontal elementor-widget elementor-widget-wpr-advanced-slider" data-id="25c742b2" data-element_type="widget" data-settings='{"slider_amount":"2","slider_amount_tablet":1,"slider_amount_mobile":1,"slides_to_scroll":1,"slider_video_btn_size":"medium"}' data-widget_type="wpr-advanced-slider.default">
-				<div class="elementor-widget-container">
-			
-		<!-- Advanced Slider -->
-		<div class="wpr-advanced-slider-wrap">
-			
-			<div class="wpr-advanced-slider" dir="ltr" data-slick='{"rtl":false,"speed":700,"arrows":true,"dots":true,"autoplay":false,"autoplaySpeed":0,"pauseOnHover":"","prevArrow":"#wpr-slider-prev-25c742b2","nextArrow":"#wpr-slider-next-25c742b2","vertical":false,"adaptiveHeight":true}' data-video-btn-size='{"widescreen":"medium","desktop":"medium","laptop":"medium","tablet_extra":"medium","tablet":"medium","mobile_extra":"medium","mobile":"medium"}' data-slide-effect="slide">
-				<div class="wpr-slider-item elementor-repeater-item-af2bb90"><div class="wpr-slider-item-bg " style="background-image: url(/wp-content/uploads/2024/02/5-2.png)"></div><div class="wpr-cv-container"><div class="wpr-cv-outer"><div class="wpr-cv-inner"><div class="wpr-slider-item-overlay"></div><div class="wpr-slider-content"><div class="wpr-slider-title"><h2>Diabetic Retinopathy Screening in Tirur</h2></div><div class="wpr-slider-description"><p>Diabetic retinopathy often shows no symptoms until vision is already affected. Quick, painless retinal imaging catches the damage early.</p></div><div class="wpr-slider-btns"></div></div></div></div></div></div><div class="wpr-slider-item elementor-repeater-item-5270e34"><div class="wpr-slider-item-bg " style="background-image: url(/wp-content/uploads/2024/02/3-2.png)"></div><div class="wpr-cv-container"><div class="wpr-cv-outer"><div class="wpr-cv-inner"><div class="wpr-slider-item-overlay"></div><div class="wpr-slider-content"><div class="wpr-slider-title"><h2>Humphrey Field Analyzer for Glaucoma</h2></div><div class="wpr-slider-description"><p>The Humphrey Field Analyzer is the gold standard for visual field testing, used here to detect glaucoma before vision is lost.</p></div><div class="wpr-slider-btns"></div></div></div></div></div></div><div class="wpr-slider-item elementor-repeater-item-7ebcd9c"><div class="wpr-slider-item-bg " style="background-image: url(/wp-content/uploads/2024/02/5-2.png)"></div><div class="wpr-cv-container"><div class="wpr-cv-outer"><div class="wpr-cv-inner"><div class="wpr-slider-item-overlay"></div><div class="wpr-slider-content"><div class="wpr-slider-title"><h2>OCT: The Essential Eye Exam Tool</h2></div><div class="wpr-slider-description"><p>Optical Coherence Tomography gives a cross-sectional image of the retina, revealing problems long before symptoms appear.</p></div><div class="wpr-slider-btns"></div></div></div></div></div></div>			</div>
-			<div class="wpr-slider-controls">
-				<div class="wpr-slider-dots"></div>
-			</div>
-
-			<div class="wpr-slider-arrow-container">
-				<div class="wpr-slider-prev-arrow wpr-slider-arrow" id="wpr-slider-prev-25c742b2">
-					<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewbox="0 0 259.6 512" style="enable-background:new 0 0 259.6 512;" xml:space="preserve"><g><path class="st0" d="M256.6,18.1L126.2,256.1l130.6,237.6c3.6,5.6,3.9,10.8,0.2,14.9c-0.2,0.2-0.2,0.3-0.3,0.3s-0.3,0.3-0.3,0.3c-3.9,3.9-10.3,3.6-14.2-0.3L2.9,263.6c-2-2.1-3.1-4.7-2.9-7.5c0-2.8,1-5.6,3.1-7.7L242,3.1c4.1-4.1,10.6-4.1,14.6,0l0,0C260.7,7.3,260.5,10.9,256.6,18.1z"></path></g></svg>				</div>
-				<div class="wpr-slider-next-arrow wpr-slider-arrow" id="wpr-slider-next-25c742b2">
-					<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewbox="0 0 259.6 512" style="enable-background:new 0 0 259.6 512;" xml:space="preserve"><g><path class="st0" d="M256.6,18.1L126.2,256.1l130.6,237.6c3.6,5.6,3.9,10.8,0.2,14.9c-0.2,0.2-0.2,0.3-0.3,0.3s-0.3,0.3-0.3,0.3c-3.9,3.9-10.3,3.6-14.2-0.3L2.9,263.6c-2-2.1-3.1-4.7-2.9-7.5c0-2.8,1-5.6,3.1-7.7L242,3.1c4.1-4.1,10.6-4.1,14.6,0l0,0C260.7,7.3,260.5,10.9,256.6,18.1z"></path></g></svg>				</div>
-			</div>
-			
-			
-		</div>
-				</div>
-				</div>
+		<div class="svr-page">
+		<section class="svr-sec" id="latest-updates" aria-labelledby="home-updates-h">
+			<div class="svr-wrap">
+				<div class="svr-ig__head">
+					<div>
+						<span class="svr-eyebrow">From Our Blog</span>
+						<h2 class="svr-h2" id="home-updates-h" style="margin:0">Latest updates</h2>
 					</div>
-		</div>
+					<a class="svr-btn svr-btn--outline" href="/blog/">All articles</a>
+				</div>
+				<div class="svr-updates" data-svr-updates role="region" aria-roledescription="carousel" aria-label="Latest articles">
+					<div class="svr-updates__track" tabindex="0">
+						{featured.map((a, i) => (
+							<article class="svr-slide" aria-roledescription="slide" aria-label={`${i + 1} of ${featured.length}`}>
+								<a class="svr-slide__img" href={a.href} tabindex="-1" aria-hidden="true">
+									<img src={a.image} alt="" width="1024" height="576" loading={i === 0 ? 'eager' : 'lazy'}>
+								</a>
+								<div class="svr-slide__body">
+									<p class="svr-slide__meta">{a.category} &middot; {a.dateLabel}</p>
+									<h3>{a.title}</h3>
+									<p>{a.excerpt}</p>
+									<div><a class="svr-btn svr-btn--primary" href={a.href}>Read Article <span aria-hidden="true">&rarr;</span><span class="svr-sr">: {a.title}</span></a></div>
+								</div>
+							</article>
+						))}
 					</div>
+					<div class="svr-updates__nav">
+						<button class="svr-updates__btn" type="button" data-dir="-1" aria-label="Previous article">&larr;</button>
+						<div class="svr-updates__dots">
+							{featured.map((a, i) => <button class="svr-updates__dot" type="button" data-i={i} aria-label={`Show article ${i + 1}`} aria-current={i === 0 ? 'true' : 'false'}></button>)}
+						</div>
+						<button class="svr-updates__btn" type="button" data-dir="1" aria-label="Next article">&rarr;</button>
+					</div>
+				</div>
+			</div>
 		</section>
+
+		<section class="svr-sec svr-sec--mist" id="instagram" aria-labelledby="home-ig-h">
+			<div class="svr-wrap">
+				<div class="svr-ig__head">
+					<div>
+						<span class="svr-eyebrow">Follow Us on Instagram</span>
+						<h2 class="svr-h2" id="home-ig-h" style="margin:0 0 10px">Life at Sampada VR</h2>
+						<a class="svr-ig__handle" href={INSTAGRAM_URL} target="_blank" rel="noopener noreferrer">
+							<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.3" cy="6.7" r="1" fill="currentColor" stroke="none"/></svg>
+							{INSTAGRAM_HANDLE}
+						</a>
+					</div>
+					<a class="svr-btn svr-btn--outline" href={INSTAGRAM_URL} target="_blank" rel="noopener noreferrer">Follow on Instagram</a>
+				</div>
+				<div class="svr-ig__grid" style={`--cols:${igPosts.length >= 6 ? 3 : Math.min(igPosts.length, 4)}`}>
+					{igPosts.map((p) => (
+						<a class="svr-ig__item" href={p.permalink} target="_blank" rel="noopener noreferrer" aria-label={`View on Instagram: ${p.caption}`}>
+							<img src={p.image} alt={p.alt} width="600" height="600" loading="lazy">
+							<span class="svr-ig__over">
+								<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.3" cy="6.7" r="1" fill="currentColor" stroke="none"/></svg>
+								<p>{p.caption}</p>
+								<span>View post</span>
+							</span>
+						</a>
+					))}
+				</div>
+			</div>
+		</section>
+		</div>
+
+		<script>
+			document.querySelectorAll<HTMLElement>('[data-svr-updates]').forEach((root) => {
+				const track = root.querySelector<HTMLElement>('.svr-updates__track')!;
+				const dots = Array.from(root.querySelectorAll<HTMLButtonElement>('.svr-updates__dot'));
+				const slideW = () => track.clientWidth + 24;
+				const go = (i: number) => track.scrollTo({ left: Math.max(0, Math.min(dots.length - 1, i)) * slideW(), behavior: 'smooth' });
+				const current = () => Math.round(track.scrollLeft / slideW());
+				root.querySelectorAll<HTMLButtonElement>('.svr-updates__btn').forEach((b) =>
+					b.addEventListener('click', () => go(current() + Number(b.dataset.dir))));
+				dots.forEach((d) => d.addEventListener('click', () => go(Number(d.dataset.i))));
+				track.addEventListener('scroll', () => {
+					const c = current();
+					dots.forEach((d, i) => d.setAttribute('aria-current', String(i === c)));
+				}, { passive: true });
+				track.addEventListener('keydown', (e) => {
+					if (e.key === 'ArrowRight') { e.preventDefault(); go(current() + 1); }
+					if (e.key === 'ArrowLeft') { e.preventDefault(); go(current() - 1); }
+				});
+			});
+		</script>
 		<div class="elementor-element elementor-element-ed0055f e-flex e-con-boxed wpr-particle-no wpr-jarallax-no wpr-parallax-no wpr-sticky-section-no e-con e-parent" data-id="ed0055f" data-element_type="container" data-settings='{"content_width":"boxed"}' data-core-v316-plus="true">
 					<div class="e-con-inner">
 				<div class="elementor-element elementor-element-b004cbf elementor-widget elementor-widget-spacer" data-id="b004cbf" data-element_type="widget" data-widget_type="spacer.default">
@@ -1447,27 +921,7 @@ window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/16
 				</div>
 				<div class="elementor-element elementor-element-92d06c8 elementor-widget__width-initial wpr-pointer-none wpr-main-menu-align-left wpr-main-menu-align--tabletleft wpr-main-menu-align--mobileleft wpr-sub-icon-caret-down wpr-sub-menu-fx-fade wpr-nav-menu-bp-mobile wpr-mobile-menu-full-width wpr-mobile-menu-item-align-center wpr-mobile-toggle-v1 wpr-sub-divider-yes wpr-mobile-divider-yes elementor-widget elementor-widget-wpr-nav-menu" data-id="92d06c8" data-element_type="widget" data-settings='{"menu_layout":"horizontal"}' data-widget_type="wpr-nav-menu.default">
 				<div class="elementor-widget-container">
-			<nav class="wpr-nav-menu-container wpr-nav-menu-horizontal" data-trigger="hover"><ul id="menu-1-92d06c8" class="wpr-nav-menu"><li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-home current-menu-item page_item page-item-12 current_page_item menu-item-695"><a href="/" aria-current="page" class="wpr-menu-item wpr-pointer-item wpr-active-menu-item">Home</a></li>
-<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-696"><a href="/about/" class="wpr-menu-item wpr-pointer-item">About<i class="wpr-sub-icon fas" aria-hidden="true"></i></a>
-<ul class="sub-menu wpr-sub-menu">
-	<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-1562"><a href="/about-dr-sameera-v-v/" class="wpr-sub-menu-item">About Dr. Sameera V V</a></li>
-</ul>
-</li>
-<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-698"><a href="/why-sampada-vr/" class="wpr-menu-item wpr-pointer-item">Why Sampada VR</a></li>
-<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-1080"><a href="/treatments/" class="wpr-menu-item wpr-pointer-item">Treatments</a></li>
-<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-699"><a href="/blog/" class="wpr-menu-item wpr-pointer-item">Blog</a></li>
-<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-697"><a href="/contact-us/" class="wpr-menu-item wpr-pointer-item">Contact Us</a></li>
-</ul></nav><nav class="wpr-mobile-nav-menu-container"><div class="wpr-mobile-toggle-wrap"><div class="wpr-mobile-toggle"><span class="wpr-mobile-toggle-line"></span><span class="wpr-mobile-toggle-line"></span><span class="wpr-mobile-toggle-line"></span></div></div><ul id="mobile-menu-2-92d06c8" class="wpr-mobile-nav-menu"><li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-home current-menu-item page_item page-item-12 current_page_item menu-item-695"><a href="/" aria-current="page" class="wpr-mobile-menu-item wpr-active-menu-item">Home</a></li>
-<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-696"><a href="/about/" class="wpr-mobile-menu-item">About</a>
-<ul class="sub-menu wpr-sub-menu">
-	<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-1562"><a href="/about-dr-sameera-v-v/" class="wpr-mobile-sub-menu-item">About Dr. Sameera V V</a></li>
-</ul>
-</li>
-<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-698"><a href="/why-sampada-vr/" class="wpr-mobile-menu-item">Why Sampada VR</a></li>
-<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-1080"><a href="/treatments/" class="wpr-mobile-menu-item">Treatments</a></li>
-<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-699"><a href="/blog/" class="wpr-mobile-menu-item">Blog</a></li>
-<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-697"><a href="/contact-us/" class="wpr-mobile-menu-item">Contact Us</a></li>
-</ul></nav>		</div>
+			<nav class="svr-footer-nav" aria-label="Footer"><ul><li><a href="/">Home</a></li><li><a href="/about/">About Us</a></li><li><a href="/treatments/">Treatments</a></li><li><a href="/blog/">Blog</a></li><li><a href="/contact-us/">Contact Us</a></li></ul></nav>		</div>
 				</div>
 					</div>
 		</div>
@@ -1583,13 +1037,6 @@ var elementorFrontendConfig = {"environmentMode":{"edit":false,"wpPreview":false
 <script type="text/javascript" src="/wp-content/plugins/elementor/assets/js/frontend.min.js?ver=3.19.0" id="elementor-frontend-js"></script>
 <script type="text/javascript" src="/wp-content/plugins/bdthemes-prime-slider-lite/assets/js/prime-slider-site.min.js?ver=3.11.12" id="prime-slider-site-js"></script>
 <script type="text/javascript" src="/wp-content/plugins/elementor-pro/assets/js/webpack-pro.runtime.min.js?ver=3.16.2" id="elementor-pro-webpack-runtime-js"></script>
-<script type="text/javascript" src="/wp-includes/js/dist/hooks.min.js?ver=4d63a3d491d11ffd8ac6" id="wp-hooks-js"></script>
-<script type="text/javascript" src="/wp-includes/js/dist/i18n.min.js?ver=5e580eb46a90c2b997e6" id="wp-i18n-js"></script>
-<script type="text/javascript" id="wp-i18n-js-after">
-/* <![CDATA[ */
-wp.i18n.setLocaleData( { 'text direction\u0004ltr': [ 'ltr' ] } );
-/* ]]> */
-</script>
 <script type="text/javascript" id="elementor-pro-frontend-js-before">
 /* <![CDATA[ */
 var ElementorProFrontendConfig = {"ajaxurl":"\/wp-admin\/admin-ajax.php","nonce":"4f37542d73","urls":{"assets":"\/wp-content\/plugins\/elementor-pro\/assets\/","rest":"\/wp-json\/"},"shareButtonsNetworks":{"facebook":{"title":"Facebook","has_counter":true},"twitter":{"title":"Twitter"},"linkedin":{"title":"LinkedIn","has_counter":true},"pinterest":{"title":"Pinterest","has_counter":true},"reddit":{"title":"Reddit","has_counter":true},"vk":{"title":"VK","has_counter":true},"odnoklassniki":{"title":"OK","has_counter":true},"tumblr":{"title":"Tumblr"},"digg":{"title":"Digg"},"skype":{"title":"Skype"},"stumbleupon":{"title":"StumbleUpon","has_counter":true},"mix":{"title":"Mix"},"telegram":{"title":"Telegram"},"pocket":{"title":"Pocket","has_counter":true},"xing":{"title":"XING","has_counter":true},"whatsapp":{"title":"WhatsApp"},"email":{"title":"Email"},"print":{"title":"Print"}},"facebook_sdk":{"lang":"en_US","app_id":""},"lottie":{"defaultAnimationUrl":"\/wp-content\/plugins\/elementor-pro\/modules\/lottie\/assets\/animations\/default.json"}};

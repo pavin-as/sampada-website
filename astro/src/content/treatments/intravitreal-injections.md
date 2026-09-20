@@ -5,6 +5,8 @@ description: "Anti-VEGF and steroid eye injections for macular degeneration, dia
 procedureName: "Intravitreal Injection"
 procedureType: "MedicalProcedure"
 summary: "An intravitreal injection delivers medicine directly into the back of the eye, where it works on the retina at a dose that eye drops or tablets cannot achieve. It is the standard treatment for several conditions that used to cause irreversible central vision loss."
+navLabel: "Intravitreal Injections"
+cardSummary: "Anti-VEGF and steroid injections for macular degeneration, diabetic macular oedema and vein occlusion."
 order: 40
 reviewedOn: "2026-09-20"
 faqs:

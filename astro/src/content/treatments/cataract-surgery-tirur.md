@@ -5,6 +5,8 @@ description: "Cataract surgery at Sampada VR Speciality Eye Care, Tirur. What a 
 procedureName: "Cataract Surgery"
 procedureType: "MedicalProcedure"
 summary: "A cataract is the clouding of the eye's natural lens. It is the most common reason for treatable vision loss in Kerala, and modern surgery replaces the cloudy lens with a clear artificial one in a procedure that usually takes under half an hour."
+navLabel: "Cataract Surgery"
+cardSummary: "Clouded lens replaced with a clear artificial one, as a same-day, day-care procedure."
 order: 75
 reviewedOn: "2026-09-20"
 faqs:

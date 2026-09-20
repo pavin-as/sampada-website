@@ -1,0 +1,34 @@
+---
+/**
+ * The 8 dedicated treatment pages as a responsive card grid.
+ * Fed by the `treatments` content collection so titles/summaries live in one place
+ * (each treatment's frontmatter: navLabel, cardSummary, procedureType).
+ *   compact = title + arrow only (homepage); default = title + 2-3 line clinical summary.
+ */
+import { getCollection } from 'astro:content';
+import { TREATMENT_ORDER } from '../data/site';
+
+interface Props { compact?: boolean }
+const { compact = false } = Astro.props;
+
+const entries = await getCollection('treatments');
+const items = TREATMENT_ORDER
+  .map((slug) => entries.find((e) => e.id === slug))
+  .filter((e): e is NonNullable<typeof e> => Boolean(e))
+  .map((e) => ({
+    href: `/treatments/${e.id}/`,
+    title: e.data.navLabel ?? e.data.procedureName,
+    summary: e.data.cardSummary ?? e.data.description,
+    tag: e.data.procedureType === 'MedicalTest' ? 'Diagnostic test' : 'Procedure',
+  }));
+---
+<div class:list={['svr-tgrid', { 'svr-tgrid--compact': compact }]}>
+  {items.map((t) => (
+    <a class="svr-tcard" href={t.href}>
+      <span class="svr-tcard__tag">{t.tag}</span>
+      <h3>{t.title}</h3>
+      {!compact && <p>{t.summary}</p>}
+      <span class="svr-tcard__cta">View Procedure <span aria-hidden="true">&rarr;</span></span>
+    </a>
+  ))}
+</div>

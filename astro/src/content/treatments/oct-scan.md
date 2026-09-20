@@ -5,6 +5,8 @@ description: "Optical Coherence Tomography gives a cross-sectional scan of the r
 procedureName: "Optical Coherence Tomography (OCT)"
 procedureType: "MedicalTest"
 summary: "An OCT scan produces a cross-sectional image of the retina, layer by layer, in a few seconds and without any injection or discomfort. It shows swelling, holes and thinning that a standard eye examination cannot."
+navLabel: "OCT Scan"
+cardSummary: "A painless, seconds-long cross-section scan of the retina, without dye."
 order: 70
 reviewedOn: "2026-09-20"
 faqs:

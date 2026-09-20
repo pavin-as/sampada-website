@@ -5,6 +5,8 @@ description: "Diabetic retinopathy damages the retina silently before vision cha
 procedureName: "Diabetic Retinopathy Treatment"
 procedureType: "MedicalProcedure"
 summary: "Diabetes damages the small blood vessels of the retina long before anyone notices a change in vision. By the time sight is affected, treatment is about limiting loss rather than preventing it. Annual screening is what changes that."
+navLabel: "Diabetic Retinopathy Treatment"
+cardSummary: "Screening, laser, injections and surgery for diabetic damage to the retina."
 order: 30
 reviewedOn: "2026-09-20"
 faqs:

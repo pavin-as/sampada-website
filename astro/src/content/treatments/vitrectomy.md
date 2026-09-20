@@ -5,6 +5,8 @@ description: "Vitrectomy removes the vitreous gel to treat retinal detachment, v
 procedureName: "Vitrectomy"
 procedureType: "MedicalProcedure"
 summary: "Vitrectomy is the core operation of retinal surgery. The vitreous gel filling the eye is removed through tiny openings, giving the surgeon access to work directly on the retina."
+navLabel: "Vitrectomy"
+cardSummary: "Removal of the vitreous gel to repair detachment, haemorrhage, macular hole and membranes."
 order: 60
 reviewedOn: "2026-09-20"
 faqs:

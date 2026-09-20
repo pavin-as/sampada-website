@@ -3,7 +3,7 @@ name: Deploy Astro to GitHub Pages
 on:
   push:
     branches: [ main ]
-  # Refresh Google reviews and redeploy on the 1st of every month, 00:00 UTC
+  # Refresh Google reviews + Instagram feed and redeploy on the 1st of every month, 00:00 UTC
   schedule:
     - cron: '0 0 1 * *'
   workflow_dispatch:
@@ -41,6 +41,15 @@ jobs:
           GOOGLE_PLACES_API_KEY: ${{ secrets.GOOGLE_PLACES_API_KEY }}
           GOOGLE_PLACE_ID: ${{ secrets.GOOGLE_PLACE_ID }}
         run: node scripts/fetch-reviews.mjs
+
+      # Pull the newest @sampadavr posts for the homepage "Life at Sampada VR" grid.
+      # With neither secret set this is a no-op and the bundled src/data/instagram.json is used.
+      - name: Refresh Instagram feed
+        working-directory: astro
+        env:
+          INSTAGRAM_FEED_URL: ${{ secrets.INSTAGRAM_FEED_URL }}
+          INSTAGRAM_ACCESS_TOKEN: ${{ secrets.INSTAGRAM_ACCESS_TOKEN }}
+        run: node scripts/fetch-instagram.mjs
 
       - name: Build Astro site
         working-directory: astro

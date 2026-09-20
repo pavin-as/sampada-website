@@ -5,6 +5,8 @@ description: "Glaucoma damages the optic nerve silently. Testing with the Humphr
 procedureName: "Glaucoma Management"
 procedureType: "MedicalProcedure"
 summary: "Glaucoma damages the optic nerve gradually, usually starting at the edges of vision where it is almost impossible to notice. Sight already lost cannot be restored, which makes early detection and lifelong follow-up the whole of the treatment."
+navLabel: "Glaucoma Treatment"
+cardSummary: "Pressure control with drops, laser or surgery to protect the optic nerve."
 order: 50
 reviewedOn: "2026-09-20"
 faqs:

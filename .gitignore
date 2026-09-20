@@ -25,3 +25,6 @@ pnpm-debug.log*
 node_modules
 dist
 delete/
+
+# local archive of deprecated pages/images
+archive/

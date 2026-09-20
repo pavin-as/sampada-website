@@ -1,0 +1,57 @@
+{
+  "handle": "@sampadavr",
+  "profile": "https://www.instagram.com/sampadavr/",
+  "source": "fallback",
+  "updatedAt": null,
+  "note": "Fallback set: the clinic's own photos, each linking to the Instagram profile. scripts/fetch-instagram.mjs overwrites this file with real recent posts when INSTAGRAM_FEED_URL or INSTAGRAM_ACCESS_TOKEN is configured.",
+  "posts": [
+    {
+      "id": "fallback-team",
+      "permalink": "https://www.instagram.com/sampadavr/",
+      "image": "/wp-content/uploads/2024/02/sampadavr-team.webp",
+      "alt": "The Sampada VR care team at the Tirur clinic",
+      "caption": "The care team behind every visit at Sampada VR, Tirur.",
+      "timestamp": null
+    },
+    {
+      "id": "fallback-hfa",
+      "permalink": "https://www.instagram.com/sampadavr/",
+      "image": "/wp-content/uploads/2026/07/hfa-visual-field-testing.webp",
+      "alt": "A patient having a Humphrey visual field test",
+      "caption": "Visual field testing on the Humphrey Field Analyzer, our tool for catching glaucoma early.",
+      "timestamp": null
+    },
+    {
+      "id": "fallback-reception",
+      "permalink": "https://www.instagram.com/sampadavr/",
+      "image": "/wp-content/uploads/2024/02/sampadavr-reception.webp",
+      "alt": "Reception at Sampada VR Speciality Eye Care",
+      "caption": "A warm welcome at the reception desk on Railway Station Bypass Road, Tirur.",
+      "timestamp": null
+    },
+    {
+      "id": "fallback-dr",
+      "permalink": "https://www.instagram.com/sampadavr/",
+      "image": "/wp-content/uploads/2024/02/dr-sameera-sampada-768x512.webp",
+      "alt": "Dr. Sameera V V at her desk in the clinic",
+      "caption": "Dr. Sameera V V, vitreoretinal surgeon and Medical Director.",
+      "timestamp": null
+    },
+    {
+      "id": "fallback-dr-team",
+      "permalink": "https://www.instagram.com/sampadavr/",
+      "image": "/wp-content/uploads/2024/02/doctorsampadavr.webp",
+      "alt": "Dr. Sameera V V with a colleague at the clinic",
+      "caption": "Life at Sampada VR: doctors, staff and patients in one friendly space.",
+      "timestamp": null
+    },
+    {
+      "id": "fallback-dr-retina",
+      "permalink": "https://www.instagram.com/sampadavr/",
+      "image": "/wp-content/uploads/2026/07/diabetic-retinopathy-retinal-imaging.webp",
+      "alt": "Illustration of retinal imaging for diabetic retinopathy",
+      "caption": "Retinal imaging reveals diabetic eye damage before symptoms appear.",
+      "timestamp": null
+    }
+  ]
+}
