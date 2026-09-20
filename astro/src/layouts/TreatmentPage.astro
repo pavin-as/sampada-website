@@ -1,0 +1,189 @@
+---
+import Header from '../components/Header.astro';
+
+export type Faq = { q: string; a: string };
+export type Props = {
+  title: string;
+  h1: string;
+  description: string;
+  procedureName: string;
+  procedureType: 'MedicalProcedure' | 'MedicalTest';
+  summary: string;
+  slug: string;
+  heroImage?: string;
+  reviewedBy: string;
+  reviewedOn: string;
+  faqs: Faq[];
+};
+
+const { title, h1, description, procedureName, procedureType, summary, slug,
+        heroImage, reviewedBy, reviewedOn, faqs } = Astro.props;
+
+const SITE = 'https://sampadavr.com';
+const canonical = `${SITE}/treatments/${slug}/`;
+
+const procedureSchema = {
+  '@context': 'https://schema.org',
+  '@type': procedureType,
+  name: procedureName,
+  description,
+  url: canonical,
+  ...(heroImage ? { image: new URL(heroImage, SITE).href } : {}),
+  performedBy: { '@id': `${SITE}/#clinic` },
+  availableService: { '@id': `${SITE}/#clinic` },
+};
+
+const pageSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'MedicalWebPage',
+  name: h1,
+  description,
+  url: canonical,
+  inLanguage: 'en-IN',
+  lastReviewed: reviewedOn,
+  reviewedBy: { '@type': 'Physician', '@id': `${SITE}/about-dr-sameera-v-v/#physician`, name: reviewedBy },
+  about: { '@type': procedureType, name: procedureName },
+  isPartOf: { '@id': `${SITE}/#clinic` },
+};
+
+const breadcrumbSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: `${SITE}/` },
+    { '@type': 'ListItem', position: 2, name: 'Treatments', item: `${SITE}/treatments/` },
+    { '@type': 'ListItem', position: 3, name: procedureName, item: canonical },
+  ],
+};
+
+const faqSchema = faqs.length ? {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqs.map((f) => ({
+    '@type': 'Question',
+    name: f.q,
+    acceptedAnswer: { '@type': 'Answer', text: f.a },
+  })),
+} : null;
+---
+<!DOCTYPE html>
+<html lang="en-IN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>{title}</title>
+<meta name="description" content={description}>
+<link rel="canonical" href={canonical}>
+<meta name="robots" content="max-image-preview:large">
+
+<meta property="og:type" content="article">
+<meta property="og:title" content={title}>
+<meta property="og:description" content={description}>
+<meta property="og:url" content={canonical}>
+<meta property="og:site_name" content="Sampada VR Speciality Eye Care">
+{heroImage && <meta property="og:image" content={new URL(heroImage, SITE).href} />}
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content={title}>
+<meta name="twitter:description" content={description}>
+
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<script type="application/ld+json" set:html={JSON.stringify(procedureSchema)} />
+<script type="application/ld+json" set:html={JSON.stringify(pageSchema)} />
+<script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
+{faqSchema && <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />}
+
+<style is:global>
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;color:#243740;background:#fff;-webkit-font-smoothing:antialiased}
+img{max-width:100%;height:auto}
+.tx-wrap{max-width:820px;margin:0 auto;padding:0 20px}
+.tx-crumb{font-size:14px;color:#5d7079;padding:24px 0 0}
+.tx-crumb a{color:#5d7079}
+.tx-hero{padding:24px 0 8px}
+.tx-hero h1{font-size:38px;line-height:1.2;margin:0 0 16px;color:#12303f;font-weight:700}
+.tx-lead{font-size:19px;line-height:1.65;color:#33474f;margin:0 0 20px}
+.tx-byline{font-size:14px;color:#66787f;border-top:1px solid #e3eaed;border-bottom:1px solid #e3eaed;padding:12px 0;margin:0 0 32px}
+.tx-byline a{color:#0b7ea8}
+.tx-body{font-size:17px;line-height:1.78;padding-bottom:16px}
+.tx-body h2{font-size:27px;line-height:1.3;margin:40px 0 14px;color:#12303f}
+.tx-body h3{font-size:20px;margin:28px 0 10px;color:#12303f}
+.tx-body p{margin:0 0 16px}
+.tx-body ul,.tx-body ol{margin:0 0 18px;padding-left:22px}
+.tx-body li{margin:0 0 8px}
+.tx-body a{color:#0b7ea8}
+.tx-body strong{color:#12303f}
+.tx-faq{background:#f7fafc;border-radius:10px;padding:28px;margin:40px 0}
+.tx-faq h2{margin-top:0}
+.tx-faq details{border-bottom:1px solid #e3eaed;padding:12px 0}
+.tx-faq details:last-child{border-bottom:0}
+.tx-faq summary{cursor:pointer;font-weight:600;color:#12303f;font-size:17px}
+.tx-faq p{margin:10px 0 0;color:#42555d}
+.tx-cta{background:#12303f;color:#fff;border-radius:10px;padding:30px;margin:40px 0}
+.tx-cta h2{margin:0 0 10px;color:#fff;font-size:23px}
+.tx-cta p{margin:0 0 18px;color:#c9dae2;line-height:1.6}
+.tx-cta a.btn{display:inline-block;background:#fff;color:#12303f;padding:13px 26px;border-radius:6px;text-decoration:none;font-weight:700}
+.tx-cta .addr{font-size:14px;color:#9fb8c4;margin-top:16px;line-height:1.6}
+.tx-disclaimer{font-size:13px;color:#7b8b92;line-height:1.6;border-top:1px solid #e3eaed;padding:20px 0 40px;margin-top:8px}
+.tx-foot{background:#0d2531;color:#9fb8c4;font-size:14px;line-height:1.7;padding:32px 0;text-align:center}
+.tx-foot a{color:#fff}
+@media(max-width:767px){.tx-hero h1{font-size:28px}.tx-lead{font-size:17px}.tx-body{font-size:16px}.tx-body h2{font-size:22px}.tx-faq,.tx-cta{padding:22px}}
+</style>
+</head>
+<body>
+<Header />
+
+<main class="tx-wrap">
+  <nav class="tx-crumb" aria-label="Breadcrumb">
+    <a href="/">Home</a> &rsaquo; <a href="/treatments/">Treatments</a> &rsaquo; <span>{procedureName}</span>
+  </nav>
+
+  <div class="tx-hero">
+    <h1>{h1}</h1>
+    <p class="tx-lead">{summary}</p>
+    <p class="tx-byline">
+      Medically reviewed by <a href="/about-dr-sameera-v-v/">{reviewedBy}</a>, Vitreoretinal Surgeon &middot; Last reviewed {reviewedOn}
+    </p>
+  </div>
+
+  <article class="tx-body">
+    <slot />
+  </article>
+
+  {faqs.length > 0 && (
+    <section class="tx-faq" aria-labelledby="tx-faq-h">
+      <h2 id="tx-faq-h">Common questions</h2>
+      {faqs.map((f) => (
+        <details>
+          <summary>{f.q}</summary>
+          <p>{f.a}</p>
+        </details>
+      ))}
+    </section>
+  )}
+
+  <section class="tx-cta">
+    <h2>Book an appointment in Tirur</h2>
+    <p>Speak to our team about {procedureName.toLowerCase()} at Sampada VR Speciality Eye Care.</p>
+    <a class="btn" href="tel:+919188572412">Call +91 91885 72412</a>
+    <div class="addr">
+      Sampada VR Speciality Eye Care LLP<br>
+      Railway Station Bypass Road, Thazhepalam, Tirur, Kerala 676101<br>
+      Monday to Saturday &middot; <a href="/contact-us/" style="color:#fff">Directions and timings</a>
+    </div>
+  </section>
+
+  <p class="tx-disclaimer">
+    This page is general information about eye care, not medical advice for any individual.
+    Treatment depends on your own examination findings. Please consult an ophthalmologist
+    before making decisions about your eyes.
+  </p>
+</main>
+
+<footer class="tx-foot">
+  <div class="tx-wrap">
+    Sampada VR Speciality Eye Care LLP &middot; Railway Station Bypass Road, Thazhepalam, Tirur, Kerala 676101<br>
+    <a href="tel:+919188572412">+91 91885 72412</a> &middot; <a href="/treatments/">All treatments</a> &middot; <a href="/blog/">Blog</a>
+  </div>
+</footer>
+</body>
+</html>
