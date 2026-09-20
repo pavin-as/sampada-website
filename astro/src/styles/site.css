@@ -191,3 +191,64 @@
 @media (prefers-reduced-motion:reduce){
   .svr-page *{transition:none!important;scroll-behavior:auto!important}
 }
+
+/* ==========================================================================
+   Local landing page (/eye-hospital-in-tirur/)
+   ========================================================================== */
+.svr-page .svr-hero__meta{margin:26px 0 0;font-size:14.5px;color:#98A0BC}
+.svr-page .svr-hero__meta a{color:#fff;border-bottom:1px solid rgba(255,255,255,.35)}
+.svr-page .svr-hero__meta a:hover{border-color:#F28738}
+.svr-page .svr-prose{max-width:760px}
+.svr-page .svr-prose h3{font-size:24px;margin:30px 0 10px}
+.svr-page .svr-prose ul.svr-bullets{margin:0 0 18px}
+.svr-page .svr-bullets li{position:relative;padding-left:24px;margin:0 0 10px;font-size:16px}
+.svr-page .svr-bullets li::before{content:"";position:absolute;left:0;top:11px;width:9px;height:9px;border-radius:50%;background:var(--accent)}
+.svr-page .svr-bullets strong{color:var(--navy);font-weight:600}
+.svr-page .svr-inline a,.svr-page .svr-prose a{color:var(--accent-dk);font-weight:500}
+.svr-page .svr-inline a:hover,.svr-page .svr-prose a:hover{color:var(--navy)}
+.svr-page .svr-alsolist{display:flex;flex-wrap:wrap;gap:10px;margin:26px 0 0}
+.svr-page .svr-alsolist li{border:1px solid var(--line);background:#fff;border-radius:999px;padding:7px 18px;font-size:14.5px;color:var(--navy)}
+.svr-page .svr-alsolabel{margin:34px 0 0;font-size:14px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.svr-page .svr-signs{display:grid;grid-template-columns:repeat(2,1fr);gap:22px}
+.svr-page .svr-urgent{align-self:start;background:#FFF4E9;border:1px solid #FFD9B8;border-left:5px solid var(--accent);border-radius:14px;padding:24px 26px}
+.svr-page .svr-urgent h3{font-size:23px;margin:0 0 8px}
+.svr-page .svr-urgent p{margin:0 0 10px;font-size:15.5px}
+.svr-page .svr-urgent p:last-child{margin:0}
+.svr-page .svr-visit{display:grid;grid-template-columns:1fr 1.15fr;gap:44px;align-items:start}
+.svr-page .svr-visit>*{min-width:0}
+.svr-page .svr-nap{background:#fff;border:1px solid var(--line);border-radius:18px;padding:30px 30px 26px}
+.svr-page .svr-nap h3{font-size:24px;margin:0 0 12px}
+.svr-page .svr-nap address{font-style:normal;margin:0 0 18px;font-size:16px;line-height:1.75}
+.svr-page .svr-nap address a{color:var(--navy);font-weight:600}
+.svr-page .svr-hours{width:100%;border-collapse:collapse;margin:0 0 20px;font-size:15.5px}
+.svr-page .svr-hours th,.svr-page .svr-hours td{text-align:left;padding:9px 0;border-bottom:1px solid var(--line);font-weight:400}
+.svr-page .svr-hours th{color:var(--navy);font-weight:600}
+.svr-page .svr-hours td{text-align:right;color:var(--ink)}
+.svr-page .svr-hours tr.is-closed td{color:var(--muted)}
+.svr-page .svr-nap__actions{display:flex;flex-wrap:wrap;gap:12px}
+.svr-page .svr-map{border-radius:18px;overflow:hidden;border:1px solid var(--line);box-shadow:0 18px 40px rgba(4,9,42,.10);background:var(--mist)}
+.svr-page .svr-map iframe{display:block;width:100%;height:100%;min-height:430px;border:0}
+.svr-page .svr-areas{display:flex;flex-wrap:wrap;gap:10px;margin:0 0 6px}
+.svr-page .svr-areas li{background:#fff;border:1px solid var(--line);border-radius:999px;padding:7px 18px;font-size:14.5px;color:var(--navy)}
+.svr-page .svr-getting{margin:22px 0 0;font-size:15.5px}
+.svr-page .svr-reviews{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+.svr-page .svr-reviews>*{min-width:0}
+.svr-page .svr-review{background:#fff;border:1px solid var(--line);border-radius:16px;padding:26px 24px;display:flex;flex-direction:column}
+.svr-page .svr-review__stars{color:#F5A623;letter-spacing:2px;font-size:16px;margin:0 0 10px}
+.svr-page .svr-review blockquote{margin:0 0 16px;font-size:15.5px;line-height:1.75;color:var(--ink)}
+.svr-page .svr-review footer{margin-top:auto;font-size:14px;color:var(--muted)}
+.svr-page .svr-review footer strong{color:var(--navy);font-weight:600}
+.svr-page .svr-reviews__more{margin:26px 0 0;text-align:center}
+@media (max-width:1100px){.svr-page .svr-reviews{grid-template-columns:1fr 1fr}}
+@media (max-width:900px){
+  .svr-page .svr-visit{grid-template-columns:1fr;gap:28px}
+  .svr-page .svr-signs{grid-template-columns:1fr}
+  .svr-page .svr-map iframe{min-height:340px}
+}
+@media (max-width:600px){
+  .svr-page .svr-reviews{grid-template-columns:1fr}
+  .svr-page .svr-nap{padding:24px 20px 20px}
+}
+
+.svr-page .svr-split p a:not(.svr-btn),.svr-page .svr-lead a:not(.svr-btn),.svr-page .svr-urgent p a:not(.svr-btn){color:var(--accent-dk);font-weight:500}
+.svr-page .svr-split p a:not(.svr-btn):hover,.svr-page .svr-urgent p a:not(.svr-btn):hover{color:var(--navy)}

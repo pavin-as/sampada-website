@@ -13,6 +13,7 @@ Goal: a simpler, more trustworthy site that ranks for "eye hospital Tirur" and i
 | 4 | Instagram data + automation | `src/data/instagram.json` (fallback), `scripts/fetch-instagram.mjs`, new step in `deploy.yml`. | Done (needs a feed URL or token for live posts) |
 | 5 | Homepage | Mission/Vision and homepage FAQ removed. Latest updates now three featured blog articles with real hero images and "Read Article". Instagram grid added under it. Kept: Tirur H1 hero, local intro, Dr. Sameera spotlight, Google reviews. Stock coverflow replaced by a compact 8-card treatment grid. | Done |
 | 6 | Verify | `npm run build`: no warnings. All 28 pages crawled at 1366px and 390px: no 404s for local assets, no horizontal overflow. Dead WordPress head tags (feeds, wp-json, oEmbed, RSD, shortlink) removed from touched pages. | Done |
+| 7 | Local landing page | `/eye-hospital-in-tirur/` added: surgeon-led/retina-first positioning, 8 treatment cards, symptoms and emergency box, NAP + hours + map, Google reviews, 9-question FAQ with FAQPage schema, new lean `Footer.astro`. Linked from the homepage intro H2 and all footer navs. | Done, awaiting review |
 
 ## Decisions worth knowing
 - Everything new is scoped under `.svr-page` in `src/styles/site.css`, so legacy Elementor CSS cannot override it.
@@ -22,5 +23,5 @@ Goal: a simpler, more trustworthy site that ranks for "eye hospital Tirur" and i
 ## Open items for the clinic
 1. **Instagram**: the bundled `instagram.json` is a fallback (clinic photos linking to the profile). Instagram blocks scraping, so real posts need `INSTAGRAM_FEED_URL` (e.g. a Behold/Curator JSON feed) or `INSTAGRAM_ACCESS_TOKEN` added as GitHub repository secrets. The workflow currently runs on push and monthly; add a weekly cron if you want fresher posts.
 2. **Insurance / cashless FAQ**: worded neutrally ("call to confirm for your insurer or TPA"). Replace with your actual empanelment policy.
-3. **Green laser**: listed on /about/ as requested; it is not mentioned anywhere else on the site yet.
+3. **Green laser**: confirmed by the clinic (retinal photocoagulation); listed on /about/ and on /eye-hospital-in-tirur/.
 4. **Still Elementor**: contact-us, blog index and Dr. Sameera's page keep their legacy bodies (only header/footer nav changed).

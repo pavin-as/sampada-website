@@ -1,0 +1,334 @@
+---
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import TreatmentGrid from '../../components/TreatmentGrid.astro';
+import '../../styles/site.css';
+import reviewData from '../../data/reviews.json';
+import { SITE, PHONE_DISPLAY, PHONE_TEL } from '../../data/site';
+
+const URL = `${SITE}/eye-hospital-in-tirur/`;
+const TITLE = 'Eye Hospital in Tirur | Retina & Cataract Care | Sampada VR';
+const DESC = `Surgeon-led eye hospital in Tirur, Kerala. Retina, cataract and glaucoma care by Dr Sameera V V, near Tirur railway station. Call ${PHONE_DISPLAY}.`;
+const OG_IMAGE = `${SITE}/wp-content/uploads/2024/02/dr-sameera-sampada-1024x682.webp`;
+const MAPS_PROFILE = reviewData.profileUrl;
+const MAPS_DIRECTIONS = 'https://www.google.com/maps/dir/?api=1&destination=Sampada+VR+Speciality+Eye+Care+LLP%2C+Railway+Station+Bypass+Rd%2C+Thazhepalam%2C+Tirur%2C+Kerala+676101';
+const WA = `https://wa.me/${PHONE_TEL.replace('+', '')}`;
+const reviews = (reviewData.reviews ?? []).filter((r) => r.rating >= 4 && r.text).slice(0, 3);
+
+// Answers are HTML strings, kept in sync with the FAQPage JSON-LD below.
+const faqs = [
+  {
+    q: 'Which eye hospital in Tirur treats retina problems?',
+    a: `<p>Sampada VR Speciality Eye Care, on Railway Station Bypass Road, Thazhepalam, is a centre built around retinal disease. <a href="/about-dr-sameera-v-v/">Dr Sameera V V</a>, a vitreoretinal surgeon with 14 years of experience, examines and operates on every retinal case. We treat <a href="/treatments/retinal-detachment-surgery/">retinal detachment</a>, <a href="/treatments/diabetic-retinopathy-treatment/">diabetic retinopathy</a>, macular degeneration and retinopathy of prematurity, so patients no longer need to travel to a distant city for a retina specialist.</p>`,
+  },
+  {
+    q: 'Where is Sampada VR and how do I reach it?',
+    a: `<p>We are at Railway Station Bypass Road, Thazhepalam, Tirur, Kerala 676101, a few minutes from Tirur railway station and the bus stand. <a href="${MAPS_DIRECTIONS}" rel="noopener">Open directions in Google Maps</a>, or call <a href="tel:${PHONE_TEL}">${PHONE_DISPLAY}</a> and we will guide you.</p>`,
+  },
+  {
+    q: 'What are your opening hours?',
+    a: `<p>Monday 9 AM to 5 PM, Tuesday 3 PM to 5 PM, and Wednesday to Saturday 9 AM to 5 PM. We are closed on Sundays. If you are travelling from a distance, or are coming for a procedure, please call ahead so we can confirm the time with you.</p>`,
+  },
+  {
+    q: 'Do you perform cataract surgery in Tirur?',
+    a: `<p>Yes. <a href="/treatments/cataract-surgery-tirur/">Cataract surgery</a> is done here as a day-care procedure: the clouded lens is replaced with a clear artificial one and you go home the same day. Having a retina surgeon in the same centre is an advantage if you also have diabetes or another retinal condition that needs to be assessed before surgery.</p>`,
+  },
+  {
+    q: 'Do you treat glaucoma and do routine eye check-ups?',
+    a: `<p>Yes. We offer <a href="/treatments/glaucoma-treatment/">glaucoma care</a>, including visual field testing with a Humphrey Field Analyzer, and complete <a href="/treatments/eye-check-up/">dilated eye check-ups</a> for adults and children, along with dry-eye treatment, squint (strabismus) care, vision therapy, myopia control and a low vision clinic.</p>`,
+  },
+  {
+    q: 'What should I do in an eye emergency?',
+    a: `<p>A sudden curtain or shadow across your vision, a shower of new floaters, flashes of light, or a sudden drop in vision can mean a retinal detachment, where the hours matter. Call <a href="tel:${PHONE_TEL}">${PHONE_DISPLAY}</a> straight away and come in. If the clinic is closed when symptoms begin, go to the nearest hospital emergency department without waiting for our next opening.</p>`,
+  },
+  {
+    q: 'Do you accept health insurance or cashless treatment?',
+    a: `<p>Whether a procedure can be claimed cashless depends on your insurer or TPA and on your policy. Please call us on <a href="tel:${PHONE_TEL}">${PHONE_DISPLAY}</a> before your visit, with your policy details to hand, and we will tell you what to expect.</p>`,
+  },
+  {
+    q: 'Do I need an appointment?',
+    a: `<p>Booking ahead saves you waiting time. Call <a href="tel:${PHONE_TEL}">${PHONE_DISPLAY}</a> or message us on <a href="${WA}" rel="noopener">WhatsApp</a>. Walk-ins are also welcome during opening hours.</p>`,
+  },
+  {
+    q: 'Do you treat children and premature babies?',
+    a: `<p>Yes. We screen premature babies for retinopathy of prematurity (ROP), a condition that can cause blindness if it is missed, and we care for children with squint and refractive problems. The centre is designed to be calm for elderly patients and young children alike.</p>`,
+  },
+];
+const stripTags = (h: string) => h.replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim();
+
+const pageSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'WebPage',
+  '@id': `${URL}#webpage`,
+  url: URL,
+  name: TITLE,
+  description: DESC,
+  inLanguage: 'en-IN',
+  dateModified: '2026-09-20',
+  isPartOf: { '@type': 'WebSite', '@id': `${SITE}/#website`, url: `${SITE}/`, name: 'Sampada VR Speciality Eye Care' },
+  about: { '@id': `${SITE}/#clinic` },
+  primaryImageOfPage: { '@type': 'ImageObject', url: OG_IMAGE },
+  reviewedBy: { '@id': `${SITE}/about-dr-sameera-v-v/#physician` },
+};
+const crumbSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: `${SITE}/` },
+    { '@type': 'ListItem', position: 2, name: 'Eye Hospital in Tirur', item: URL },
+  ],
+};
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqs.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: stripTags(f.a) } })),
+};
+---
+<!DOCTYPE html>
+<html lang="en-IN">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+	<title>{TITLE}</title>
+	<meta name="description" content={DESC}>
+	<meta name="robots" content="index, follow, max-image-preview:large">
+	<link rel="canonical" href={URL}>
+	<meta name="geo.region" content="IN-KL">
+	<meta name="geo.placename" content="Tirur">
+	<meta property="og:type" content="website">
+	<meta property="og:site_name" content="Sampada VR Speciality Eye Care">
+	<meta property="og:title" content={TITLE}>
+	<meta property="og:description" content={DESC}>
+	<meta property="og:url" content={URL}>
+	<meta property="og:image" content={OG_IMAGE}>
+	<meta name="twitter:card" content="summary_large_image">
+	<meta name="twitter:title" content={TITLE}>
+	<meta name="twitter:description" content={DESC}>
+	<meta name="twitter:image" content={OG_IMAGE}>
+	<link rel="icon" href="/favicon.ico" type="image/x-icon">
+	<link rel="icon" href="/wp-content/uploads/2021/12/cropped-sampadaLogo-32x32.webp" sizes="32x32">
+	<link rel="icon" href="/wp-content/uploads/2021/12/cropped-sampadaLogo-192x192.webp" sizes="192x192">
+	<link rel="apple-touch-icon" href="/wp-content/uploads/2021/12/cropped-sampadaLogo-180x180.webp">
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Poppins:wght@400;500;600&display=swap">
+	<script type="application/ld+json" set:html={JSON.stringify(pageSchema)} />
+	<script type="application/ld+json" set:html={JSON.stringify(crumbSchema)} />
+	<script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+</head>
+<body style="margin:0">
+	<Header />
+	<main class="svr-page" id="main">
+
+		<section class="svr-hero">
+			<div class="svr-wrap">
+				<p class="svr-crumb"><a href="/">Home</a> &rsaquo; Eye Hospital in Tirur</p>
+				<h1>Eye Hospital in Tirur for Retina, Cataract and Glaucoma Care</h1>
+				<p class="svr-lead">Sampada VR Speciality Eye Care is a surgeon-led eye hospital on Railway Station Bypass Road, Thazhepalam, a few minutes from Tirur railway station. It is the first centre in the Malabar region dedicated to vitreoretinal disease, with cataract, glaucoma and routine eye care under the same roof.</p>
+				<div class="svr-hero__actions">
+					<a class="svr-btn svr-btn--primary" href={`tel:${PHONE_TEL}`}>Call {PHONE_DISPLAY}</a>
+					<a class="svr-btn svr-btn--ghost" href={MAPS_DIRECTIONS} rel="noopener">Get Directions</a>
+					<a class="svr-btn svr-btn--ghost" href={WA} rel="noopener">WhatsApp</a>
+				</div>
+				<p class="svr-hero__meta">Open Monday to Saturday &middot; <a href="#visit">Timings and map</a></p>
+			</div>
+		</section>
+
+		<div class="svr-wrap">
+			<div class="svr-facts" role="list">
+				<div class="svr-fact" role="listitem"><strong>Dec 2020</strong><span>Opened in Tirur</span></div>
+				<div class="svr-fact" role="listitem"><strong>14 years</strong><span>Vitreoretinal surgical experience</span></div>
+				<div class="svr-fact" role="listitem"><strong>4.7 &#9733;</strong><span>From 2,200+ Google reviews</span></div>
+				<div class="svr-fact" role="listitem"><strong>Day care</strong><span>Same-day surgery, home the same day</span></div>
+			</div>
+		</div>
+
+		<!-- Why Sampada VR -->
+		<section class="svr-sec" aria-labelledby="why-h">
+			<div class="svr-wrap svr-split">
+				<div>
+					<span class="svr-eyebrow">Why Patients Choose Us</span>
+					<h2 class="svr-h2" id="why-h">A retina-first eye hospital in the heart of Tirur</h2>
+					<p>Most eye hospitals are built around spectacles and cataract lists. Sampada VR was built around the retina: the thin, light-sensing layer at the back of the eye where diabetic damage, detachment and macular disease begin. If you have been told you need a retina specialist, you can be seen and treated in Tirur.</p>
+					<p>Every retinal case is examined by <a href="/about-dr-sameera-v-v/">Dr Sameera V V</a>, a fellowship-trained vitreoretinal surgeon with 14 years of experience, and she explains the plan in plain language before anything is done. Cataract, glaucoma, dry eye and general eye check-ups are handled in the same building, so a family can be seen together.</p>
+					<ul class="svr-cred">
+						<li><strong>Retinal imaging and diagnostics:</strong> OCT scanning, fundus photography and Humphrey visual field testing on site.</li>
+						<li><strong>Retinal laser:</strong> green laser for retinal photocoagulation, used in diabetic retinopathy and to seal retinal tears.</li>
+						<li><strong>Surgery as day care:</strong> most procedures are completed the same day, with a follow-up plan and a number to call.</li>
+						<li><strong>All ages:</strong> a calm, unhurried setting for elderly patients, children and premature babies.</li>
+					</ul>
+					<p style="margin-top:22px"><a class="svr-btn svr-btn--outline" href="/about/">About the centre and our equipment</a></p>
+				</div>
+				<div class="svr-split__media">
+					<img src="/wp-content/uploads/2024/02/dr-sameera-sampada-1024x682.webp" alt="Dr Sameera V V, vitreoretinal surgeon, at Sampada VR eye hospital in Tirur" width="1024" height="682" loading="lazy">
+				</div>
+			</div>
+		</section>
+
+		<!-- Treatments -->
+		<section class="svr-sec svr-sec--mist" id="treatments" aria-labelledby="treat-h">
+			<div class="svr-wrap">
+				<div class="svr-sechead">
+					<span class="svr-eyebrow">Eye Treatments in Tirur</span>
+					<h2 class="svr-h2" id="treat-h">What we treat at Sampada VR</h2>
+					<p class="svr-lead">Retinal conditions lead our work, alongside cataract, glaucoma and diagnostic testing. Choose a treatment for symptoms, how it is done and recovery.</p>
+				</div>
+				<TreatmentGrid />
+				<p class="svr-alsolabel">Also available</p>
+				<ul class="svr-alsolist">
+					<li>Macular degeneration care</li>
+					<li>Retinopathy of prematurity (ROP) screening</li>
+					<li>Dry-eye treatment</li>
+					<li>Squint (strabismus) care</li>
+					<li>Bynocs vision therapy</li>
+					<li>Myopia control</li>
+					<li>Contact lens and spectacle prescriptions</li>
+					<li>Low vision clinic</li>
+				</ul>
+			</div>
+		</section>
+
+		<!-- When to see a specialist -->
+		<section class="svr-sec" aria-labelledby="signs-h">
+			<div class="svr-wrap">
+				<div class="svr-sechead">
+					<span class="svr-eyebrow">When To Get Your Eyes Checked</span>
+					<h2 class="svr-h2" id="signs-h">Do not wait for eye problems to get worse</h2>
+					<p class="svr-lead">Many serious eye diseases cause no pain in the early stages. A dilated examination finds them while treatment still works well.</p>
+				</div>
+				<div class="svr-signs">
+					<div class="svr-prose">
+						<h3>Book an examination if you notice</h3>
+						<ul class="svr-bullets">
+							<li>Blurred, dim or distorted vision, or straight lines that look wavy.</li>
+							<li>New floaters, or spots drifting across your vision.</li>
+							<li>Difficulty seeing at night, or a shrinking side (peripheral) field of view.</li>
+							<li>Frequent headaches or eye strain, or a change in your spectacle power.</li>
+							<li>A child who squints, sits very close to screens, or does not track objects.</li>
+						</ul>
+						<h3>Get checked on a schedule if you</h3>
+						<ul class="svr-bullets">
+							<li><strong>Have diabetes:</strong> an annual dilated retinal exam, even if your vision is fine. See <a href="/treatments/diabetic-retinopathy-treatment/">diabetic retinopathy treatment</a>.</li>
+							<li><strong>Are over 40:</strong> a baseline check that includes eye pressure, which is how <a href="/treatments/glaucoma-treatment/">glaucoma</a> is caught early.</li>
+							<li><strong>Have a family history</strong> of glaucoma, retinal detachment or macular degeneration.</li>
+						</ul>
+					</div>
+					<aside class="svr-urgent" aria-labelledby="urgent-h">
+						<h3 id="urgent-h">Sudden shadow, curtain or flashes?</h3>
+						<p>A sudden curtain across your vision, a shower of new floaters, flashes of light or a sudden loss of vision can mean a <a href="/treatments/retinal-detachment-surgery/">retinal detachment</a>. This is an emergency: the sooner it is treated, the better the chance of saving sight.</p>
+						<p><a class="svr-btn svr-btn--primary" href={`tel:${PHONE_TEL}`}>Call {PHONE_DISPLAY}</a></p>
+						<p style="font-size:14px;color:var(--muted)">If the clinic is closed, go to the nearest hospital emergency department.</p>
+					</aside>
+				</div>
+			</div>
+		</section>
+
+		<!-- Visit -->
+		<section class="svr-sec svr-sec--cream" id="visit" aria-labelledby="visit-h">
+			<div class="svr-wrap">
+				<div class="svr-sechead">
+					<span class="svr-eyebrow">Visit Us</span>
+					<h2 class="svr-h2" id="visit-h">Find us on Railway Station Bypass Road, Tirur</h2>
+					<p class="svr-lead">Sampada VR is in Thazhepalam, a few minutes from Tirur railway station and the bus stand.</p>
+				</div>
+				<div class="svr-visit">
+					<div class="svr-nap">
+						<h3>Sampada VR Speciality Eye Care LLP</h3>
+						<address>
+							Railway Station Bypass Road, Thazhepalam,<br>
+							Tirur, Malappuram district,<br>
+							Kerala 676101<br>
+							<a href={`tel:${PHONE_TEL}`}>{PHONE_DISPLAY}</a>
+						</address>
+						<table class="svr-hours">
+							<caption class="svr-sr">Opening hours</caption>
+							<tbody>
+								<tr><th scope="row">Monday</th><td>9 AM &ndash; 5 PM</td></tr>
+								<tr><th scope="row">Tuesday</th><td>3 PM &ndash; 5 PM</td></tr>
+								<tr><th scope="row">Wednesday &ndash; Saturday</th><td>9 AM &ndash; 5 PM</td></tr>
+								<tr class="is-closed"><th scope="row">Sunday</th><td>Closed</td></tr>
+							</tbody>
+						</table>
+						<div class="svr-nap__actions">
+							<a class="svr-btn svr-btn--primary" href={MAPS_DIRECTIONS} rel="noopener">Get Directions</a>
+							<a class="svr-btn svr-btn--outline" href={`tel:${PHONE_TEL}`}>Call Now</a>
+						</div>
+					</div>
+					<div>
+						<div class="svr-map">
+							<iframe title="Map showing Sampada VR Speciality Eye Care, Railway Station Bypass Road, Thazhepalam, Tirur" src="https://maps.google.com/maps?q=SampadaVR%20Speciality%20Eye%20Care%20LLP%20Railway%20Station%20Bypass%20Rd%2C%20Thazhepalam%2C%20Tirur%2C%20Kerala%20676%20101&t=m&z=15&output=embed&iwloc=near" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>
+						</div>
+						<p class="svr-getting">Patients travel to us from these areas and beyond:</p>
+						<ul class="svr-areas">
+							<li>Tirur</li><li>Tanur</li><li>Kottakkal</li><li>Valanchery</li><li>Parappanangadi</li><li>Malappuram</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<!-- Reviews -->
+		{reviews.length > 0 && (
+			<section class="svr-sec" aria-labelledby="rev-h">
+				<div class="svr-wrap">
+					<div class="svr-sechead svr-sechead--center">
+						<span class="svr-eyebrow">Patient Reviews</span>
+						<h2 class="svr-h2" id="rev-h">What patients say about Sampada VR</h2>
+						<p class="svr-lead">Rated 4.7 from more than 2,200 Google reviews by patients across Tirur and Malappuram district.</p>
+					</div>
+					<div class="svr-reviews">
+						{reviews.map((r) => (
+							<figure class="svr-review" style="margin:0">
+								<div class="svr-review__stars" aria-label={`${r.rating} out of 5 stars`}>{'★'.repeat(r.rating)}</div>
+								<blockquote>&ldquo;{r.text}&rdquo;</blockquote>
+								<footer><strong>{r.author}</strong> &middot; {r.relativeTime} on Google</footer>
+							</figure>
+						))}
+					</div>
+					<p class="svr-reviews__more"><a class="svr-btn svr-btn--outline" href={MAPS_PROFILE} rel="noopener">Read all reviews on Google</a></p>
+				</div>
+			</section>
+		)}
+
+		<!-- FAQ -->
+		<section class="svr-sec svr-sec--mist" id="faq" aria-labelledby="faq-h">
+			<div class="svr-wrap">
+				<div class="svr-sechead svr-sechead--center">
+					<span class="svr-eyebrow">Common Questions</span>
+					<h2 class="svr-h2" id="faq-h">Eye care in Tirur: your questions answered</h2>
+					<p class="svr-lead">Location, timings, insurance, emergencies and what we treat.</p>
+				</div>
+				<div class="svr-faq">
+					{faqs.map((f, i) => (
+						<details open={i === 0}>
+							<summary>{f.q}</summary>
+							<div class="svr-faq__a" set:html={f.a} />
+						</details>
+					))}
+				</div>
+			</div>
+		</section>
+
+		<!-- CTA -->
+		<section class="svr-sec" aria-labelledby="cta-h">
+			<div class="svr-wrap">
+				<div class="svr-ctaband">
+					<div>
+						<h2 id="cta-h">Book your eye examination in Tirur</h2>
+						<p>A complete dilated eye examination shows what is going on. Dr Sameera will explain your options plainly before anything is planned.</p>
+						<a class="svr-btn svr-btn--primary" href={`tel:${PHONE_TEL}`}>Call {PHONE_DISPLAY}</a>
+					</div>
+					<div class="svr-ctaband__meta">
+						<strong>Sampada VR Speciality Eye Care LLP</strong><br>
+						Railway Station Bypass Road, Thazhepalam,<br>Tirur, Kerala 676101<br>
+						Mon 9 AM&ndash;5 PM &middot; Tue 3 PM&ndash;5 PM &middot; Wed&ndash;Sat 9 AM&ndash;5 PM<br>
+						<a href="/contact-us/">Contact details &rarr;</a>
+					</div>
+				</div>
+			</div>
+		</section>
+
+	</main>
+	<Footer />
+</body>
+</html>

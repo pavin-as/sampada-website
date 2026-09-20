@@ -1,0 +1,60 @@
+---
+// Lean site footer for redesigned pages (NAP, hours, quick links, social).
+// Phone and WhatsApp only: the footer email was deliberately removed (owner decision).
+import { PHONE_DISPLAY, PHONE_TEL, INSTAGRAM_URL } from '../data/site';
+const wa = `https://wa.me/${PHONE_TEL.replace('+', '')}`;
+---
+<footer class="svr-sitefooter" aria-label="Site footer">
+  <div class="svr-sitefooter__in">
+    <div class="svr-sitefooter__col svr-sitefooter__brand">
+      <img src="/wp-content/uploads/2021/12/logo-new-sampadavr.png" alt="Sampada VR Speciality Eye Care" width="180" height="60" loading="lazy" />
+      <p>Retina-first eye hospital on Railway Station Bypass Road, Thazhepalam, Tirur, Malappuram district, Kerala.</p>
+    </div>
+    <nav class="svr-sitefooter__col svr-footer-nav" aria-label="Footer">
+      <h2>Quick Links</h2>
+      <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="/eye-hospital-in-tirur/">Eye Hospital in Tirur</a></li>
+        <li><a href="/treatments/">Treatments</a></li>
+        <li><a href="/about/">About Us</a></li>
+        <li><a href="/blog/">Blog</a></li>
+        <li><a href="/contact-us/">Contact Us</a></li>
+      </ul>
+    </nav>
+    <div class="svr-sitefooter__col">
+      <h2>Contact</h2>
+      <p>
+        <a href={`tel:${PHONE_TEL}`}>{PHONE_DISPLAY}</a><br />
+        <a href={wa} rel="noopener">WhatsApp us</a><br />
+        Railway Station Bypass Rd, Thazhepalam,<br />Tirur, Kerala 676101
+      </p>
+    </div>
+    <div class="svr-sitefooter__col">
+      <h2>Opening Hours</h2>
+      <p>Mon 9 AM &ndash; 5 PM<br />Tue 3 PM &ndash; 5 PM<br />Wed &ndash; Sat 9 AM &ndash; 5 PM<br />Sunday closed</p>
+      <p class="svr-sitefooter__social">
+        <a href={INSTAGRAM_URL} rel="noopener">Instagram</a> &middot;
+        <a href="https://www.facebook.com/profile.php?id=61555728117404" rel="noopener">Facebook</a> &middot;
+        <a href="https://www.youtube.com/channel/UC27WRITUFTkTseplhxPb6Cw/featured" rel="noopener">YouTube</a>
+      </p>
+    </div>
+  </div>
+  <div class="svr-sitefooter__legal">&copy; {new Date().getFullYear()} Sampada VR Speciality Eye Care LLP. Information on this website is educational and does not replace a medical consultation.</div>
+</footer>
+
+<style is:global>
+.svr-sitefooter,.svr-sitefooter *{box-sizing:border-box}
+.svr-sitefooter{background:#04092A;color:#B5BBD0;font-family:"Poppins","Roboto",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;font-size:15px;line-height:1.75}
+.svr-sitefooter__in{max-width:1160px;margin:0 auto;padding:60px 20px 40px;display:grid;grid-template-columns:1.3fr .9fr 1.2fr 1.1fr;gap:40px}
+.svr-sitefooter__col{min-width:0}
+.svr-sitefooter h2{font-family:"DM Serif Display",Georgia,serif;font-weight:400;font-size:21px;color:#fff;margin:0 0 14px;line-height:1.2}
+.svr-sitefooter p{margin:0 0 12px}
+.svr-sitefooter a{color:#fff;text-decoration:none}
+.svr-sitefooter a:hover{color:#F28738}
+.svr-sitefooter .svr-footer-nav a{color:#B5BBD0}
+.svr-sitefooter .svr-footer-nav a:hover{color:#F28738}
+.svr-sitefooter__brand img{height:54px;width:auto;margin:0 0 14px;background:#fff;border-radius:10px;padding:6px 10px}
+.svr-sitefooter__legal{max-width:1160px;margin:0 auto;padding:20px;border-top:1px solid rgba(255,255,255,.12);font-size:13px;color:#8E95B0}
+@media (max-width:900px){.svr-sitefooter__in{grid-template-columns:1fr 1fr;gap:32px;padding-top:48px}}
+@media (max-width:560px){.svr-sitefooter__in{grid-template-columns:1fr}}
+</style>
