@@ -2,7 +2,7 @@ User-agent: *
 Allow: /
 
 # Sitemap
-Sitemap: https://sampadavr.com/sitemap.xml
+Sitemap: https://sampadavr.com/sitemap-index.xml
 
 # Disallow admin areas
 Disallow: /wp-admin/

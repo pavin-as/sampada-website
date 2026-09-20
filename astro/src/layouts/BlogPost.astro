@@ -13,6 +13,7 @@ type Props = CollectionEntry<'blog'>['data'] & {
 const { title, description, publishDate, heroImage, slug, lang = 'en', altHref, altLabel, author } = Astro.props;
 const htmlLang = lang === 'ml' ? 'ml' : 'en-US';
 const canonicalPath = lang === 'ml' ? `/ml/blog/${slug}/` : `/blog/${slug}/`;
+const canonicalURL = new URL(canonicalPath, 'https://sampadavr.com').href;
 ---
 
 <!DOCTYPE html>
@@ -30,13 +31,21 @@ const canonicalPath = lang === 'ml' ? `/ml/blog/${slug}/` : `/blog/${slug}/`;
 	<style>:lang(ml) { font-family: 'Noto Sans Malayalam', sans-serif; }</style>
 	</>
 )}
+<meta property="og:type" content="article">
+<meta property="og:title" content={title}>
+<meta property="og:description" content={description}>
+<meta property="og:url" content={canonicalURL}>
+<meta property="og:site_name" content="Sampada VR Speciality Eye Care">
+{heroImage && <meta property="og:image" content={new URL(heroImage, 'https://sampadavr.com').href} />}
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content={title}>
+<meta name="twitter:description" content={description}>
+{heroImage && <meta name="twitter:image" content={new URL(heroImage, 'https://sampadavr.com').href} />}
 {altHref && (
-	<link rel="alternate" hreflang={lang === 'ml' ? 'en' : 'ml'} href={altHref}>
+	<link rel="alternate" hreflang={lang === 'ml' ? 'en' : 'ml'} href={altHref} />
 )}
 	<style>img:is([sizes="auto" i], [sizes^="auto," i]) { contain-intrinsic-size: 3000px 1500px }</style>
 	<link rel="alternate" type="application/rss+xml" title="sampadavr &raquo; Feed" href="/feed/">
-<link rel="alternate" type="application/rss+xml" title="sampadavr &raquo; Comments Feed" href="/comments/feed/">
-<link rel="alternate" type="application/rss+xml" title="sampadavr &raquo; OCT: The Essential Eye Exam Tool You Didn&rsquo;t Know You Needed Comments Feed" href="/oct-the-essential-eye-exam-tool-you-didnt-know-you-needed/feed/">
 <script type="text/javascript">
 /* <![CDATA[ */
 window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/16.0.1\/72x72\/","ext":".png","svgUrl":"https:\/\/s.w.org\/images\/core\/emoji\/16.0.1\/svg\/","svgExt":".svg","source":{"concatemoji":"\/wp-includes\/js\/wp-emoji-release.min.js?ver=6.8.2"}};
@@ -100,12 +109,8 @@ window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/16
 <link rel="stylesheet" id="google-fonts-1-css" href="https://fonts.googleapis.com/css?family=Roboto%3A100%2C100italic%2C200%2C200italic%2C300%2C300italic%2C400%2C400italic%2C500%2C500italic%2C600%2C600italic%2C700%2C700italic%2C800%2C800italic%2C900%2C900italic%7CRoboto+Slab%3A100%2C100italic%2C200%2C200italic%2C300%2C300italic%2C400%2C400italic%2C500%2C500italic%2C600%2C600italic%2C700%2C700italic%2C800%2C800italic%2C900%2C900italic%7CDM+Serif+Display%3A100%2C100italic%2C200%2C200italic%2C300%2C300italic%2C400%2C400italic%2C500%2C500italic%2C600%2C600italic%2C700%2C700italic%2C800%2C800italic%2C900%2C900italic%7COpen+Sans%3A100%2C100italic%2C200%2C200italic%2C300%2C300italic%2C400%2C400italic%2C500%2C500italic%2C600%2C600italic%2C700%2C700italic%2C800%2C800italic%2C900%2C900italic%7CPoppins%3A100%2C100italic%2C200%2C200italic%2C300%2C300italic%2C400%2C400italic%2C500%2C500italic%2C600%2C600italic%2C700%2C700italic%2C800%2C800italic%2C900%2C900italic%7CLato%3A100%2C100italic%2C200%2C200italic%2C300%2C300italic%2C400%2C400italic%2C500%2C500italic%2C600%2C600italic%2C700%2C700italic%2C800%2C800italic%2C900%2C900italic%7CRaleway%3A100%2C100italic%2C200%2C200italic%2C300%2C300italic%2C400%2C400italic%2C500%2C500italic%2C600%2C600italic%2C700%2C700italic%2C800%2C800italic%2C900%2C900italic&amp;display=swap&amp;ver=6.8.2" type="text/css" media="all">
 <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin><script type="text/javascript" data-cfasync="false" src="/wp-includes/js/jquery/jquery.min.js?ver=3.7.1" id="jquery-core-js"></script>
 <script type="text/javascript" data-cfasync="false" src="/wp-includes/js/jquery/jquery-migrate.min.js?ver=3.4.1" id="jquery-migrate-js"></script>
-<link rel="https://api.w.org/" href="/wp-json/"><link rel="alternate" title="JSON" type="application/json" href="/wp-json/wp/v2/posts/1660"><link rel="EditURI" type="application/rsd+xml" title="RSD" href="/xmlrpc.php?rsd">
 <meta name="generator" content="WordPress 6.8.2">
 <link rel="canonical" href={canonicalPath}>
-<link rel="shortlink" href="/?p=1660">
-<link rel="alternate" title="oEmbed (JSON)" type="application/json+oembed" href="/wp-json/oembed/1.0/embed?url=http%3A%2F%2F%2Foct-the-essential-eye-exam-tool-you-didnt-know-you-needed%2F">
-<link rel="alternate" title="oEmbed (XML)" type="text/xml+oembed" href="/wp-json/oembed/1.0/embed?url=http%3A%2F%2F%2Foct-the-essential-eye-exam-tool-you-didnt-know-you-needed%2F&amp;format=xml">
 <!-- start Simple Custom CSS and JS -->
 <script src="//code.tidio.co/edxk0h03o8pzd1iyij5ncishcrdqgney.js" async></script><!-- end Simple Custom CSS and JS -->
 <style id="sticky-social-icons-styles">#sticky-social-icons-container{top: 160px}#sticky-social-icons-container li a{font-size: 16px; width: 35px; height:35px; }#sticky-social-icons-container.with-animation li a:hover{width: 45px; }#sticky-social-icons-container li a.fab-fa-facebook-f{color: #0a0a0a; background: #ffffff; }#sticky-social-icons-container li a.fab-fa-facebook-f:hover{color: #ffffff; background: #0a0a0a; }#sticky-social-icons-container li a.fab-fa-instagram{color: #0a0a0a; background: #ffffff; }#sticky-social-icons-container li a.fab-fa-instagram:hover{color: #ffffff; background: #0a0a0a; }#sticky-social-icons-container li a.fab-fa-youtube{color: #0a0a0a; background: #ffffff; }#sticky-social-icons-container li a.fab-fa-youtube:hover{color: #ffffff; background: #0a0a0a; }@media( max-width: 415px ){#sticky-social-icons-container li a{font-size: 13.6px; width: 29.75px; height:29.75px; }}</style><meta name="generator" content="Elementor 3.19.0; features: e_optimized_assets_loading, e_optimized_css_loading, e_font_icon_svg, additional_custom_breakpoints, block_editor_assets_optimize, e_image_loading_optimization; settings: css_print_method-external, google_font-enabled, font_display-swap">
@@ -230,7 +235,7 @@ window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/16
 			
 						<source srcset="/wp-content/uploads/2021/12/logo-new-sampadavr.png 1x, /wp-content/uploads/2021/12/logo-new-sampadavr.png 2x">	
 						
-			<img src="/wp-content/uploads/2021/12/logo-new-sampadavr.png" alt="">
+			<img src="/wp-content/uploads/2021/12/logo-new-sampadavr.png" alt="Sampada VR Speciality Eye Care, eye hospital in Tirur">
 
 							<a class="wpr-logo-url" rel="home" href="/"></a>
 					</source></source></picture>
@@ -311,7 +316,7 @@ window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/16
 			
 						<source srcset="/wp-content/uploads/2021/12/logo-new-sampadavr.png 1x, /wp-content/uploads/2021/12/logo-new-sampadavr.png 2x">	
 						
-			<img src="/wp-content/uploads/2021/12/logo-new-sampadavr.png" alt="">
+			<img src="/wp-content/uploads/2021/12/logo-new-sampadavr.png" alt="Sampada VR Speciality Eye Care, eye hospital in Tirur">
 
 							<a class="wpr-logo-url" rel="home" href="/"></a>
 					</source></source></picture>
@@ -425,7 +430,7 @@ window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/16
 			
 						<source srcset="/wp-content/uploads/2021/12/logo-new-sampadavr.png 1x, /wp-content/uploads/2021/12/logo-new-sampadavr.png 2x">	
 						
-			<img src="/wp-content/uploads/2021/12/logo-new-sampadavr.png" alt="">
+			<img src="/wp-content/uploads/2021/12/logo-new-sampadavr.png" alt="Sampada VR Speciality Eye Care, eye hospital in Tirur">
 
 							<a class="wpr-logo-url" rel="home" href="/"></a>
 					</source></source></picture>
@@ -515,18 +520,14 @@ window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/16
 				<div class="elementor-widget-container">
 							<p>Contact Info</p>						</div>
 				</div>
-				<div class="elementor-element elementor-element-161bcc04 elementor-widget elementor-widget-heading" data-id="161bcc04" data-element_type="widget" data-widget_type="heading.default">
-				<div class="elementor-widget-container">
-			<p class="elementor-heading-title elementor-size-default"><a href="mailto:Info@sampada.local">Info@sampada.local</a></p>		</div>
-				</div>
 				<div class="elementor-element elementor-element-99adc78 elementor-widget elementor-widget-heading" data-id="99adc78" data-element_type="widget" data-widget_type="heading.default">
 				<div class="elementor-widget-container">
-			<p class="elementor-heading-title elementor-size-default"><a href="tel:+91%20918%2085%20724%2012">+91 918 85 724 12
+			<p class="elementor-heading-title elementor-size-default"><a href="tel:+919188572412">+91 91885 72412
 </a></p>		</div>
 				</div>
 				<div class="elementor-element elementor-element-763829e elementor-widget elementor-widget-heading" data-id="763829e" data-element_type="widget" data-widget_type="heading.default">
 				<div class="elementor-widget-container">
-			<p class="elementor-heading-title elementor-size-default"><a href="tel:+91%20623%2080%20854%2082">+91 623 80 854 82</a></p>		</div>
+			<p class="elementor-heading-title elementor-size-default"><a href="tel:+916238085482">+91 62380 85482</a></p>		</div>
 				</div>
 				<div class="elementor-element elementor-element-27a70b16 elementor-widget elementor-widget-heading" data-id="27a70b16" data-element_type="widget" data-widget_type="heading.default">
 				<div class="elementor-widget-container">
