@@ -42,10 +42,6 @@ const faqs = [
     a: `<p>A sudden curtain or shadow across your vision, a shower of new floaters, flashes of light, or a sudden drop in vision can mean a retinal detachment, where the hours matter. Call <a href="tel:${PHONE_TEL}">${PHONE_DISPLAY}</a> straight away and come in. If the clinic is closed when symptoms begin, go to the nearest hospital emergency department without waiting for our next opening.</p>`,
   },
   {
-    q: 'Do you accept health insurance or cashless treatment?',
-    a: `<p>Whether a procedure can be claimed cashless depends on your insurer or TPA and on your policy. Please call us on <a href="tel:${PHONE_TEL}">${PHONE_DISPLAY}</a> before your visit, with your policy details to hand, and we will tell you what to expect.</p>`,
-  },
-  {
     q: 'Do I need an appointment?',
     a: `<p>Booking ahead saves you waiting time. Call <a href="tel:${PHONE_TEL}">${PHONE_DISPLAY}</a> or message us on <a href="${WA}" rel="noopener">WhatsApp</a>. Walk-ins are also welcome during opening hours.</p>`,
   },
@@ -296,7 +292,7 @@ const faqSchema = {
 				<div class="svr-sechead svr-sechead--center">
 					<span class="svr-eyebrow">Common Questions</span>
 					<h2 class="svr-h2" id="faq-h">Eye care in Tirur: your questions answered</h2>
-					<p class="svr-lead">Location, timings, insurance, emergencies and what we treat.</p>
+					<p class="svr-lead">Location, timings, emergencies and what we treat.</p>
 				</div>
 				<div class="svr-faq">
 					{faqs.map((f, i) => (

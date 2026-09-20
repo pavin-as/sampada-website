@@ -8,10 +8,6 @@ import { TREATMENT_ORDER, SITE, PHONE_DISPLAY } from '../../data/site';
 // Patient FAQs. Answers are HTML strings. Kept in sync with the FAQPage JSON-LD below.
 const faqs = [
   {
-    q: 'Do you accept health insurance or cashless treatment?',
-    a: `<p>Whether a procedure can be claimed cashless depends on your insurer or TPA and on your policy. Please call us on <a href="tel:+919188572412">${PHONE_DISPLAY}</a> before your visit, with your policy details if you have them, and our patient care team will confirm what applies to you and which documents are needed.</p><p>Your surgeon will explain the recommended procedure and your options first, so you can plan with your insurer with the facts in hand.</p>`,
-  },
-  {
     q: 'How do I book an appointment?',
     a: `<p>Call <a href="tel:+919188572412">${PHONE_DISPLAY}</a> (or +91 62380 85482), or walk in at the clinic on Railway Station Bypass Road, Thazhepalam, Tirur. We are open Monday 9 AM to 5 PM, Tuesday 3 PM to 5 PM, and Wednesday to Saturday 9 AM to 5 PM. Details and directions are on the <a href="/contact-us/">Contact Us</a> page.</p>`,
   },
@@ -284,7 +280,7 @@ window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/16
 						<div class="svr-sechead svr-sechead--center">
 							<span class="svr-eyebrow">Common Questions</span>
 							<h2 class="svr-h2" id="treatment-faq-h">Before you visit</h2>
-							<p class="svr-lead">Straight answers on booking, insurance, recovery and eye emergencies.</p>
+							<p class="svr-lead">Straight answers on booking, recovery and eye emergencies.</p>
 						</div>
 						<div class="svr-faq">
 							{faqs.map((f, i) => (
