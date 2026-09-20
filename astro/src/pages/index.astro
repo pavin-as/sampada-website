@@ -1,3 +1,9 @@
+---
+import reviewData from '../data/reviews.json';
+const reviews = reviewData.reviews ?? [];
+const initials = (name) =>
+  String(name).split(/\s+/).filter(Boolean).slice(0, 2).map((w) => w[0]).join('').toUpperCase();
+---
 <!DOCTYPE html>
 <html lang="en-US">
 <head>
@@ -1273,196 +1279,43 @@ window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/16
 				<div class="elementor-widget-container">
 							<p>Rated 4.7 from more than 2,200 Google reviews by patients across Tirur and Malappuram district.</p>						</div>
 				</div>
-				<div class="elementor-element elementor-element-4f30215b wpr-testimonial-slider-columns-2 wpr-testimonial-slider-columns--tablet1 wpr-testimonial-meta-position-top wpr-testimonial-slider-columns--mobile1 wpr-testimonial-meta-align-center wpr-testimonial-image-position-center elementor-widget elementor-widget-wpr-testimonial" data-id="4f30215b" data-element_type="widget" data-settings='{"testimonial_amount":"2","testimonial_amount_tablet":1,"testimonial_slides_to_scroll":1,"testimonial_amount_mobile":1,"testimonial_loop":"yes"}' data-widget_type="wpr-testimonial.default">
-				<div class="elementor-widget-container">
-					<div class="wpr-testimonial-carousel-wrap">
-			
-			<div class="wpr-testimonial-carousel" dir="ltr" data-slick='{"rtl":false,"infinite":true,"speed":700,"arrows":true,"dots":true,"autoplay":false,"autoplaySpeed":0,"pauseOnHover":"","prevArrow":"#wpr-testimonial-prev-4f30215b","nextArrow":"#wpr-testimonial-next-4f30215b","sliderSlidesToScroll":1}' data-slide-effect="slide">
-					
-					
-											
-						<div class="wpr-testimonial-item elementor-repeater-item-e6f6d06 elementor-clearfix">
-							
-							<div class="wpr-testimonial-meta elementor-clearfix">
-								<div class="wpr-testimonial-meta-inner">
-								
-					<div class="wpr-testimonial-image">
-				<img decoding="async" src="/wp-content/uploads/2024/02/Mask-Group-3.png" alt="Kimora Davila">
-			</div>
-		
-			
-		<div class="wpr-testimonial-meta-content-wrap">
-							<div class="wpr-testimonial-name">Kimora Davila</div>
-			
-			
-			
-		</div>
-										</div>
-							</div>
-
-							
-		<div class="wpr-testimonial-content-wrap">
-			<div class="wpr-testimonial-content-inner">
-							<div class="wpr-testimonial-icon">
-					<i class="fas fa-quote-left"></i>				</div>
-			
-							<div class="wpr-testimonial-title">Best Company</div>
-			
-										
-							<div class="wpr-testimonial-content">
-					
-					<p></p><p>Eat imagine you chiefly few end ferrars compass. Be visitor females am ferrars inquiry. Latter law remark two lively thrown. Spot set they know rest its. Raptures law diverted believed jennings consider children the see. Had invited beloved carried the colonel. Occasional principles discretion it as he unpleasing.</p>
+				<div class="svr-reviews">
+	<ul class="svr-reviews__list">
+		{reviews.map((r) => (
+			<li class="svr-review">
+				<div class="svr-review__head">
+					<span class="svr-review__avatar" aria-hidden="true">{initials(r.author)}</span>
+					<div>
+						<p class="svr-review__name">{r.author}</p>
+						<p class="svr-review__when">{r.relativeTime}</p>
+					</div>
 				</div>
-			
-			
-						</div>
-		</div>
-
-	
-							
-						</div>
-						
-											
-						<div class="wpr-testimonial-item elementor-repeater-item-032bd08 elementor-clearfix">
-							
-							<div class="wpr-testimonial-meta elementor-clearfix">
-								<div class="wpr-testimonial-meta-inner">
-								
-					<div class="wpr-testimonial-image">
-				<img decoding="async" src="/wp-content/uploads/2024/02/Mask-Group-3.png" alt="Kimora Davila">
-			</div>
-		
-			
-		<div class="wpr-testimonial-meta-content-wrap">
-							<div class="wpr-testimonial-name">Kimora Davila</div>
-			
-			
-			
-		</div>
-										</div>
-							</div>
-
-							
-		<div class="wpr-testimonial-content-wrap">
-			<div class="wpr-testimonial-content-inner">
-							<div class="wpr-testimonial-icon">
-					<i class="fas fa-quote-left"></i>				</div>
-			
-							<div class="wpr-testimonial-title">Best Company</div>
-			
-										
-							<div class="wpr-testimonial-content">
-					
-					<p></p><p>Eat imagine you chiefly few end ferrars compass. Be visitor females am ferrars inquiry. Latter law remark two lively thrown. Spot set they know rest its. Raptures law diverted believed jennings consider children the see. Had invited beloved carried the colonel. Occasional principles discretion it as he unpleasing.</p>
-				</div>
-			
-			
-						</div>
-		</div>
-
-	
-							
-						</div>
-						
-											
-						<div class="wpr-testimonial-item elementor-repeater-item-f8542be elementor-clearfix">
-							
-							<div class="wpr-testimonial-meta elementor-clearfix">
-								<div class="wpr-testimonial-meta-inner">
-								
-					<div class="wpr-testimonial-image">
-				<img decoding="async" src="/wp-content/uploads/2024/02/Mask-Group-1.png" alt="Ashleigh Davila">
-			</div>
-		
-			
-		<div class="wpr-testimonial-meta-content-wrap">
-							<div class="wpr-testimonial-name">Ashleigh Davila</div>
-			
-			
-			
-		</div>
-										</div>
-							</div>
-
-							
-		<div class="wpr-testimonial-content-wrap">
-			<div class="wpr-testimonial-content-inner">
-							<div class="wpr-testimonial-icon">
-					<i class="fas fa-quote-left"></i>				</div>
-			
-							<div class="wpr-testimonial-title">Right Choice</div>
-			
-										
-							<div class="wpr-testimonial-content">
-					
-					<p></p><p>Do so written as raising parlors spirits mr elderly. Made late in of high left hold. Carried females of up highest calling. Limits marked led silent dining her she far. Sir but elegance marriage dwelling likewise position old pleasure men. Dissimilar themselves simplicity no of contrasted as. Delay great day hours.</p>
-				</div>
-			
-			
-						</div>
-		</div>
-
-	
-							
-						</div>
-						
-											
-						<div class="wpr-testimonial-item elementor-repeater-item-757e9bf elementor-clearfix">
-							
-							<div class="wpr-testimonial-meta elementor-clearfix">
-								<div class="wpr-testimonial-meta-inner">
-								
-					<div class="wpr-testimonial-image">
-				<img decoding="async" src="/wp-content/uploads/2024/02/Mask-Group-1.png" alt="Ashleigh Davila">
-			</div>
-		
-			
-		<div class="wpr-testimonial-meta-content-wrap">
-							<div class="wpr-testimonial-name">Ashleigh Davila</div>
-			
-			
-			
-		</div>
-										</div>
-							</div>
-
-							
-		<div class="wpr-testimonial-content-wrap">
-			<div class="wpr-testimonial-content-inner">
-							<div class="wpr-testimonial-icon">
-					<i class="fas fa-quote-left"></i>				</div>
-			
-							<div class="wpr-testimonial-title">Right Choice</div>
-			
-										
-							<div class="wpr-testimonial-content">
-					
-					<p></p><p>Do so written as raising parlors spirits mr elderly. Made late in of high left hold. Carried females of up highest calling. Limits marked led silent dining her she far. Sir but elegance marriage dwelling likewise position old pleasure men. Dissimilar themselves simplicity no of contrasted as. Delay great day hours.</p>
-				</div>
-			
-			
-						</div>
-		</div>
-
-	
-							
-						</div>
-									</div>
-
-			<div class="wpr-testimonial-controls">
-				<div class="wpr-testimonial-dots"></div>
-			</div>
-
-			<div class="wpr-testimonial-arrow-container">
-				<div class="wpr-testimonial-prev-arrow wpr-testimonial-arrow" id="wpr-testimonial-prev-4f30215b">
-					<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewbox="0 0 512 338.4" style="enable-background:new 0 0 512 338.4;" xml:space="preserve"><g><polygon class="st0" points="511.4,183.1 53.4,183.1 188.9,318.7 169.2,338.4 0,169.2 169.2,0 188.9,19.7 53.4,155.3 511.4,155.3 "></polygon></g></svg>				</div>
-				<div class="wpr-testimonial-next-arrow wpr-testimonial-arrow" id="wpr-testimonial-next-4f30215b">
-					<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewbox="0 0 512 338.4" style="enable-background:new 0 0 512 338.4;" xml:space="preserve"><g><polygon class="st0" points="511.4,183.1 53.4,183.1 188.9,318.7 169.2,338.4 0,169.2 169.2,0 188.9,19.7 53.4,155.3 511.4,155.3 "></polygon></g></svg>				</div>
-			</div>
-		</div>
-
-			</div>
-				</div>
+				<p class="svr-review__stars" aria-label={`Rated ${r.rating} out of 5`}>
+					<span aria-hidden="true">{'\u2605'.repeat(r.rating)}</span>
+				</p>
+				<blockquote class="svr-review__text">{r.text}</blockquote>
+			</li>
+		))}
+	</ul>
+	<p class="svr-reviews__foot">
+		<a href={reviewData.profileUrl} target="_blank" rel="noopener noreferrer">Read all reviews on Google</a>
+	</p>
+</div>
+<style>
+.svr-reviews{max-width:1140px;margin:0 auto;padding:8px 0 0;text-align:left;}
+.svr-reviews__list{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:24px;}
+.svr-review{background:#fff;border:1px solid #E9EBEF;border-radius:14px;padding:28px;box-shadow:0 4px 20px rgba(4,9,42,.06);display:flex;flex-direction:column;}
+.svr-review__head{display:flex;align-items:center;gap:14px;margin-bottom:14px;}
+.svr-review__avatar{flex:0 0 46px;width:46px;height:46px;border-radius:50%;background:#04092A;color:#fff;display:inline-flex;align-items:center;justify-content:center;font-family:"DM Serif Display",Georgia,serif;font-size:17px;letter-spacing:.02em;}
+.svr-review__name{font-family:"DM Serif Display",Georgia,serif;font-size:19px;line-height:1.2;color:#04092A;margin:0;}
+.svr-review__when{font-family:"Poppins","Roboto",sans-serif;font-size:13px;color:#7A7E8C;margin:3px 0 0;}
+.svr-review__stars{color:#F28738;font-size:16px;letter-spacing:2px;margin:0 0 12px;line-height:1;}
+.svr-review__text{font-family:"Poppins","Roboto",sans-serif;font-size:15px;line-height:1.72;color:#3C4048;margin:0;border:0;padding:0;quotes:none;flex:1 1 auto;}
+.svr-reviews__foot{margin:26px 0 0;font-family:"Poppins","Roboto",sans-serif;font-size:14px;}
+.svr-reviews__foot a{color:#F28738;font-weight:600;text-decoration:none;}
+.svr-reviews__foot a:hover{text-decoration:underline;}
+@media(max-width:767px){.svr-reviews__list{grid-template-columns:1fr;gap:18px;}.svr-review{padding:22px;}}
+</style>
 					</div>
 		</div>
 					</div>

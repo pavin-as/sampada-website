@@ -3,6 +3,9 @@ name: Deploy Astro to GitHub Pages
 on:
   push:
     branches: [ main ]
+  # Refresh Google reviews and redeploy on the 1st of every month, 00:00 UTC
+  schedule:
+    - cron: '0 0 1 * *'
   workflow_dispatch:
 
 permissions:
@@ -31,6 +34,13 @@ jobs:
       - name: Install dependencies
         working-directory: astro
         run: npm ci
+
+      - name: Refresh Google reviews
+        working-directory: astro
+        env:
+          GOOGLE_PLACES_API_KEY: ${{ secrets.GOOGLE_PLACES_API_KEY }}
+          GOOGLE_PLACE_ID: ${{ secrets.GOOGLE_PLACE_ID }}
+        run: node scripts/fetch-reviews.mjs
 
       - name: Build Astro site
         working-directory: astro

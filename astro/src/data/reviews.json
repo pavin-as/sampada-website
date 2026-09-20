@@ -1,0 +1,26 @@
+{
+  "source": "Google Business Profile",
+  "placeId": "ChIJIbC53pexpzsRZRpDYkXLNcM",
+  "updatedAt": "2026-09-20",
+  "profileUrl": "https://maps.google.com/?cid=14066372510023359077",
+  "reviews": [
+    {
+      "author": "kajal asru",
+      "rating": 5,
+      "relativeTime": "3 months ago",
+      "text": "Dr Sameera mam is an outstanding eye specialist. Doctor explained my eye condition very clearly and provided the best treatment with great patience and attention. I truly appreciate the accurate diagnosis, friendly approach and excellent support throughout the treatment. Highly recommended for anyone looking for the best eye care and expert treatment."
+    },
+    {
+      "author": "Thasni Razak",
+      "rating": 5,
+      "relativeTime": "6 months ago",
+      "text": "I had a wonderful experience with Dr Sameera. She was extremely professional, patient, and took the time to explain everything clearly. The examination was thorough, and I felt very comfortable throughout the consultation. Their kindness and attention to detail truly made a difference. I highly recommend them to anyone looking for excellent eye care."
+    },
+    {
+      "author": "Faisal Pk",
+      "rating": 5,
+      "relativeTime": "3 months ago",
+      "text": "Special thanks to the team for the care and support during our babies' ROP follow-ups. We truly appreciate the attention and guidance provided."
+    }
+  ]
+}
