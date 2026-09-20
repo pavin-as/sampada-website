@@ -15,6 +15,7 @@ Goal: a simpler, more trustworthy site that ranks for "eye hospital Tirur" and i
 | 6 | Verify | `npm run build`: no warnings. All 28 pages crawled at 1366px and 390px: no 404s for local assets, no horizontal overflow. Dead WordPress head tags (feeds, wp-json, oEmbed, RSD, shortlink) removed from touched pages. | Done |
 | 7 | Local landing page | `/eye-hospital-in-tirur/` added: surgeon-led/retina-first positioning, 8 treatment cards, symptoms and emergency box, NAP + hours + map, Google reviews, 9-question FAQ with FAQPage schema, new lean `Footer.astro`. Linked from the homepage intro H2 and all footer navs. | Done, awaiting review |
 | 8 | Homepage order + retina-first treatments | Homepage sequence: hero, intro, surgeon, Instagram, reviews, latest updates, treatment grid, footer. `TREATMENT_ORDER` reordered: DR, RD, injections, vitrectomy, OCT, glaucoma, check-up, cataract. | Done |
+| 9 | Legacy bloat cleanup | Shared `Footer.astro` (NAP, phone/WhatsApp, hours, native WhatsApp button, Tidio) and `SiteHead.astro` (favicons + fonts) on every page. Removed WordPress head tags, emoji scripts, jQuery/Elementor/plugin JS and all plugin stylesheets. Five legacy-body pages now use purged `legacy-home.css` / `legacy-pages.css`; layouts use `base.css`. Dead WPForms form on /contact-us/ replaced by Call/WhatsApp/Directions. ~870 unused plugin files moved to `archive/public-unused/`. | Done |
 
 ## Decisions worth knowing
 - Everything new is scoped under `.svr-page` in `src/styles/site.css`, so legacy Elementor CSS cannot override it.
@@ -25,4 +26,4 @@ Goal: a simpler, more trustworthy site that ranks for "eye hospital Tirur" and i
 1. **Instagram**: the bundled `instagram.json` is a fallback (clinic photos linking to the profile). Instagram blocks scraping, so real posts need `INSTAGRAM_FEED_URL` (e.g. a Behold/Curator JSON feed) or `INSTAGRAM_ACCESS_TOKEN` added as GitHub repository secrets. The workflow currently runs on push and monthly; add a weekly cron if you want fresher posts.
 2. **Insurance / cashless FAQ**: worded neutrally ("call to confirm for your insurer or TPA"). Replace with your actual empanelment policy.
 3. **Green laser**: confirmed by the clinic (retinal photocoagulation); listed on /about/ and on /eye-hospital-in-tirur/.
-4. **Still Elementor**: contact-us, blog index and Dr. Sameera's page keep their legacy bodies (only header/footer nav changed).
+4. **Still Elementor-style bodies**: contact-us, blog index, ml blog index, Dr. Sameera's page and the homepage hero keep their legacy markup, now styled by small purged CSS bundles (header and footer are shared components).

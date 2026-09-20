@@ -2,6 +2,7 @@
 export const SITE = 'https://sampadavr.com';
 export const PHONE_DISPLAY = '+91 91885 72412';
 export const PHONE_TEL = '+919188572412';
+export const MAPS_DIRECTIONS = 'https://www.google.com/maps/dir/?api=1&destination=Sampada+VR+Speciality+Eye+Care+LLP%2C+Railway+Station+Bypass+Rd%2C+Thazhepalam%2C+Tirur%2C+Kerala+676101';
 export const INSTAGRAM_HANDLE = '@sampadavr';
 export const INSTAGRAM_URL = 'https://www.instagram.com/sampadavr/';
 

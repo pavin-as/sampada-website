@@ -1,17 +1,17 @@
 ---
 import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
+import SiteHead from '../../components/SiteHead.astro';
 import TreatmentGrid from '../../components/TreatmentGrid.astro';
 import '../../styles/site.css';
 import reviewData from '../../data/reviews.json';
-import { SITE, PHONE_DISPLAY, PHONE_TEL } from '../../data/site';
+import { SITE, PHONE_DISPLAY, PHONE_TEL, MAPS_DIRECTIONS } from '../../data/site';
 
 const URL = `${SITE}/eye-hospital-in-tirur/`;
 const TITLE = 'Eye Hospital in Tirur | Retina & Cataract Care | Sampada VR';
 const DESC = `Surgeon-led eye hospital in Tirur, Kerala. Retina, cataract and glaucoma care by Dr Sameera V V, near Tirur railway station. Call ${PHONE_DISPLAY}.`;
 const OG_IMAGE = `${SITE}/wp-content/uploads/2024/02/dr-sameera-sampada-1024x682.webp`;
 const MAPS_PROFILE = reviewData.profileUrl;
-const MAPS_DIRECTIONS = 'https://www.google.com/maps/dir/?api=1&destination=Sampada+VR+Speciality+Eye+Care+LLP%2C+Railway+Station+Bypass+Rd%2C+Thazhepalam%2C+Tirur%2C+Kerala+676101';
 const WA = `https://wa.me/${PHONE_TEL.replace('+', '')}`;
 const reviews = (reviewData.reviews ?? []).filter((r) => r.rating >= 4 && r.text).slice(0, 3);
 
@@ -101,18 +101,12 @@ const faqSchema = {
 	<meta name="twitter:title" content={TITLE}>
 	<meta name="twitter:description" content={DESC}>
 	<meta name="twitter:image" content={OG_IMAGE}>
-	<link rel="icon" href="/favicon.ico" type="image/x-icon">
-	<link rel="icon" href="/wp-content/uploads/2021/12/cropped-sampadaLogo-32x32.webp" sizes="32x32">
-	<link rel="icon" href="/wp-content/uploads/2021/12/cropped-sampadaLogo-192x192.webp" sizes="192x192">
-	<link rel="apple-touch-icon" href="/wp-content/uploads/2021/12/cropped-sampadaLogo-180x180.webp">
-	<link rel="preconnect" href="https://fonts.googleapis.com">
-	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Poppins:wght@400;500;600&display=swap">
+	<SiteHead />
 	<script type="application/ld+json" set:html={JSON.stringify(pageSchema)} />
 	<script type="application/ld+json" set:html={JSON.stringify(crumbSchema)} />
 	<script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
 </head>
-<body style="margin:0">
+<body>
 	<Header />
 	<main class="svr-page" id="main">
 

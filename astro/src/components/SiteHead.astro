@@ -1,0 +1,20 @@
+---
+/**
+ * Shared <head> resources: favicons and web fonts. Put <SiteHead /> once inside <head>.
+ * Fonts: DM Serif Display (headings) and Poppins (body). Pages that still use a legacy
+ * Elementor body pass `legacy` to also load the extra families that markup references.
+ */
+interface Props { legacy?: boolean }
+const { legacy = false } = Astro.props;
+// Extra families the legacy Elementor bodies still reference (from their pruned CSS).
+const extra: string[] = legacy ? ['Roboto:wght@400;500;700', 'Roboto+Slab:wght@400;700', 'Open+Sans:wght@400;600;700'] : [];
+const families = ['DM+Serif+Display', 'Poppins:wght@400;500;600;700', ...extra.map((f) => f.replace(/ /g, '+'))];
+const fontsHref = `https://fonts.googleapis.com/css2?${families.map((f) => `family=${f}`).join('&')}&display=swap`;
+---
+<link rel="icon" href="/favicon.ico" type="image/x-icon" />
+<link rel="icon" href="/wp-content/uploads/2021/12/cropped-sampadaLogo-32x32.webp" sizes="32x32" />
+<link rel="icon" href="/wp-content/uploads/2021/12/cropped-sampadaLogo-192x192.webp" sizes="192x192" />
+<link rel="apple-touch-icon" href="/wp-content/uploads/2021/12/cropped-sampadaLogo-180x180.webp" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href={fontsHref} />
