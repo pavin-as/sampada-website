@@ -2,6 +2,9 @@
 import sitemap from '@astrojs/sitemap';
 import { defineConfig } from 'astro/config';
 
+// Internal staff/tool redirect pages: they must stay out of the public sitemap.
+const INTERNAL_PATHS = ['/akshay/', '/content/', '/inventory/', '/queue/', '/sudarshan/', '/syamili/', '/wellness/'];
+
 // https://astro.build/config
 export default defineConfig({
   site: 'https://sampadavr.com',
@@ -14,6 +17,8 @@ export default defineConfig({
   integrations: [
     sitemap({
       filenameBase: 'sitemap',
+      // Only public clinic pages belong in the sitemap.
+      filter: (page) => !INTERNAL_PATHS.includes(new URL(page).pathname),
     }),
   ],
 });
