@@ -240,42 +240,177 @@ window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/16
 </style>
 	         <!-- Schema Markup -->
 	         <script type="application/ld+json">
-	         {
-	           "@context": "https://schema.org",
-	           "@type": "MedicalBusiness",
-	           "name": "Sampada VR Speciality Eye Care LLP",
-	           "description": "Leading eye hospital in Tirur, Kerala specializing in vitreoretinal diseases, cataract surgery, and advanced eye care treatments",
-	           "url": "https://sampadavr.com",
-	           "telephone": "+91 9188572412",
-	           "address": {
-	             "@type": "PostalAddress",
-	             "addressLocality": "Tirur",
-	             "addressRegion": "Kerala",
-	             "addressCountry": "IN"
-	           },
-	           "medicalSpecialty": "Ophthalmology",
-	           "availableService": [
-	             {
-	               "@type": "MedicalProcedure",
-	               "name": "Cataract Surgery"
-	             },
-	             {
-	               "@type": "MedicalProcedure", 
-	               "name": "Vitreoretinal Surgery"
-	             },
-	             {
-	               "@type": "MedicalProcedure",
-	               "name": "Eye Examination"
-	             }
-	           ],
-	           "founder": {
-	             "@type": "Person",
-	             "name": "Dr. Sameera VV",
-	             "jobTitle": "Ophthalmologist",
-	             "medicalSpecialty": "Vitreoretinal Surgery"
-	           }
-	         }
-	         </script>
+{
+  "@context": "https://schema.org",
+  "@type": "MedicalClinic",
+  "@id": "https://sampadavr.com/#clinic",
+  "name": "Sampada VR Speciality Eye Care LLP",
+  "alternateName": "Sampada VR Speciality Eye Care",
+  "description": "Eye hospital in Tirur, Malappuram district, Kerala, and the first centre in the Malabar region dedicated to vitreoretinal disease. Retinal detachment, diabetic retinopathy, macular degeneration, ROP, cataract surgery and glaucoma care.",
+  "url": "https://sampadavr.com/",
+  "telephone": "+919188572412",
+  "image": "https://sampadavr.com/wp-content/uploads/2024/02/drsameera.webp",
+  "logo": "https://sampadavr.com/wp-content/uploads/2021/12/logo-new-sampadavr.png",
+  "foundingDate": "2020-12-28",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "Railway Station Bypass Road, Thazhepalam",
+    "addressLocality": "Tirur",
+    "addressRegion": "Kerala",
+    "postalCode": "676101",
+    "addressCountry": "IN"
+  },
+  "geo": {
+    "@type": "GeoCoordinates",
+    "latitude": 10.915102,
+    "longitude": 75.920625
+  },
+  "hasMap": "https://maps.google.com/?cid=14066372510023359077",
+  "openingHoursSpecification": [
+    {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": "https://schema.org/Monday",
+      "opens": "09:00",
+      "closes": "17:00"
+    },
+    {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": "https://schema.org/Tuesday",
+      "opens": "15:00",
+      "closes": "17:00"
+    },
+    {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": [
+        "https://schema.org/Wednesday",
+        "https://schema.org/Thursday",
+        "https://schema.org/Friday",
+        "https://schema.org/Saturday"
+      ],
+      "opens": "09:00",
+      "closes": "17:00"
+    }
+  ],
+  "medicalSpecialty": "https://schema.org/Ophthalmologic",
+  "availableLanguage": [
+    "Malayalam",
+    "English",
+    "Hindi"
+  ],
+  "areaServed": [
+    {
+      "@type": "City",
+      "name": "Tirur"
+    },
+    {
+      "@type": "City",
+      "name": "Tanur"
+    },
+    {
+      "@type": "City",
+      "name": "Kottakkal"
+    },
+    {
+      "@type": "City",
+      "name": "Valanchery"
+    },
+    {
+      "@type": "City",
+      "name": "Parappanangadi"
+    },
+    {
+      "@type": "City",
+      "name": "Malappuram"
+    }
+  ],
+  "availableService": [
+    {
+      "@type": "MedicalProcedure",
+      "name": "Cataract Surgery"
+    },
+    {
+      "@type": "MedicalProcedure",
+      "name": "Vitrectomy"
+    },
+    {
+      "@type": "MedicalProcedure",
+      "name": "Retinal Detachment Surgery"
+    },
+    {
+      "@type": "MedicalProcedure",
+      "name": "Intravitreal Injection"
+    },
+    {
+      "@type": "MedicalTest",
+      "name": "Diabetic Retinopathy Screening"
+    },
+    {
+      "@type": "MedicalTest",
+      "name": "Retinopathy of Prematurity (ROP) Screening"
+    },
+    {
+      "@type": "MedicalProcedure",
+      "name": "Macular Degeneration Care"
+    },
+    {
+      "@type": "MedicalProcedure",
+      "name": "Glaucoma Management"
+    },
+    {
+      "@type": "MedicalTest",
+      "name": "Optical Coherence Tomography (OCT)"
+    },
+    {
+      "@type": "MedicalTest",
+      "name": "Humphrey Visual Field Test"
+    },
+    {
+      "@type": "MedicalTest",
+      "name": "Fundus Photography"
+    },
+    {
+      "@type": "MedicalTest",
+      "name": "Comprehensive Eye Examination"
+    },
+    {
+      "@type": "MedicalProcedure",
+      "name": "Dry Eye Treatment"
+    },
+    {
+      "@type": "MedicalProcedure",
+      "name": "Squint (Strabismus) Treatment"
+    },
+    {
+      "@type": "MedicalProcedure",
+      "name": "Low Vision Clinic"
+    },
+    {
+      "@type": "MedicalProcedure",
+      "name": "Myopia Control"
+    },
+    {
+      "@type": "MedicalProcedure",
+      "name": "Bynocs Vision Therapy"
+    },
+    {
+      "@type": "MedicalProcedure",
+      "name": "Refraction and Spectacle Prescription"
+    }
+  ],
+  "founder": {
+    "@type": "Physician",
+    "@id": "https://sampadavr.com/about-dr-sameera-v-v/#physician",
+    "name": "Dr Sameera V V",
+    "jobTitle": "Vitreoretinal Surgeon",
+    "medicalSpecialty": "https://schema.org/Ophthalmologic",
+    "url": "https://sampadavr.com/about-dr-sameera-v-v/"
+  },
+  "sameAs": [
+    "https://www.facebook.com/SAMPADA.VR/",
+    "https://www.instagram.com/sampadavr/"
+  ]
+}
+</script>
 	         
 	         <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"></head>
 <body class="home wp-singular page-template page-template-elementor_canvas page page-id-12 wp-custom-logo wp-embed-responsive wp-theme-royal-elementor-kit elementor-default elementor-template-canvas elementor-kit-7 elementor-page elementor-page-12">
@@ -611,6 +746,24 @@ window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/16
 		</div>
 					</div>
 		</section>
+<section class="svr-intro" aria-labelledby="svr-intro-heading">
+	<div class="svr-intro__inner">
+		<h2 id="svr-intro-heading">Eye Hospital in Tirur, Malappuram District</h2>
+		<p><strong>Sampada VR Speciality Eye Care</strong> is on Railway Station Bypass Road, Thazhepalam, a few minutes from Tirur railway station and the bus stand. Opened in December 2020, it is the first centre in the Malabar region dedicated to vitreoretinal disease, and is led by <a href="/about-dr-sameera-v-v/">Dr Sameera V V</a>, a vitreoretinal surgeon with 14 years of experience.</p>
+		<p>We treat retinal detachment, diabetic retinopathy, macular degeneration and retinopathy of prematurity (ROP), alongside cataract surgery, glaucoma care, squint, low vision and myopia control. Diagnosis is done in-house with <a href="/blog/oct-essential-eye-exam-tool/">OCT</a>, <a href="/blog/diabetic-retinopathy-retinal-imaging/">fundus imaging</a> and the <a href="/blog/humphrey-field-analyzer-glaucoma-detection/">Humphrey Field Analyzer</a>, so most patients get an answer on the same visit.</p>
+		<p>Patients travel to us from Tirur, Tanur, Kottakkal, Valanchery, Parappanangadi and across Malappuram district. Open Monday to Saturday; call <a href="tel:+919188572412">+91 91885 72412</a> to book an appointment.</p>
+	</div>
+</section>
+<style>
+.svr-intro{background:#f7fafc;padding:56px 20px;}
+.svr-intro__inner{max-width:860px;margin:0 auto;}
+.svr-intro h2{font-size:32px;line-height:1.25;margin:0 0 20px;color:#12303f;font-weight:700;}
+.svr-intro p{font-size:17px;line-height:1.75;margin:0 0 16px;color:#33474f;}
+.svr-intro p:last-child{margin-bottom:0;}
+.svr-intro a{color:#0b7ea8;text-decoration:underline;}
+@media (max-width:767px){.svr-intro{padding:40px 16px;}.svr-intro h2{font-size:25px;}.svr-intro p{font-size:16px;}}
+</style>
+
 				<section class="elementor-section elementor-top-section elementor-element elementor-element-1430627c elementor-section-boxed elementor-section-height-default elementor-section-height-default wpr-particle-no wpr-jarallax-no wpr-parallax-no wpr-sticky-section-no" data-id="1430627c" data-element_type="section" data-settings='{"background_background":"classic"}'>
 							<div class="elementor-background-overlay"></div>
 							<div class="elementor-container elementor-column-gap-wide">
