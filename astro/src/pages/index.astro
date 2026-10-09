@@ -70,6 +70,19 @@ const initials = (name) =>
     background-position: center;
     background-repeat: no-repeat;
 }
+
+/* Award slide: desktop image keeps Dr Sameera on the right; mobile uses a portrait crop with text pinned to the top */
+.bdt-ps-slide-award {
+    background-image: url('/wp-content/uploads/2026/10/best-doctor-2026-hero.webp');
+    background-size: cover;
+    background-position: right center;
+}
+.svr-award-sub { display: block; margin-top: 14px; font-size: clamp(1rem, 1.6vw, 1.35rem); font-weight: 400; max-width: 34ch; line-height: 1.4; }
+@media (max-width: 767px) {
+    .bdt-ps-slide-award { background-image: url('/wp-content/uploads/2026/10/best-doctor-2026-hero-m.webp'); background-position: center bottom; }
+    .bdt-slideshow-item:has(.bdt-ps-slide-award) { align-items: flex-start; }
+    .bdt-slideshow-item:has(.bdt-ps-slide-award) .bdt-prime-slider-content { padding-top: 150px; }
+}
 </style>	         
 <!-- Schema Markup -->
 	         <script type="application/ld+json">
@@ -364,7 +377,7 @@ const initials = (name) =>
             <li class="bdt-slideshow-item bdt-flex bdt-flex-middle elementor-repeater-item-dd1a2d1">
 
 				
-        <div class="bdt-ps-slide-img" style="background-image: url('/wp-content/uploads/2024/02/eyeeeee.webp')"></div>
+        <div class="bdt-ps-slide-img bdt-ps-slide-award"></div>
 
         
 								
@@ -372,12 +385,12 @@ const initials = (name) =>
 
 									<div class="bdt-sub-title">
 						<h4 class="bdt-sub-title-inner" data-reveal="reveal-active">
-							Trusted locally						</h4>
+							Recognised by Outlook India						</h4>
 					</div>
 				
 									<div class="bdt-main-title">
 						<h2 class="bdt-title-tag" data-reveal="reveal-active">
-															<span class="frist-word">4.7</span> from Over 2,200 Patient Reviews														</h2>
+															<span class="frist-word">Best Doctor</span>, South India 2026<br><small class="svr-award-sub">Dr. Sameera V V &middot; 4.7&#9733; from 2,200+ patient reviews</small>														</h2>
 					</div>
 				
 			</div>
