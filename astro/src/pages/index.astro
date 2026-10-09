@@ -78,9 +78,21 @@ const initials = (name) =>
     background-position: right center;
 }
 .svr-award-sub { display: block; margin-top: 14px; font-size: clamp(1rem, 1.6vw, 1.35rem); font-weight: 400; max-width: 34ch; line-height: 1.4; }
+/* Award slide uses a light left side, so switch text and slider controls to dark */
+.bdt-slideshow-item:has(.bdt-ps-slide-award) .bdt-sub-title-inner { color: #0b6b66; font-weight: 600; }
+.bdt-slideshow-item:has(.bdt-ps-slide-award) .bdt-title-tag { color: #00092A; }
+.bdt-slideshow-item:has(.bdt-ps-slide-award) .frist-word { color: #a8740a; }
+.bdt-prime-slider-mount:has(.bdt-slideshow-item.bdt-active .bdt-ps-slide-award) .bdt-navigation-arrows a,
+.bdt-prime-slider-mount:has(.bdt-slideshow-item.bdt-active .bdt-ps-slide-award) .bdt-ps-dotnav li a,
+.bdt-prime-slider-mount:has(.bdt-slideshow-item.bdt-active .bdt-ps-slide-award) .bdt-ps-dotnav span { color: #00092A; }
+.bdt-prime-slider-mount:has(.bdt-slideshow-item.bdt-active .bdt-ps-slide-award) .bdt-ps-dotnav span:before { background: #00092A; }
 @media (max-width: 767px) {
     .bdt-ps-slide-award { background-image: url('/wp-content/uploads/2026/10/best-doctor-2026-hero-m.webp'); background-position: center bottom; }
     .bdt-slideshow-item:has(.bdt-ps-slide-award) { align-items: flex-start; }
+    .bdt-prime-slider-mount:has(.bdt-slideshow-item.bdt-active .bdt-ps-slide-award) .bdt-navigation-arrows a,
+    .bdt-prime-slider-mount:has(.bdt-slideshow-item.bdt-active .bdt-ps-slide-award) .bdt-ps-dotnav li a,
+    .bdt-prime-slider-mount:has(.bdt-slideshow-item.bdt-active .bdt-ps-slide-award) .bdt-ps-dotnav span { color: #fff; }
+    .bdt-prime-slider-mount:has(.bdt-slideshow-item.bdt-active .bdt-ps-slide-award) .bdt-ps-dotnav span:before { background: #fff; }
     .bdt-slideshow-item:has(.bdt-ps-slide-award) .bdt-prime-slider-content { padding-top: 150px; }
 }
 </style>	         
