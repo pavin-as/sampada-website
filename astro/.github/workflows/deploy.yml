@@ -3,9 +3,9 @@ name: Deploy Astro to GitHub Pages
 on:
   push:
     branches: [ main ]
-  # Refresh Google reviews + Instagram feed and redeploy on the 1st of every month, 00:00 UTC
+  # Refresh Google reviews + Instagram feed and redeploy every day, 02:00 UTC
   schedule:
-    - cron: '0 0 1 * *'
+    - cron: '0 2 * * *'
   workflow_dispatch:
 
 permissions:
