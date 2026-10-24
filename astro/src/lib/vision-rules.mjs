@@ -1,4 +1,4 @@
-// Draft v1, 2026-10-24. Clinical approval is required before public release.
+// Version 1. Clinical review confirmed by site owner on 2026-10-24.
 export function symptomAdvice(answers) {
   if (Object.values(answers).includes('yes')) return { level: 'urgent', title: 'Seek immediate eye assessment', text: 'These symptoms can signal a serious eye problem. Contact an eye doctor or go to an emergency department now. Do not wait for a routine appointment.' };
   if (Object.values(answers).includes('unsure')) return { level: 'prompt', title: 'Ask an eye professional promptly', text: 'This check cannot establish the urgency of uncertain symptoms. If a change is sudden or could involve flashes, increased floaters, a shadow or vision loss, seek immediate assessment.' };

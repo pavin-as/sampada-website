@@ -1,7 +1,7 @@
 ---
 import Layout from '../../layouts/VisionChecks.astro';
 import { tools, quiz } from '../../data/vision-checks.mjs';
-export function getStaticPaths() { return import.meta.env.VISION_CHECKS_PREVIEW === 'true' ? tools.map(tool => ({ params: { tool: tool.id }, props: { tool } })) : []; }
+export function getStaticPaths() { return tools.map(tool => ({ params: { tool: tool.id }, props: { tool } })); }
 const { tool } = Astro.props;
 const options = [['yes','Yes'],['no','No'],['unsure','Not sure']];
 const symptoms = [ ['loss','Have you had sudden vision loss?'], ['shadow','Do you have a new curtain or shadow over your vision?'], ['flashes','Have you noticed new flashes of light?'], ['floaters','Have floaters suddenly appeared or increased?'] ];

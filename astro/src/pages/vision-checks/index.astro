@@ -1,8 +1,6 @@
 ---
 import Layout from '../../layouts/VisionChecks.astro';
 import { tools } from '../../data/vision-checks.mjs';
-// The static build omits all preview pages unless explicitly enabled.
-export function getStaticPaths() { return import.meta.env.VISION_CHECKS_PREVIEW === 'true' ? [{ params: { hub: undefined } }] : []; }
 ---
 <Layout title="Vision checks & retina health" description="Guided vision checks, retinal symptom advice and eye-health education.">
 <header class="hero"><p class="eyebrow">Small checks. Clear next steps.</p><h1>Know your vision.<br/><em>Care for your retina.</em></h1><p>Explore a guided self-check, understand a symptom, or learn something new about your eyes.</p><div class="hero-tags"><span>No sign-up</span><span>One eye at a time</span><span>Clear next steps</span></div></header>

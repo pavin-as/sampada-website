@@ -18,7 +18,7 @@ export default defineConfig({
     sitemap({
       filenameBase: 'sitemap',
       // Only public clinic pages belong in the sitemap.
-      filter: (page) => !INTERNAL_PATHS.includes(new URL(page).pathname) && !new URL(page).pathname.startsWith('/vision-checks/'),
+      filter: (page) => !INTERNAL_PATHS.includes(new URL(page).pathname),
     }),
   ],
 });

@@ -1,3 +1,13 @@
+# Public release update — 24 October 2026
+
+The site owner confirmed clinical review is complete and explicitly authorised public release. Version 1 is released in English; Malayalam translation and review are not claimed complete. The implementation record below describes the original preview and its outstanding manual checks, not the current publication status.
+
+Production now generates `/vision-checks/` and all four tools without an environment flag, includes them in the sitemap, supplies canonical metadata, and links the hub from header and footer. Preview warnings and noindex have been removed. No scoring, clinical decision rules or test instructions were changed for release. No patient data collection was added.
+
+Rollback: revert the public-release commit to restore preview gating and remove public navigation links.
+
+---
+
 # Vision Checks — Phase 0 / 1 review packet
 
 Status: English implementation ready for review. NOT clinically approved or ready for patient release.
