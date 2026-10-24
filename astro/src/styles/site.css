@@ -1,9 +1,11 @@
+@import './brand.css';
+
 /* ==========================================================================
    Sampada VR – shared page styles for the redesigned sections
    Everything is scoped under .svr-page so it wins over the legacy Elementor CSS.
    Palette: navy #04092A, accent orange #F28738, DM Serif Display headings.
    ========================================================================== */
-.svr-page{--navy:#04092A;--ink:#3C4048;--muted:#6B7080;--line:#E9EBEF;--accent:#F28738;--accent-dk:#D9701F;--cream:#FAF8F5;--mist:#F5F7FB;
+.svr-page{--navy:var(--sampada-navy);--ink:var(--sampada-ink);--muted:var(--sampada-muted);--line:var(--sampada-line);--accent:var(--sampada-accent);--accent-dk:var(--sampada-accent-dark);--cream:var(--sampada-cream);--mist:var(--sampada-mist);
   font-family:"Poppins","Roboto",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--ink);background:#fff;-webkit-font-smoothing:antialiased;line-height:1.7;font-size:16.5px}
 .svr-page *,.svr-page *::before,.svr-page *::after{box-sizing:border-box}
 .svr-page img{max-width:100%;height:auto;display:block}

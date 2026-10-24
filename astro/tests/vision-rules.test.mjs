@@ -1,0 +1,12 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {symptomAdvice,diabetesAdvice,amslerAdvice} from '../src/lib/vision-rules.mjs';
+test('each red flag overrides negative or uncertain symptoms',()=>{for(const key of ['loss','shadow','flashes','floaters']){assert.equal(symptomAdvice({loss:'no',shadow:'unsure',flashes:'no',floaters:'no',[key]:'yes'}).level,'urgent');}});
+test('uncertainty is not reassurance',()=>{assert.equal(symptomAdvice({loss:'unsure'}).level,'prompt');assert.match(symptomAdvice({loss:'no',shadow:'no',flashes:'no',floaters:'no'}).text,/do not rule out/);});
+const baseline={symptoms:'none',pregnancy:'no',followup:'planned',retinopathy:'no'};
+test('diabetes symptoms override planned follow-up',()=>{assert.equal(diabetesAdvice({...baseline,symptoms:'sudden'}).level,'urgent');assert.equal(diabetesAdvice({...baseline,symptoms:'other'}).level,'prompt');assert.equal(diabetesAdvice({...baseline,symptoms:'unsure'}).level,'prompt');});
+test('pregnancy and overdue visits override routine plan',()=>{assert.equal(diabetesAdvice({...baseline,pregnancy:'yes'}).level,'prompt');assert.equal(diabetesAdvice({...baseline,followup:'overdue'}).level,'prompt');});
+test('existing clinician schedule takes priority over generic screening',()=>{assert.match(diabetesAdvice({...baseline,retinopathy:'yes'}).title,/clinician/);assert.equal(diabetesAdvice({...baseline,followup:'unknown',retinopathy:'yes'}).level,'prompt');assert.match(diabetesAdvice({...baseline,followup:'unknown'}).text,/confirmed with your eye doctor/);});
+test('either eye with an abnormal Amsler observation prompts care',()=>{assert.equal(amslerAdvice('changed','unchanged').level,'prompt');assert.equal(amslerAdvice('unchanged','changed').level,'prompt');assert.equal(amslerAdvice('unsure','unchanged').level,'prompt');assert.match(amslerAdvice('unchanged','unchanged').text,/does not rule out/);});
+test('diabetes unknown history and old exams prompt clarification',()=>{for(const exam of ['older','never','unsure'])assert.equal(diabetesAdvice({...baseline,followup:'unknown',exam,type:'type2'}).level,'prompt');});
+test('gestational and unknown diabetes type do not inherit type 1 or 2 timing',()=>{for(const type of ['gestational','unsure'])assert.match(diabetesAdvice({...baseline,followup:'unknown',type}).text,/different eye-care considerations/);});

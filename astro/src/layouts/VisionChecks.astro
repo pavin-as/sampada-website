@@ -1,0 +1,21 @@
+---
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import SiteHead from '../components/SiteHead.astro';
+import { PHONE_DISPLAY, PHONE_TEL } from '../data/site';
+import { sources, urgentText } from '../data/vision-checks.mjs';
+import '../styles/vision-checks.css';
+const { title, description } = Astro.props;
+---
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>{title} | Sampada VR</title><meta name="description" content={description}/><meta name="robots" content="noindex, nofollow"/><SiteHead/></head>
+<body class="vision-body"><a class="skip" href="#main">Skip to content</a><Header/>
+<main id="main" class="vision-page">
+<p class="review-banner">Review preview · Clinical and Malayalam review pending · Not for patient use</p>
+<nav class="breadcrumbs" aria-label="Breadcrumb"><a href="/">Home</a> / <a href="/vision-checks/">Vision checks</a></nav>
+<aside class="urgent"><strong>Sudden change in vision?</strong><p>{urgentText}</p><a href={`tel:${PHONE_TEL}`}>Call clinic: {PHONE_DISPLAY}</a><span> · Calling does not guarantee emergency availability.</span></aside>
+<slot/>
+<section class="privacy"><h2>Your privacy</h2><p>These tools do not ask for your name or phone number. Answers stay in this page’s memory and are not sent to the clinic or saved by the tools. Refreshing clears them. Nothing is monitored by the clinic. A printed or saved summary remains your responsibility to keep private.</p><p>These self-checks cannot diagnose disease or replace an eye examination.</p></section>
+<details class="sources"><summary>Sources and review status</summary><p>Draft content version 1 · Prepared 24 October 2026. Clinical sign-off and Malayalam translation review are pending.</p><ul>{sources.map(([label, href]) => <li><a href={href} target="_blank" rel="noopener noreferrer">{label}</a></li>)}</ul></details>
+</main><Footer/></body></html>

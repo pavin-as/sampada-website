@@ -1,0 +1,11 @@
+---
+import Layout from '../../layouts/VisionChecks.astro';
+import { tools } from '../../data/vision-checks.mjs';
+// The static build omits all preview pages unless explicitly enabled.
+export function getStaticPaths() { return import.meta.env.VISION_CHECKS_PREVIEW === 'true' ? [{ params: { hub: undefined } }] : []; }
+---
+<Layout title="Vision checks & retina health" description="Guided vision checks, retinal symptom advice and eye-health education.">
+<header class="hero"><p class="eyebrow">Small checks. Clear next steps.</p><h1>Know your vision.<br/><em>Care for your retina.</em></h1><p>Explore a guided self-check, understand a symptom, or learn something new about your eyes.</p><div class="hero-tags"><span>No sign-up</span><span>One eye at a time</span><span>Clear next steps</span></div></header>
+<section aria-labelledby="tools-title"><h2 id="tools-title">Where would you like to start?</h2><div class="tool-grid">{tools.map((tool, i) => <a class="tool-card" href={`/vision-checks/${tool.id}/`}><span class="card-number">0{i + 1}</span><span class="eyebrow">{tool.category} · {tool.time}</span><h3>{tool.title}</h3><p>{tool.description}</p><span class="card-link">{tool.id === 'retina-quiz' ? 'Try the quiz' : 'Start here'} <span aria-hidden="true">↗</span></span></a>)}</div></section>
+<section class="panel"><h2>Not sure which check to choose?</h2><p>Start with the symptom checker if something has changed. If you have diabetes, retinal examinations matter even when your vision feels normal.</p><a href="/contact-us/">Talk to the clinic →</a></section>
+</Layout>

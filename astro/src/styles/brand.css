@@ -1,0 +1,11 @@
+/* Shared Sampada palette, used by the main site and vision-check tools. */
+:root {
+  --sampada-navy: #04092A;
+  --sampada-ink: #3C4048;
+  --sampada-muted: #6B7080;
+  --sampada-line: #E9EBEF;
+  --sampada-accent: #F28738;
+  --sampada-accent-dark: #D9701F;
+  --sampada-cream: #FAF8F5;
+  --sampada-mist: #F5F7FB;
+}

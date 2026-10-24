@@ -1,0 +1,80 @@
+---
+import Layout from '../../layouts/VisionChecks.astro';
+import { tools, quiz } from '../../data/vision-checks.mjs';
+export function getStaticPaths() { return import.meta.env.VISION_CHECKS_PREVIEW === 'true' ? tools.map(tool => ({ params: { tool: tool.id }, props: { tool } })) : []; }
+const { tool } = Astro.props;
+const options = [['yes','Yes'],['no','No'],['unsure','Not sure']];
+const symptoms = [ ['loss','Have you had sudden vision loss?'], ['shadow','Do you have a new curtain or shadow over your vision?'], ['flashes','Have you noticed new flashes of light?'], ['floaters','Have floaters suddenly appeared or increased?'] ];
+---
+<Layout title={tool.title} description={tool.description}>
+<header class="hero"><p class="eyebrow">{tool.category} · {tool.time}</p><h1>{tool.title}</h1><p>{tool.description}</p></header>
+<noscript><p class="urgent">Enable JavaScript to use the interactive tools. For a sudden change in vision, follow the urgent advice above. You can contact the clinic directly.</p></noscript>
+{tool.id === 'flashes-and-floaters' && <section class="panel"><h2>Tell us about the change</h2><p>Answer each question. Concerning answers show advice immediately. This cannot diagnose the cause.</p><form id="symptom-form" autocomplete="off">{symptoms.map(([id,label]) => <fieldset><legend>{label}</legend><div class="choices">{options.map(([value,text]) => <label class="choice"><input required type="radio" name={id} value={value}/>{text}</label>)}</div></fieldset>)}<fieldset><legend>Which eye is affected?</legend><div class="choices">{['Right','Left','Both','Not sure'].map(value => <label class="choice"><input required type="radio" name="eye" value={value}/>{value}</label>)}</div></fieldset><label for="onset">When did you first notice the change?</label><select id="onset" name="onset" required><option value="">Choose an answer</option><option>Today</option><option>Within the last week</option><option>Earlier</option><option>Not sure</option><option>No current symptoms</option></select><div class="actions"><button type="submit">See next steps</button><button type="reset" class="secondary">Start again</button></div></form><div id="symptom-result" role="status" tabindex="-1" hidden></div></section>}
+{tool.id === 'diabetes-retina-check' && <section class="panel"><h2>Your examination history</h2><p>This questionnaire helps prepare for an appointment. It does not calculate disease risk or establish a personal examination schedule.</p><form id="diabetes-form" autocomplete="off">
+{[
+['symptoms','Have you noticed a vision change?', [['','Choose an answer'],['none','No current change'],['sudden','Sudden loss, shadow, new flashes or increased floaters'],['other','Other change, such as blur or distortion'],['unsure','Not sure']]],
+['type','What type of diabetes do you have?', [['','Choose an answer'],['type2','Type 2'],['type1','Type 1'],['gestational','Gestational diabetes'],['unsure','Not sure']]],
+['duration','How long have you had diabetes?', [['','Choose an answer'],['under5','Less than five years'],['over5','Five years or more'],['unsure','Not sure']]],
+['exam','When was your last retinal examination?', [['','Choose an answer'],['recent','Within the past year'],['older','More than a year ago'],['never','Never'],['unsure','Not sure']]],
+['retinopathy','Have you been diagnosed with diabetic retinopathy?', [['','Choose an answer'],['yes','Yes'],['no','No'],['unsure','Not sure']]],
+['followup','What follow-up did your eye doctor advise?', [['','Choose an answer'],['planned','I have a follow-up plan and the date has not passed'],['overdue','My advised follow-up date has passed'],['unknown','No plan, or I am not sure']]],
+['pregnancy','Are you pregnant or planning pregnancy?', [['','Choose an answer'],['yes','Yes'],['no','No / does not apply'],['unsure','Not sure']]],
+].map(([id,label,choices]) => <div><label for={id}>{label}</label><select id={id} name={id} required>{choices.map(([value,text]) => <option value={value}>{text}</option>)}</select></div>)}
+<div class="actions"><button type="submit">Review my next steps</button><button type="reset" class="secondary">Start again</button></div></form><div id="diabetes-result" role="status" tabindex="-1" hidden></div><div class="no-print"><h3>Bring to your appointment</h3><ul class="checklist"><li>Your last eye report and any retinal scan reports.</li><li>Your diabetes medication list and recent available diabetes results.</li><li>Details of symptoms and when they started.</li></ul></div></section>}
+{tool.id === 'amsler-grid' && <section class="panel" id="amsler-tool"><h2>Set up before you begin</h2><ol class="checklist"><li>Wear the glasses you normally use for reading. Use good, even lighting and avoid screen glare.</li><li>Use a ruler to adjust the line below until it measures exactly 5 cm. The grid will then measure 10 cm square. Do not rely on the screen’s apparent size.</li><li>Keep your eyes approximately 35 cm (14 inches) from the grid. Keep the same distance for each eye.</li><li>Cover the left eye without pressing on it. Keep looking at the centre dot with the right eye. Notice the surrounding lines without moving your gaze around the grid.</li><li>Then cover the right eye and repeat with the left eye.</li></ol>
+<div class="no-print"><label for="grid-size">Adjust the 5 cm reference line</label><input id="grid-size" type="range" min="90" max="260" value="189"/><div id="reference-line" class="calibration-line" style="width:189px"></div><label class="choice"><input id="calibrated" type="checkbox"/>I measured the line as 5 cm and can see the whole grid.</label><p id="calibration-note">If the whole calibrated grid does not fit, use a larger screen or print it. Recheck the line after zooming, rotating or resizing your screen.</p></div>
+<div class="grid-stage"><svg class="amsler" id="amsler-grid" width="378" height="378" viewBox="0 0 200 200" role="img" aria-label="Amsler grid: twenty by twenty squares with a central black fixation dot"><rect width="200" height="200" fill="white"/>{Array.from({length:21},(_,i)=><><line x1={i*10} x2={i*10} y1="0" y2="200" stroke="black" stroke-width="0.5"/><line y1={i*10} y2={i*10} x1="0" x2="200" stroke="black" stroke-width="0.5"/></>)}<circle cx="100" cy="100" r="1.8" fill="black"/></svg></div>
+<p class="print-only">Print at actual size / 100%, without “fit to page”. Measure the grid: it must be 10 cm square. A 5 cm verification line appears above. If the size is wrong, do not use this printout for the check.</p>
+<div class="actions no-print"><button id="print-grid" type="button" class="secondary">Print grid & instructions</button></div>
+<form id="amsler-form" autocomplete="off"><h2>Record what you noticed</h2><p>You can report a concerning observation even if you could not confirm the grid size. For each eye, keep looking at the centre dot while observing; record your answer afterwards.</p>{[['right','Right eye — cover your left eye'],['left','Left eye — cover your right eye']].map(([eye,label])=><fieldset><legend>{label}</legend><div class="choices">{[['unchanged','Lines look straight; no missing areas'],['changed','Wavy, blurred, dark or missing areas'],['unsure','Not sure / could not complete']].map(([value,text])=><label class="choice"><input required type="radio" name={eye} value={value}/>{text}</label>)}</div></fieldset>)}<div class="actions"><button type="submit">See my observation summary</button><button type="reset" class="secondary">Clear observations</button></div></form><div id="amsler-result" role="status" tabindex="-1" hidden></div></section>}
+{tool.id === 'retina-quiz' && <section class="panel"><h2>A little knowledge goes a long way</h2><p>This score measures knowledge, not eye health.</p><form id="quiz-form" autocomplete="off">{quiz.map((q,i)=><fieldset data-quiz={i}><legend>{i+1}. {q.question}</legend><div class="choices">{q.options.map((option,j)=><label class="choice"><input required type="radio" name={`q${i}`} value={j}/>{option}</label>)}</div><div class="feedback" role="status" hidden></div></fieldset>)}<div class="actions"><button type="submit">See my knowledge score</button><button type="reset" class="secondary">Try again</button></div></form><div id="quiz-result" role="status" tabindex="-1" hidden></div></section>}
+<div class="actions"><a href="/vision-checks/">← All vision checks</a><a href="/contact-us/">Contact the clinic →</a></div>
+</Layout>
+<script>
+import { symptomAdvice, diabetesAdvice, amslerAdvice } from '../../lib/vision-rules.mjs';
+import { quiz } from '../../data/vision-checks.mjs';
+import { PHONE_DISPLAY, PHONE_TEL } from '../../data/site';
+type Advice = { level: string; title: string; text: string };
+function showResult(id: string, advice: Advice, summary = '', focus = false) {
+ const el = document.getElementById(id); if (!el) return;
+ el.replaceChildren(); el.className = 'result'; el.dataset.level = advice.level; el.hidden = false;
+ const heading = document.createElement('h2'); heading.textContent = advice.title;
+ const text = document.createElement('p'); text.textContent = advice.text; el.append(heading,text);
+ if (summary) { const details = document.createElement('p'); details.className='summary-list'; details.textContent=summary; el.append(details); }
+ const stamp=document.createElement('p'); stamp.textContent=`Visitor-reported observations · ${new Intl.DateTimeFormat('en-IN',{dateStyle:'medium',timeStyle:'short',timeZone:'Asia/Kolkata'}).format(new Date())} IST`; el.append(stamp);
+ const call=document.createElement('a'); call.href=`tel:${PHONE_TEL}`; call.textContent=`Call clinic: ${PHONE_DISPLAY}`; el.append(call);
+ const note=document.createElement('p'); note.textContent='If the clinic cannot respond promptly to urgent symptoms, go to an emergency eye service or emergency department. This summary is not a diagnosis and is not sent to the clinic.'; el.append(note);
+ const print=document.createElement('button'); print.type='button'; print.textContent='Print / save summary'; print.className='secondary'; print.addEventListener('click',()=>window.print()); el.append(print);
+ if(focus || advice.level === 'urgent') el.focus();
+}
+function data(form: HTMLFormElement) { return Object.fromEntries(new FormData(form).entries()) as Record<string,string>; }
+function readable(form: HTMLFormElement) { return Array.from(form.querySelectorAll('select')).map(s=>`${s.labels?.[0]?.textContent}: ${s.selectedOptions[0]?.textContent}`).join('\n'); }
+for(const [formId,resultId] of [['symptom-form','symptom-result'],['diabetes-form','diabetes-result'],['amsler-form','amsler-result'],['quiz-form','quiz-result']]) {
+ const form=document.getElementById(formId) as HTMLFormElement | null;
+ form?.addEventListener('reset',()=>{ const el=document.getElementById(resultId); if(el){el.hidden=true;el.replaceChildren();} form.querySelectorAll<HTMLElement>('.feedback').forEach(el=>{el.hidden=true;el.textContent='';}); });
+}
+const symptoms=document.getElementById('symptom-form') as HTMLFormElement | null;
+symptoms?.addEventListener('change',()=>{
+ const a=data(symptoms); const medical=Object.fromEntries(['loss','shadow','flashes','floaters'].filter(k=>a[k]).map(k=>[k,a[k]]));
+ if(Object.values(medical).some(v=>v==='yes'||v==='unsure')) showResult('symptom-result',symptomAdvice(medical));
+ else document.getElementById('symptom-result')!.hidden=true;
+});
+symptoms?.addEventListener('submit',e=>{e.preventDefault();const a=data(symptoms);showResult('symptom-result',symptomAdvice({loss:a.loss,shadow:a.shadow,flashes:a.flashes,floaters:a.floaters}),`Vision loss: ${a.loss}\nShadow: ${a.shadow}\nFlashes: ${a.flashes}\nFloaters: ${a.floaters}\nEye: ${a.eye}\nOnset: ${a.onset}`,true);});
+const diabetes=document.getElementById('diabetes-form') as HTMLFormElement|null;
+diabetes?.addEventListener('change',()=>{const a=data(diabetes);if(a.symptoms && a.symptoms!=='none')showResult('diabetes-result',diabetesAdvice(a));else document.getElementById('diabetes-result')!.hidden=true;});
+diabetes?.addEventListener('submit',e=>{e.preventDefault();showResult('diabetes-result',diabetesAdvice(data(diabetes)),readable(diabetes),true);});
+const size=document.getElementById('grid-size') as HTMLInputElement|null;
+const calibrated=document.getElementById('calibrated') as HTMLInputElement|null;
+function clearCalibration(){if(calibrated)calibrated.checked=false;const result=document.getElementById('amsler-result');if(result)result.hidden=true;}
+size?.addEventListener('input',()=>{ const px=Number(size.value);document.getElementById('reference-line')!.style.width=`${px}px`;const grid=document.getElementById('amsler-grid')!;grid.setAttribute('width',String(px*2));grid.setAttribute('height',String(px*2));clearCalibration();});
+window.addEventListener('resize',clearCalibration);
+window.visualViewport?.addEventListener('resize',clearCalibration);
+calibrated?.addEventListener('change',()=>{document.getElementById('amsler-result')!.hidden=true;});
+document.getElementById('print-grid')?.addEventListener('click',()=>window.print());
+const amsler=document.getElementById('amsler-form') as HTMLFormElement|null;
+amsler?.addEventListener('change',()=>{const a=data(amsler);if(a.right==='changed'||a.left==='changed')showResult('amsler-result',amslerAdvice(a.right,a.left));else document.getElementById('amsler-result')!.hidden=true;});
+amsler?.addEventListener('submit',e=>{e.preventDefault();const a=data(amsler);const advice= !calibrated?.checked && a.right==='unchanged' && a.left==='unchanged' ? {level:'prompt',title:'Grid setup was not confirmed',text:'This check cannot be interpreted because the grid size was not confirmed. Use a ruler and recheck the setup, or print the grid at its verified size. Do not delay care for symptoms.'} : amslerAdvice(a.right,a.left);showResult('amsler-result',advice,`Right eye: ${a.right}\nLeft eye: ${a.left}\nPhysical size confirmed: ${calibrated?.checked?'Yes':'No'}`,true);});
+const quizForm=document.getElementById('quiz-form') as HTMLFormElement|null;
+quizForm?.addEventListener('change',e=>{const input=e.target as HTMLInputElement;const i=Number(input.name.slice(1));const feedback=input.closest('fieldset')?.querySelector<HTMLElement>('.feedback');if(feedback){feedback.hidden=false;feedback.textContent=`${Number(input.value)===quiz[i].correct?'Correct.':'Let’s learn more.'} ${quiz[i].explanation}`;}document.getElementById('quiz-result')!.hidden=true;});
+quizForm?.addEventListener('submit',e=>{e.preventDefault();const a=data(quizForm);const score=quiz.filter((q,i)=>Number(a[`q${i}`])===q.correct).length;const el=document.getElementById('quiz-result')!;el.hidden=false;el.className='result';el.textContent=`You answered ${score} of ${quiz.length} correctly. This is a knowledge score only; it says nothing about your eye health. Read the explanations above and keep your advised eye examinations.`;el.focus();});
+</script>
