@@ -62,6 +62,15 @@ npm run preview
 - **`archive/`** (git-ignored, project root of this folder): deprecated pages and stock images moved out of the build instead of deleted (`archive/pages/`, `archive/images/`, `archive/components/`, and `archive/public-unused/` = ~870 unreferenced WordPress/Elementor plugin, wp-includes and generated-CSS files that used to sit in `public/`). Restore by moving a file back to its original path.
 - **Verifying changes locally on a non-macOS box**: `node_modules` here is macOS-native; build from a copy (`rsync` the project, exclude `node_modules`/`dist`, `npm ci`, `npm run build`).
 
+## Samanvayam 2026 (Sampada CME, 17 Nov 2026)
+- All event content (dates, venue, programme, speakers, form specialities) lives in `src/data/cme.ts`; edit speakers there (set `confirmed: true`, add name/role/photo/topic).
+- Homepage teaser: `src/components/CmeFeature.astro`, a compact banner directly under the hero slider that links to `/cme/` (details) and `/cme/#register` (form); the full information lives only on `/cme/`. Registration page: `src/pages/cme/index.astro` at `/cme/` (target of the brochure QR code). Styles: `src/styles/cme.css`.
+- Both hide/close automatically the day after the event (checked at build time; the daily CI rebuild handles it). `/cme/` is `noindex` and excluded from the sitemap (invitation-only).
+- Registrations go to a Google Sheet through an Apps Script web app: code and setup steps in `docs/cme-registration/Code.gs`; paste the `/exec` URL into `REGISTRATION_ENDPOINT` in `src/data/cme.ts`. While it is empty the form falls back to a pre-filled WhatsApp message.
+- Styling follows the Sampada brand guidelines (Mint #B2FCE4 / Ink #0A0A0A, Cormorant Garamond + DM Sans, Mint-fill buttons with Ink text), scoped under `.cme-scope` in `src/styles/cme.css`. The rest of the site still uses the older navy/orange + DM Serif/Poppins look. The CME fonts load through the `extraFamilies` prop of `SiteHead`.
+- Brochure QR: `public/wp-content/uploads/2026/11/samanvayam-register-qr.svg` (vector, for print) and `.png`. It encodes `https://sampadavr.com/cme/#register`; keep that URL working once the brochure is printed.
+- Content mirrors the printed brochure (schedule, speakers, who should attend, contact number). The `/cme/` hero is the photo at `CME.heroImage` in `cme.ts` (`public/wp-content/uploads/2026/11/samanvayam-hero.webp`); replace the file or change the path to use another image.
+
 ## Conventions
 - No component framework: server-rendered `.astro`. Header, Footer and SiteHead are shared components; the five legacy Elementor page bodies are still verbatim markup (styled by the purged legacy CSS bundles) and only worth componentizing as a deliberate, separate refactor.
 - Images live under `public/wp-content/uploads/<year>/<month>/...webp`, matching the old WordPress upload path structure so existing hardcoded references keep working.

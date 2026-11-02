@@ -1,0 +1,38 @@
+---
+/**
+ * Homepage teaser for Samanvayam 2026 (Sampada CME): a compact banner under the hero.
+ * The whole banner links to the dedicated page (/cme/), which carries the full details and the registration form.
+ * Content comes from src/data/cme.ts. Renders nothing once the event is over.
+ */
+import '../styles/site.css';
+import '../styles/cme.css';
+import { CME, cmeIsOver } from '../data/cme';
+const [first, ...rest] = CME.name.split(' ');
+---
+{!cmeIsOver && (
+  <div class="svr-page cme-scope">
+    <section class="cme-teaser" aria-label={`${CME.name}, ${CME.series}`}>
+      <div class="svr-wrap cme-teaser__in">
+        <div class="cme__orb cme__orb--sm cme-teaser__mark">
+          <img src={CME.emblem} alt="" width="400" height="400" />
+        </div>
+        <div class="cme-teaser__text">
+          <p class="cme-teaser__eyebrow">{CME.series} &middot; For doctors &middot; Free registration</p>
+          <h2 class="cme-teaser__title">
+            <a class="cme-teaser__stretch" href={CME.path}>{first}{" "}<em>{rest.join(' ')}</em></a>
+          </h2>
+          <p class="cme-teaser__theme">&ldquo;{CME.theme}&rdquo;</p>
+          <ul class="cme-teaser__meta">
+            <li>{CME.dateShort}</li>
+            <li>{CME.timeLabel}</li>
+            <li>{CME.venue}, Tirur</li>
+          </ul>
+        </div>
+        <div class="cme-teaser__cta">
+          <a class="cme-btn cme-btn--mint" href={CME.path}>View details <span aria-hidden="true">&rarr;</span></a>
+          <a class="cme-teaser__reg" href={`${CME.path}#register`}>Register free</a>
+        </div>
+      </div>
+    </section>
+  </div>
+)}

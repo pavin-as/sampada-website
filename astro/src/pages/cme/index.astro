@@ -1,0 +1,331 @@
+---
+/**
+ * Registration page for Samanvayam 2026 (Sampada CME).
+ * The QR code on the brochure points here (https://sampadavr.com/cme/).
+ * Event details live in src/data/cme.ts; submissions go to a Google Apps Script endpoint (REGISTRATION_ENDPOINT).
+ * Styled to the Sampada brand guidelines. Kept out of search results and the sitemap: invitation-only event.
+ */
+import { existsSync } from 'node:fs';
+import { join } from 'node:path';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import SiteHead from '../../components/SiteHead.astro';
+import CmeProgramme from '../../components/CmeProgramme.astro';
+import CmeSpeakers from '../../components/CmeSpeakers.astro';
+import '../../styles/site.css';
+import '../../styles/cme.css';
+import { SITE } from '../../data/site';
+import { CME, CME_AUDIENCE, FORM_SPECIALITIES, REGISTRATION_ENDPOINT, cmeIsOver, cmeCalendar } from '../../data/cme';
+
+const [first, ...rest] = CME.name.split(' ');
+const TITLE = `Register: ${CME.name} | ${CME.series} | Sampada VR`;
+const DESC = `Free registration for ${CME.name}, a multidisciplinary clinical update by Sampada VR on ${CME.dateLabel}, ${CME.timeLabel}, at ${CME.venue}, ${CME.place}.`;
+const URL = `${SITE}${CME.path}`;
+const cal = cmeCalendar(SITE);
+const hasPhoto = existsSync(join(process.cwd(), 'public', CME.heroImage));
+const config = {
+  endpoint: REGISTRATION_ENDPOINT,
+  waNumber: CME.phoneTel.replace('+', ''),
+  event: CME.name,
+  when: `${CME.dateShort}, ${CME.timeLabel}`,
+  where: `${CME.venue}, ${CME.place}`,
+};
+---
+<!DOCTYPE html>
+<html lang="en-IN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{TITLE}</title>
+  <meta name="description" content={DESC} />
+  <meta name="robots" content="noindex, follow" />
+  <link rel="canonical" href={URL} />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Sampada VR Speciality Eye Care" />
+  <meta property="og:title" content={`${CME.name}: ${CME.series}`} />
+  <meta property="og:description" content={`${CME.theme}. ${CME.dateShort}, ${CME.timeLabel}, ${CME.venue}, ${CME.place}. Free registration.`} />
+  <meta property="og:url" content={URL} />
+  <meta property="og:image" content={`${SITE}${CME.ogImage}`} />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content={`${SITE}${CME.ogImage}`} />
+  <SiteHead extraFamilies={['Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500', 'DM+Sans:wght@400;500;600', 'Noto+Sans+Malayalam:wght@600']} />
+</head>
+<body>
+  <Header />
+  <main class="svr-page cme-scope">
+    <section class:list={['cme-hero', { 'has-photo': hasPhoto }]} style={hasPhoto ? `--hero:url('${CME.heroImage}')` : undefined}>
+      <div class="svr-wrap cme-hero__in">
+        <div class="cme-hero__text">
+          <div class="cme-hero__mark"><div class="cme__orb cme__orb--sm"><img src={CME.emblem} alt="Samanvayam emblem" width="400" height="400" /></div></div>
+          <p class="cme__badge"><span class="cme__dot" aria-hidden="true"></span>{CME.series} &middot; Doctor registration</p>
+          <h1>{first}{" "}<em>{rest.join(' ')}</em></h1>
+          <p class="cme__ml" lang="ml">{CME.malayalam}</p>
+          <p class="cme__theme">&ldquo;{CME.theme}&rdquo;</p>
+          <p class="cme-hero__kind">{CME.kind}</p>
+          <ul class="cme-chips">
+            <li>{CME.dateShort}</li>
+            <li>{CME.timeLabel}</li>
+            <li><a href={CME.mapUrl} target="_blank" rel="noopener">{CME.venue}, Tirur</a></li>
+            <li class="is-free">Registration: {CME.fee}</li>
+          </ul>
+          {!cmeIsOver && <p class="cme-hero__cta"><a class="cme-btn cme-btn--mint" href="#register">Register now <span aria-hidden="true">&darr;</span></a></p>}
+        </div>
+      </div>
+    </section>
+
+    <div class="cme-body"><div class="svr-wrap cme-wrap">
+      <div class="cme-reg">
+        <div class="cme-card" id="register">
+          {cmeIsOver ? (
+            <div class="cme-closed">
+              <h2>Registration is closed</h2>
+              <p class="cme-card__sub">Thank you for your interest in {CME.name}. We look forward to seeing you at our next programme.</p>
+              <p><a class="cme-btn cme-btn--outline-ink" href="/">Back to home</a></p>
+            </div>
+          ) : (
+            <>
+              <div id="cme-formwrap">
+                <h2>Register for the evening</h2>
+                <p class="cme-card__sub">Takes about a minute. Please fill in your details below.</p>
+                <p class="cme-fee">Registration fee: {CME.fee}</p>
+
+                <form class="cme-form" id="cme-form" novalidate data-config={JSON.stringify(config)}>
+                  <div class="cme-field" data-field="name">
+                    <label for="f-name">Doctor&rsquo;s full name <span class="req" aria-hidden="true">*</span></label>
+                    <input id="f-name" name="name" type="text" autocomplete="name" placeholder="Enter your full name" required />
+                    <p class="cme-err">Please enter your full name.</p>
+                  </div>
+
+                  <fieldset class="cme-field" data-field="speciality">
+                    <legend>Medical speciality <span class="req" aria-hidden="true">*</span></legend>
+                    <div class="cme-opts">
+                      {FORM_SPECIALITIES.map((s) => (
+                        <label class="cme-opt"><input type="radio" name="speciality" value={s} required /><span>{s}</span></label>
+                      ))}
+                    </div>
+                    <div class="cme-other" id="cme-other">
+                      <input id="f-other" name="otherSpeciality" type="text" placeholder="Please specify your speciality" aria-label="Your speciality" />
+                    </div>
+                    <p class="cme-err">Please choose your speciality.</p>
+                  </fieldset>
+
+                  <div class="cme-field" data-field="hospital">
+                    <label for="f-hospital">Hospital / Clinic name <span class="req" aria-hidden="true">*</span></label>
+                    <input id="f-hospital" name="hospital" type="text" autocomplete="organization" placeholder="Hospital or clinic" required />
+                    <p class="cme-err">Please enter your hospital or clinic name.</p>
+                  </div>
+
+                  <div class="cme-field" data-field="mobile">
+                    <label for="f-mobile">Mobile number <span class="req" aria-hidden="true">*</span></label>
+                    <input id="f-mobile" name="mobile" type="tel" inputmode="numeric" autocomplete="tel" placeholder="10-digit mobile number" required />
+                    <p class="cme-err">Please enter a valid 10-digit mobile number.</p>
+                  </div>
+
+                  <div class="cme-field" data-field="email">
+                    <label for="f-email">Email address <span class="opt">(optional)</span></label>
+                    <input id="f-email" name="email" type="email" autocomplete="email" placeholder="doctor@example.com" />
+                    <p class="cme-err">That email address doesn&rsquo;t look right.</p>
+                  </div>
+
+                  <div class="cme-hp" aria-hidden="true"><label>Leave this empty<input type="text" name="website" tabindex="-1" autocomplete="off" /></label></div>
+
+                  <button class="cme-btn cme-btn--mint cme-submit" type="submit" id="cme-submit">Register now</button>
+                  <p class="cme-status" id="cme-status" role="status" aria-live="polite"></p>
+                  <p class="cme-fine">By invitation. Your details are used only to organise this programme.</p>
+                </form>
+              </div>
+
+              <div class="cme-done" id="cme-done" hidden>
+                <div class="cme-done__tick" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" width="34" height="34"><path fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" d="m5 12.5 4.5 4.5L19 7.5"/></svg>
+                </div>
+                <h2 id="cme-done-h">You&rsquo;re registered</h2>
+                <p id="cme-done-p">Thank you. We look forward to welcoming you.</p>
+                <div class="cme-done__sum" id="cme-done-sum"></div>
+                <div class="cme-done__actions" id="cme-done-actions">
+                  <a class="cme-btn cme-btn--mint" id="cme-wa" href="#" target="_blank" rel="noopener" hidden>Send on WhatsApp</a>
+                  <a class="cme-btn cme-btn--mint" href={cal.google} target="_blank" rel="noopener">Add to Google Calendar</a>
+                  <a class="cme-btn cme-btn--outline-ink" href={cal.icsHref} download="samanvayam-2026.ics">Download .ics</a>
+                  <a class="cme-btn cme-btn--outline-ink" href={CME.mapUrl} target="_blank" rel="noopener">Venue on map</a>
+                </div>
+              </div>
+            </>
+          )}
+        </div>
+
+        <aside class="cme-side" aria-label="About the programme">
+          <div class="cme-panel">
+            <h2>About the evening</h2>
+            <p class="cme-panel__p">{CME.about}</p>
+            <ul class="cme-aud cme-aud--light">
+              {CME_AUDIENCE.map((a) => <li>{a}</li>)}
+            </ul>
+          </div>
+          <div class="cme-panel">
+            <h2>Speakers</h2>
+            <CmeSpeakers compact />
+          </div>
+          <div class="cme-panel">
+            <h2>Programme schedule</h2>
+            <p class="cme-panel__p">{CME.dateShort} &middot; {CME.timeLabel}</p>
+            <CmeProgramme />
+          </div>
+          <div class="cme-panel cme-qr">
+            <img src={CME.qr} alt={`QR code that opens the ${CME.name} registration form`} width="148" height="148" loading="lazy" />
+            <div>
+              <h2>Scan to register</h2>
+              <p>Reading this on a computer? Scan with your phone camera to open the registration form.</p>
+            </div>
+          </div>
+          <div class="cme-panel cme-venue">
+            <h2>Venue</h2>
+            <p><strong>{CME.venue}</strong><br />{CME.place}</p>
+            <p><a class="cme-btn cme-btn--outline-ink" href={CME.mapUrl} target="_blank" rel="noopener">Open in Google Maps</a></p>
+            <p class="cme-help">Questions? Call or WhatsApp <a href={`tel:${CME.phoneTel}`}>{CME.phoneDisplay}</a>.</p>
+          </div>
+        </aside>
+      </div>
+    </div></div>
+  </main>
+  <Footer />
+
+  <script>
+    const form = document.getElementById('cme-form') as HTMLFormElement | null;
+    if (form) {
+      const cfg = JSON.parse(form.dataset.config || '{}');
+      const $ = (id: string) => document.getElementById(id) as HTMLElement;
+      const submitBtn = $('cme-submit') as HTMLButtonElement;
+      const status = $('cme-status');
+      const other = $('cme-other');
+      const otherInput = $('f-other') as HTMLInputElement;
+
+      form.querySelectorAll<HTMLInputElement>('input[name=speciality]').forEach((r) =>
+        r.addEventListener('change', () => {
+          const isOther = (form.elements.namedItem('speciality') as RadioNodeList).value === 'Other';
+          other.classList.toggle('is-on', isOther);
+          if (isOther) otherInput.focus();
+        }),
+      );
+
+      const normMobile = (v: string) => {
+        let d = v.replace(/\D/g, '');
+        if (d.length === 12 && d.startsWith('91')) d = d.slice(2);
+        if (d.length === 11 && d.startsWith('0')) d = d.slice(1);
+        return d;
+      };
+      const setErr = (name: string, bad: boolean) => form.querySelector(`[data-field=${name}]`)?.classList.toggle('has-err', bad);
+      const val = (n: string) => ((form.elements.namedItem(n) as HTMLInputElement | RadioNodeList)?.value ?? '').toString().trim();
+
+      form.addEventListener('input', (e) => {
+        const f = (e.target as HTMLElement).closest('[data-field]');
+        f?.classList.remove('has-err');
+      });
+
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        status.textContent = '';
+        status.classList.remove('is-err');
+        if (val('website')) return; // honeypot
+
+        const mobile = normMobile(val('mobile'));
+        const email = val('email');
+        const speciality = val('speciality');
+        const checks: Record<string, boolean> = {
+          name: val('name').length < 2,
+          speciality: !speciality || (speciality === 'Other' && !val('otherSpeciality')),
+          hospital: val('hospital').length < 2,
+          mobile: !/^\d{10}$/.test(mobile),
+          email: email !== '' && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email),
+        };
+        Object.entries(checks).forEach(([k, bad]) => setErr(k, bad));
+        const firstBad = Object.keys(checks).find((k) => checks[k]);
+        if (firstBad) {
+          const el = form.querySelector(`[data-field=${firstBad}]`) as HTMLElement;
+          el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          (el.querySelector('input') as HTMLInputElement | null)?.focus({ preventScroll: true });
+          return;
+        }
+
+        const data = {
+          name: val('name'),
+          speciality: speciality === 'Other' ? `Other: ${val('otherSpeciality')}` : speciality,
+          hospital: val('hospital'),
+          mobile,
+          email,
+          page: location.href,
+        };
+
+        const waText = [
+          `Registration: ${cfg.event}`,
+          `Doctor's name: ${data.name}`,
+          `Speciality: ${data.speciality}`,
+          `Hospital/Clinic: ${data.hospital}`,
+          `Mobile: ${data.mobile}`,
+          `Email: ${data.email || '-'}`,
+        ].join('\n');
+        const waHref = `https://wa.me/${cfg.waNumber}?text=${encodeURIComponent(waText)}`;
+
+        const showDone = (mode: 'recorded' | 'duplicate' | 'whatsapp') => {
+          const h = $('cme-done-h');
+          const p = $('cme-done-p');
+          const wa = $('cme-wa') as HTMLAnchorElement;
+          if (mode === 'whatsapp') {
+            h.textContent = 'One last step';
+            p.textContent = 'Tap the button to send your details to us on WhatsApp. Your registration is confirmed once we receive that message.';
+            wa.href = waHref;
+            wa.hidden = false;
+          } else {
+            h.textContent = mode === 'duplicate' ? 'You’re already registered' : 'You’re registered';
+            p.textContent = mode === 'duplicate'
+              ? 'We already have a registration for this mobile number. See you there.'
+              : 'Thank you. We look forward to welcoming you.';
+            wa.hidden = true;
+          }
+          const sum = $('cme-done-sum');
+          sum.innerHTML = '';
+          const rows: [string, string][] = [
+            ['Doctor', data.name], ['Speciality', data.speciality], ['Hospital / Clinic', data.hospital],
+            ['When', cfg.when], ['Where', cfg.where],
+          ];
+          rows.forEach(([k, v]) => {
+            const d = document.createElement('div');
+            const s = document.createElement('strong');
+            s.textContent = `${k}: `;
+            d.append(s, document.createTextNode(v));
+            sum.appendChild(d);
+          });
+          $('cme-formwrap').hidden = true;
+          $('cme-done').hidden = false;
+          $('register').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        };
+
+        if (!cfg.endpoint) {
+          showDone('whatsapp');
+          window.open(waHref, '_blank', 'noopener');
+          return;
+        }
+
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Submitting…';
+        try {
+          // A string body is sent as text/plain, which avoids a CORS preflight against Apps Script.
+          const res = await fetch(cfg.endpoint, { method: 'POST', body: JSON.stringify(data) });
+          const out = await res.json();
+          if (!out.ok) throw new Error(out.error || 'Registration failed');
+          showDone(out.duplicate ? 'duplicate' : 'recorded');
+        } catch (err) {
+          status.classList.add('is-err');
+          status.textContent = 'We could not submit this just now. Please try again, or ';
+          const a = document.createElement('a');
+          a.href = waHref; a.target = '_blank'; a.rel = 'noopener';
+          a.textContent = 'send your details on WhatsApp';
+          status.append(a, document.createTextNode('.'));
+        } finally {
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'Register now';
+        }
+      });
+    }
+  </script>
+</body>
+</html>

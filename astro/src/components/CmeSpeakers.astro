@@ -1,0 +1,28 @@
+---
+/** Speaker cards. Confirmed speakers show photo, name, role and talk; the rest show a "To be announced" placeholder. */
+import { CME_SPEAKERS } from '../data/cme';
+interface Props { compact?: boolean }
+const { compact = false } = Astro.props;
+---
+<ul class:list={['cme-speakers', { 'cme-speakers--compact': compact }]}>
+  {CME_SPEAKERS.map((s) => (
+    <li class:list={['cme-speaker', { 'is-tba': !s.confirmed }]}>
+      <div class="cme-speaker__avatar">
+        {s.confirmed && s.photo ? (
+          <img src={s.photo} alt={s.name} width="120" height="120" loading="lazy" />
+        ) : (
+          <svg viewBox="0 0 24 24" width="34" height="34" aria-hidden="true" focusable="false"><path fill="currentColor" d="M12 12a4.5 4.5 0 1 0 0-9 4.5 4.5 0 0 0 0 9Zm0 2c-4.1 0-7.5 2.2-7.5 5v1.5h15V19c0-2.8-3.4-5-7.5-5Z"/></svg>
+        )}
+      </div>
+      <div class="cme-speaker__body">
+        <p class="cme-speaker__tag">Session {s.session}</p>
+        <h3 class="cme-speaker__name">{s.confirmed ? s.name : 'To be announced'}</h3>
+        {s.confirmed && (
+          <p class="cme-speaker__role">{s.role}{s.org ? <><br />{s.org}</> : null}</p>
+        )}
+        {s.confirmed && s.topic && <p class="cme-speaker__topic">{s.topic}</p>}
+        {!s.confirmed && <p class="cme-speaker__role">Name will be shared soon</p>}
+      </div>
+    </li>
+  ))}
+</ul>

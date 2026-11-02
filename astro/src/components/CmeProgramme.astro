@@ -1,0 +1,19 @@
+---
+/** Evening schedule for Samanvayam 2026, with times and (for scientific sessions) the speaker and topic. */
+import { CME_SCHEDULE, CME_SPEAKERS } from '../data/cme';
+---
+<ol class="cme-sched">
+  {CME_SCHEDULE.map((s) => {
+    const sp = s.session ? CME_SPEAKERS.find((x) => x.session === s.session) : undefined;
+    return (
+      <li class:list={['cme-sched__row', { 'is-talk': Boolean(s.session) }]}>
+        <span class="cme-sched__time">{s.time}</span>
+        <div class="cme-sched__body">
+          <h3 class="cme-sched__t">{s.title}{sp?.confirmed && sp.name ? <span class="cme-sched__by"> &middot; {sp.name}</span> : null}</h3>
+          {s.note && <p class="cme-sched__d">{s.note}</p>}
+          {sp?.confirmed && sp.topic && <p class="cme-sched__d">{sp.topic}</p>}
+        </div>
+      </li>
+    );
+  })}
+</ol>

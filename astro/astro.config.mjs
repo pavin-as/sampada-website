@@ -2,8 +2,8 @@
 import sitemap from '@astrojs/sitemap';
 import { defineConfig } from 'astro/config';
 
-// Internal staff/tool redirect pages: they must stay out of the public sitemap.
-const INTERNAL_PATHS = ['/akshay/', '/content/', '/inventory/', '/queue/', '/sudarshan/', '/syamili/', '/wellness/'];
+// Internal staff/tool pages and the invitation-only CME registration page (/cme/): they must stay out of the public sitemap.
+const INTERNAL_PATHS = ['/akshay/', '/cme/', '/content/', '/inventory/', '/queue/', '/sudarshan/', '/syamili/', '/wellness/'];
 
 // https://astro.build/config
 export default defineConfig({
