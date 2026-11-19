@@ -1,0 +1,42 @@
+---
+/**
+ * Homepage "Our Activities" strip: the three most recent editions across all programmes (upcoming ones first-class,
+ * marked "Upcoming"), plus a link to the full list. Replaces the old time-limited Samanvayam banner: nothing needs
+ * removing when an event ends, because the strip is driven by dates in src/data/activities.ts.
+ */
+import '../styles/site.css';
+import '../styles/activities.css';
+import ActCard from './activities/ActCard.astro';
+import { FREQUENCY_LABEL, UI, pick, editionLink, isUpcoming, recentEditions } from '../data/activities';
+const items = recentEditions(3);
+---
+{items.length > 0 && (
+  <div class="svr-page act">
+    <section class="svr-sec svr-sec--cream act-sec" id="activities" aria-labelledby="home-act-h">
+      <div class="svr-wrap">
+        <div class="svr-ig__head">
+          <div>
+            <span class="svr-eyebrow">{pick(UI.eyebrow, 'en')}</span>
+            <h2 class="svr-h2" id="home-act-h" style="margin:0">{pick(UI.pageTitle, 'en')}</h2>
+          </div>
+          <a class="svr-btn svr-btn--outline" href="/activities/">{pick(UI.viewAll, 'en')}</a>
+        </div>
+        <ul class="act-grid">
+          {items.map(({ series, edition }) => (
+            <ActCard
+              href={editionLink(series, edition, 'en')}
+              title={pick(edition.title, 'en')}
+              image={edition.cover ?? series.cover}
+              tags={[
+                isUpcoming(edition) ? { label: pick(UI.upcoming, 'en'), tone: 'upcoming' as const } : { label: pick(FREQUENCY_LABEL[series.frequency], 'en') },
+              ]}
+              meta={pick(edition.dateLabel, 'en')}
+              summary={pick(edition.summary, 'en')}
+              cta={pick(UI.viewDetails, 'en')}
+            />
+          ))}
+        </ul>
+      </div>
+    </section>
+  </div>
+)}

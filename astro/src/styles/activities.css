@@ -1,0 +1,140 @@
+/* ==========================================================================
+   "Our Activities": /activities/, /ml/activities/ and the homepage strip.
+   Two looks, both scoped under .svr-page:
+     .act--site   main site (navy / orange, DM Serif Display + Poppins): index and series pages, homepage strip
+     .act--event  Samanvayam brand (Mint / Ink, Cormorant Garamond + DM Sans): edition archive pages.
+                  Reuses the .cme-* styles in cme.css (hero, panels, speakers, schedule).
+   ========================================================================== */
+
+/* ---------- card grid + card ---------- */
+.svr-page .act-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px;list-style:none;margin:0;padding:0}
+.svr-page .act-card{position:relative;display:flex;flex-direction:column;background:#fff;border:1px solid var(--line);border-radius:18px;overflow:hidden;transition:transform .22s ease,box-shadow .22s ease,border-color .22s ease}
+.svr-page .act-card[hidden]{display:none}
+.svr-page .act-card:hover{transform:translateY(-4px);box-shadow:0 18px 40px rgba(4,9,42,.12);border-color:#D9DDE8}
+.svr-page .act-card:focus-within{outline:3px solid var(--accent);outline-offset:3px}
+.svr-page .act-card__media{position:relative;aspect-ratio:16/10;background:var(--navy);overflow:hidden}
+.svr-page .act-card__media img{width:100%;height:100%;object-fit:cover;transition:transform .4s ease}
+.svr-page .act-card:hover .act-card__media img{transform:scale(1.04)}
+.svr-page .act-card__ph{width:100%;height:100%;display:grid;place-items:center;background:radial-gradient(500px 220px at 85% 0,rgba(242,135,56,.32),transparent 60%),var(--navy)}
+.svr-page .act-card__ph span{font-family:"DM Serif Display",Georgia,serif;font-size:76px;line-height:1;color:rgba(255,255,255,.9)}
+.svr-page .act-card__tags{position:absolute;left:14px;top:14px;display:flex;flex-wrap:wrap;gap:8px}
+.svr-page .act-tag{padding:5px 12px;border-radius:999px;background:rgba(255,255,255,.94);color:var(--navy);font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;line-height:1.4}
+.svr-page .act-tag--upcoming{background:var(--accent);color:#fff}
+.svr-page .act-tag--done{background:rgba(4,9,42,.82);color:#fff}
+.svr-page .act-card__body{display:flex;flex-direction:column;flex:1;padding:22px 24px 24px}
+.svr-page .act-card__title{font-size:26px;margin:0 0 6px}
+.svr-page .act-card__link{color:var(--navy)}
+.svr-page .act-card__link::after{content:"";position:absolute;inset:0;z-index:1}
+.svr-page .act-card__link:focus-visible{outline:none}
+.svr-page .act-card__meta{margin:0 0 10px;font-size:13.5px;font-weight:500;color:var(--accent-dk)}
+.svr-page .act-card__sum{margin:0 0 16px;font-size:15px;line-height:1.7;color:var(--muted)}
+.svr-page .act-card__cta{margin:auto 0 0;font-weight:600;font-size:14.5px;color:var(--navy)}
+.svr-page .act-card:hover .act-card__cta{color:var(--accent-dk)}
+
+/* ---------- filter chips ---------- */
+.svr-page .act-head{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:14px 24px;margin:0 0 30px}
+.svr-page .act-head .svr-h2{margin:0}
+.svr-page .act-chips{display:flex;flex-wrap:wrap;gap:8px}
+.svr-page .act-chip{font:inherit;font-size:14px;font-weight:600;padding:8px 18px;border-radius:999px;border:1.5px solid var(--line);background:#fff;color:var(--navy);cursor:pointer;transition:background .15s,color .15s,border-color .15s}
+.svr-page .act-chip:hover{border-color:var(--navy)}
+.svr-page .act-chip.is-on{background:var(--navy);border-color:var(--navy);color:#fff}
+.svr-page .act-chip:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+
+/* ---------- hero extras ---------- */
+.svr-page .act-hero{padding:64px 0 60px}
+.svr-page .act-hero__lang{margin:22px 0 0;font-size:14.5px}
+.svr-page .act-hero__lang a{color:#FFB37A;border-bottom:1px solid rgba(255,179,122,.5)}
+.svr-page .act-hero__lang a:hover{color:#fff;border-color:#fff}
+
+/* ---------- series page ---------- */
+.svr-page .act-split{display:grid;gap:48px;align-items:center}
+.svr-page .act-split.has-media{grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr)}
+.svr-page .act-split__img{width:100%;border-radius:18px;box-shadow:0 24px 50px rgba(4,9,42,.16);aspect-ratio:4/3;object-fit:cover}
+.svr-page .act-note{background:#fff;border:1px solid var(--line);border-radius:18px;padding:28px 30px;max-width:640px}
+.svr-page .act-note h3{font-size:26px;margin:0 0 8px}
+.svr-page .act-note p{margin:0 0 14px;color:var(--muted)}
+.svr-page .act-note__actions{display:flex;flex-wrap:wrap;gap:12px;margin:6px 0 0!important}
+.svr-page .act-note--next{margin-top:30px}
+.svr-page .act-log{list-style:none;margin:0;padding:0;border-top:1px solid var(--line)}
+.svr-page .act-log__row{display:grid;grid-template-columns:200px minmax(0,1fr);gap:8px 32px;padding:28px 0;border-bottom:1px solid var(--line)}
+.svr-page .act-log__date{font-weight:600;font-size:15px;color:var(--accent-dk)}
+.svr-page .act-log__body h3{font-size:24px;margin:0 0 6px}
+.svr-page .act-log__body p{color:var(--muted);margin:0 0 14px}
+
+/* ---------- gallery + lightbox ---------- */
+.svr-page .act-gal{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;list-style:none;margin:0;padding:0}
+.svr-page .act-gal__item.is-wide{grid-column:span 2;grid-row:span 2}
+.svr-page .act-gal__item a{display:block;height:100%;border-radius:14px;overflow:hidden;background:#E9EBEF;aspect-ratio:1}
+.svr-page .act-gal__item.is-wide a{aspect-ratio:auto}
+.svr-page .act-gal__item img{width:100%;height:100%;object-fit:cover;transition:transform .35s ease}
+.svr-page .act-gal__item a:hover img{transform:scale(1.05)}
+.svr-page .act-gal__item a:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+.act-lb{border:0;padding:0;background:transparent;width:100vw;height:100vh;max-width:none;max-height:none;color:#fff}
+.act-lb::backdrop{background:rgba(4,9,42,.92)}
+.act-lb[open]{display:grid;grid-template-columns:64px minmax(0,1fr) 64px;align-items:center;justify-items:center}
+.act-lb__fig{margin:0;grid-column:2;display:grid;gap:12px;justify-items:center;max-width:100%}
+.act-lb__fig img{max-width:100%;max-height:82vh;border-radius:10px;object-fit:contain}
+.act-lb__fig figcaption{font:500 14.5px/1.5 "Poppins",sans-serif;text-align:center;color:#D5D9E8;max-width:70ch}
+.act-lb__nav,.act-lb__x{font:inherit;color:#fff;background:rgba(255,255,255,.12);border:0;border-radius:50%;width:46px;height:46px;font-size:22px;line-height:1;cursor:pointer}
+.act-lb__nav:hover,.act-lb__x:hover{background:rgba(255,255,255,.26)}
+.act-lb__prev{grid-column:1;grid-row:1}
+.act-lb__next{grid-column:3;grid-row:1}
+.act-lb__x{position:absolute;top:18px;right:18px;font-size:30px}
+.act-lb button:focus-visible{outline:3px solid #FFB37A;outline-offset:2px}
+
+/* ---------- edition archive page (Samanvayam look) ---------- */
+.svr-page .act-ev-crumb{margin:0 0 26px;font-size:13.5px;color:rgba(255,255,255,.65)}
+.svr-page .act-ev-crumb a{color:rgba(255,255,255,.75);border-bottom:1px solid rgba(178,252,228,.35)}
+.svr-page .act-ev-crumb a:hover{color:var(--mint)}
+.svr-page .act-ev-lang{margin:22px 0 0;font-size:14.5px}
+.svr-page .act-ev-lang a{color:var(--mint);border-bottom:1px solid rgba(178,252,228,.5)}
+.svr-page .act-ev-lang a:hover{color:#fff}
+.svr-page .act-ev-body{padding-bottom:72px}
+.svr-page .act-ev-grid{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);gap:28px;align-items:start;margin-top:-52px;position:relative;z-index:2}
+.svr-page .act-pillars{display:flex;flex-wrap:wrap;gap:10px;margin:22px 0 0}
+.svr-page .act-pillars li{padding:8px 16px;border-radius:999px;background:var(--tint);border:1px solid var(--line);color:var(--mint-ink);font-size:12px;font-weight:600;letter-spacing:.14em;text-transform:uppercase}
+.svr-page .act-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px;margin:24px 0 0}
+.svr-page .act-stats div{padding:16px;border-radius:14px;background:var(--mist);border:1px solid var(--line)}
+.svr-page .act-stats dt{font-size:12px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--warm)}
+.svr-page .act-stats dd{margin:4px 0 0;font-family:"Cormorant Garamond",Georgia,serif;font-size:38px;line-height:1.1;color:var(--ink)}
+.svr-page .act-facts{display:grid;gap:14px;margin:0 0 22px}
+.svr-page .act-facts dt{font-size:11.5px;font-weight:500;letter-spacing:.2em;text-transform:uppercase;color:var(--mint-ink)}
+.svr-page .act-facts dd{margin:2px 0 0;font-size:15.5px;color:var(--ink)}
+.svr-page .act-facts dd a{color:var(--mint-ink);font-weight:600;border-bottom:1px solid var(--mint-ink);white-space:nowrap}
+.svr-page.cme-scope .act-facts__h{font-size:24px;margin:0 0 12px}
+.svr-page .act-ev-band.cme{padding:80px 0 72px}
+.svr-page .act-ev-gallery{background:#fff;padding:72px 0}
+.svr-page.cme-scope .act-ev-h{font-size:clamp(32px,4vw,44px);margin:0 0 26px}
+.svr-page .act-ev-next{background:var(--mist);padding:72px 0 88px}
+.svr-page .act-ev-cta{max-width:760px}
+.svr-page.cme-scope .act-ev-cta .cme__cta-t{font-size:34px;line-height:1.1;margin:0 0 10px}
+.svr-page .act-ev-cta__actions{display:flex;flex-wrap:wrap;gap:12px;margin:0!important}
+
+/* ---------- responsive ---------- */
+@media (max-width:1000px){
+  .svr-page .act-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .svr-page .act-ev-grid{grid-template-columns:1fr;margin-top:-40px}
+  .svr-page .act-split.has-media{grid-template-columns:1fr;gap:30px}
+  .svr-page .act-gal{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+@media (max-width:640px){
+  .svr-page .act-grid{grid-template-columns:1fr}
+  .svr-page .act-log__row{grid-template-columns:1fr}
+  .svr-page .act-gal{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .svr-page .act-hero{padding:48px 0 44px}
+  .svr-page .act-ev-band.cme{padding:60px 0 56px}
+  .act-lb[open]{grid-template-columns:44px minmax(0,1fr) 44px}
+  .act-lb__nav{width:38px;height:38px;font-size:18px}
+}
+@media (prefers-reduced-motion:reduce){
+  .svr-page .act-card,.svr-page .act-card__media img,.svr-page .act-gal__item img{transition:none}
+  .svr-page .act-card:hover{transform:none}
+}
+
+/* ---------- Malayalam pages: Noto Sans Malayalam throughout, no tracking or italics (they break the script) ---------- */
+html[lang="ml"] .svr-page.act.act :is(h1,h2,h3,h4,p,li,a,span,div,dt,dd,strong,em,button,figcaption){font-family:"Noto Sans Malayalam","Malayalam MN","Nirmala UI",sans-serif}
+html[lang="ml"] .svr-page.act.act :is(h1,h2,h3,h4){font-weight:600;line-height:1.35}
+html[lang="ml"] .svr-page.act.act *{letter-spacing:0;font-style:normal}
+html[lang="ml"] .svr-page.act.act :is(.act-tag,.act-pillars li,.act-facts dt,.act-stats dt,.cme__sub,.cme__badge,.cme-speaker__tag){text-transform:none}
+html[lang="ml"] .svr-page.act.act .cme-hero h1{font-size:clamp(38px,6vw,72px)}
+html[lang="ml"] .svr-page.act.act .cme__theme{font-size:clamp(20px,2.4vw,28px);line-height:1.5}

@@ -1,0 +1,111 @@
+---
+/** /activities/ and /ml/activities/: every programme Sampada runs, with filters by frequency and an "upcoming" strip. */
+import ActivityPage from '../../layouts/ActivityPage.astro';
+import ActCard from './ActCard.astro';
+import { SITE } from '../../data/site';
+import {
+  SERIES, FREQUENCY_LABEL, UI, pick, base, seriesHref, editionLink, latestEdition, isUpcoming, recentEditions, type Lang,
+} from '../../data/activities';
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const path = base(lang);
+const altPath = base(lang === 'en' ? 'ml' : 'en');
+
+const upcoming = recentEditions().filter(({ edition }) => isUpcoming(edition)).reverse();
+const freqs = (['yearly', 'monthly', 'once'] as const).filter((f) => SERIES.some((s) => s.frequency === f));
+
+const title = lang === 'ml'
+  ? 'ഞങ്ങളുടെ പ്രവർത്തനങ്ങൾ | സമ്പദ VR സ്പെഷ്യാലിറ്റി ഐ കെയർ, തിരൂർ'
+  : 'Our Activities | Camps, CME and Community Programmes | Sampada VR, Tirur';
+const description = pick(UI.pageLead, lang);
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org', '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: `${SITE}/` },
+      { '@type': 'ListItem', position: 2, name: pick(UI.pageTitle, lang), item: `${SITE}${path}` },
+    ],
+  },
+  {
+    '@context': 'https://schema.org', '@type': 'CollectionPage', name: pick(UI.pageTitle, lang), url: `${SITE}${path}`,
+    mainEntity: { '@type': 'ItemList', itemListElement: SERIES.map((s, i) => ({ '@type': 'ListItem', position: i + 1, name: pick(s.name, lang), url: `${SITE}${seriesHref(s, lang)}` })) },
+  },
+];
+---
+<ActivityPage title={title} description={description} lang={lang} path={path} altPath={altPath} jsonLd={jsonLd}>
+  <section class="svr-hero act-hero">
+    <div class="svr-wrap">
+      <nav class="svr-crumb" aria-label="Breadcrumb"><a href="/">Home</a> &rsaquo; {pick(UI.pageTitle, lang)}</nav>
+      <span class="svr-eyebrow">{pick(UI.eyebrow, lang)}</span>
+      <h1>{pick(UI.pageTitle, lang)}</h1>
+      <p class="svr-lead">{pick(UI.pageLead, lang)}</p>
+      <p class="act-hero__lang"><a href={altPath} hreflang={lang === 'en' ? 'ml' : 'en'} lang={lang === 'en' ? 'ml' : 'en'}>{pick(UI.toggle, lang)}</a></p>
+    </div>
+  </section>
+
+  {upcoming.length > 0 && (
+    <section class="svr-sec svr-sec--cream act-sec" aria-labelledby="act-up-h">
+      <div class="svr-wrap">
+        <h2 class="svr-h2" id="act-up-h">{pick(UI.upcoming, lang)}</h2>
+        <ul class="act-grid">
+          {upcoming.map(({ series, edition }) => (
+            <ActCard
+              href={editionLink(series, edition, lang)}
+              title={pick(edition.title, lang)}
+              image={edition.cover ?? series.cover}
+              tags={[{ label: pick(UI.upcoming, lang), tone: 'upcoming' }, { label: pick(FREQUENCY_LABEL[series.frequency], lang) }]}
+              meta={pick(edition.dateLabel, lang)}
+              summary={pick(edition.summary, lang)}
+              cta={pick(UI.viewDetails, lang)}
+            />
+          ))}
+        </ul>
+      </div>
+    </section>
+  )}
+
+  <section class="svr-sec act-sec" aria-labelledby="act-all-h">
+    <div class="svr-wrap">
+      <div class="act-head">
+        <h2 class="svr-h2" id="act-all-h">{pick(UI.allProgrammes, lang)}</h2>
+        {freqs.length > 1 && (
+          <div class="act-chips" role="group" aria-label="Filter" data-act-filter>
+            <button type="button" class="act-chip is-on" data-f="all" aria-pressed="true">{pick(UI.all, lang)}</button>
+            {freqs.map((f) => <button type="button" class="act-chip" data-f={f} aria-pressed="false">{pick(FREQUENCY_LABEL[f], lang)}</button>)}
+          </div>
+        )}
+      </div>
+      <ul class="act-grid" data-act-list>
+        {SERIES.map((s) => {
+          const last = latestEdition(s);
+          return (
+            <ActCard
+              href={seriesHref(s, lang)}
+              title={pick(s.name, lang)}
+              image={s.cover}
+              freq={s.frequency}
+              tags={[{ label: pick(FREQUENCY_LABEL[s.frequency], lang) }, ...(s.draft ? [{ label: 'Draft', tone: 'plain' as const }] : [])]}
+              meta={last ? `${pick(UI.latest, lang)}: ${pick(last.title, lang)}` : pick(s.audience, lang)}
+              summary={pick(s.tagline, lang)}
+              cta={pick(UI.viewDetails, lang)}
+            />
+          );
+        })}
+      </ul>
+    </div>
+  </section>
+
+  <script>
+    const bar = document.querySelector<HTMLElement>('[data-act-filter]');
+    if (bar) {
+      const cards = document.querySelectorAll<HTMLElement>('[data-act-list] > .act-card');
+      bar.addEventListener('click', (e) => {
+        const b = (e.target as HTMLElement).closest<HTMLButtonElement>('button[data-f]');
+        if (!b) return;
+        bar.querySelectorAll('button').forEach((x) => { x.classList.toggle('is-on', x === b); x.setAttribute('aria-pressed', String(x === b)); });
+        cards.forEach((c) => { c.hidden = b.dataset.f !== 'all' && c.dataset.freq !== b.dataset.f; });
+      });
+    }
+  </script>
+</ActivityPage>

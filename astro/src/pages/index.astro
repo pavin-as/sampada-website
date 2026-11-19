@@ -4,7 +4,7 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import SiteHead from '../components/SiteHead.astro';
 import TreatmentGrid from '../components/TreatmentGrid.astro';
-import CmeFeature from '../components/CmeFeature.astro';
+import ActivitiesStrip from '../components/ActivitiesStrip.astro';
 import '../styles/site.css';
 import { getCollection } from 'astro:content';
 import instagram from '../data/instagram.json';
@@ -441,7 +441,6 @@ const initials = (name) =>
 		</div>
 					</div>
 		</section>
-<CmeFeature />
 <section class="svr-intro" aria-labelledby="svr-intro-heading">
 	<div class="svr-intro__inner">
 		<h2 id="svr-intro-heading"><a href="/eye-hospital-in-tirur/" style="color:inherit;text-decoration:none">Eye Hospital in Tirur</a>, Malappuram District</h2>
@@ -586,6 +585,7 @@ const initials = (name) =>
 		</div>
 					</div>
 		</section>
+		<ActivitiesStrip />
 		<div class="svr-page">
 		<section class="svr-sec" id="latest-updates" aria-labelledby="home-updates-h">
 			<div class="svr-wrap">

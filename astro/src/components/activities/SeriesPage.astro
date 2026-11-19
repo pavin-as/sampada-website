@@ -1,0 +1,111 @@
+---
+/**
+ * /activities/<series>/ and /ml/activities/<series>/: what the programme is, then its editions.
+ * Yearly and one-time programmes show a card per edition (linking to its archive page);
+ * monthly programmes show a running log, with photos, on this page.
+ */
+import ActivityPage from '../../layouts/ActivityPage.astro';
+import ActCard from './ActCard.astro';
+import ActGallery from './ActGallery.astro';
+import { SITE, PHONE_DISPLAY, PHONE_TEL } from '../../data/site';
+import {
+  FREQUENCY_LABEL, UI, pick, base, seriesHref, editionLink, sortedEditions, isUpcoming, type Lang, type Series,
+} from '../../data/activities';
+interface Props { lang: Lang; series: Series }
+const { lang, series } = Astro.props;
+const path = seriesHref(series, lang);
+const altPath = seriesHref(series, lang === 'en' ? 'ml' : 'en');
+const editions = sortedEditions(series);
+const hasUpcoming = editions.some(isUpcoming);
+const name = pick(series.name, lang);
+const wa = `https://wa.me/${PHONE_TEL.replace('+', '')}`;
+
+const title = lang === 'ml'
+  ? `${name} | ഞങ്ങളുടെ പ്രവർത്തനങ്ങൾ | സമ്പദ VR`
+  : `${name} | Our Activities | Sampada VR, Tirur`;
+const jsonLd = [{
+  '@context': 'https://schema.org', '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: `${SITE}/` },
+    { '@type': 'ListItem', position: 2, name: pick(UI.pageTitle, lang), item: `${SITE}${base(lang)}` },
+    { '@type': 'ListItem', position: 3, name, item: `${SITE}${path}` },
+  ],
+}];
+---
+<ActivityPage title={title} description={pick(series.tagline, lang)} lang={lang} path={path} altPath={altPath} image={series.cover} jsonLd={jsonLd}>
+  <section class="svr-hero act-hero">
+    <div class="svr-wrap">
+      <nav class="svr-crumb" aria-label="Breadcrumb"><a href="/">Home</a> &rsaquo; <a href={base(lang)}>{pick(UI.pageTitle, lang)}</a> &rsaquo; {name}</nav>
+      <span class="svr-eyebrow">{pick(FREQUENCY_LABEL[series.frequency], lang)} &middot; {pick(series.audience, lang)}</span>
+      <h1>{name}</h1>
+      <p class="svr-lead">{pick(series.tagline, lang)}</p>
+      <p class="act-hero__lang"><a href={altPath} hreflang={lang === 'en' ? 'ml' : 'en'} lang={lang === 'en' ? 'ml' : 'en'}>{pick(UI.toggle, lang)}</a></p>
+    </div>
+  </section>
+
+  <section class="svr-sec act-sec" aria-labelledby="act-about-h">
+    <div class="svr-wrap">
+      <div class:list={['act-split', { 'has-media': Boolean(series.cover) }]}>
+        <div>
+          <h2 class="svr-h2" id="act-about-h">{pick(UI.about, lang)}</h2>
+          <p class="svr-lead">{pick(series.description, lang)}</p>
+        </div>
+        {series.cover && <img class="act-split__img" src={series.cover} alt="" width="800" height="600" loading="lazy" decoding="async" />}
+      </div>
+    </div>
+  </section>
+
+  <section class="svr-sec svr-sec--mist act-sec" aria-labelledby="act-ed-h">
+    <div class="svr-wrap">
+      <h2 class="svr-h2" id="act-ed-h">{pick(UI.pastEditions, lang)}</h2>
+
+      {editions.length === 0 && (
+        <div class="act-note">
+          <p>{series.emptyNote ? pick(series.emptyNote, lang) : pick(UI.noEditions, lang)}</p>
+          <p class="act-note__actions">
+            <a class="svr-btn svr-btn--primary" href={`tel:${PHONE_TEL}`}>{PHONE_DISPLAY}</a>
+            <a class="svr-btn svr-btn--outline" href={wa} rel="noopener">WhatsApp</a>
+          </p>
+        </div>
+      )}
+
+      {series.frequency !== 'monthly' && editions.length > 0 && (
+        <ul class="act-grid">
+          {editions.map((e) => (
+            <ActCard
+              href={editionLink(series, e, lang)}
+              title={pick(e.title, lang)}
+              image={e.cover ?? series.cover}
+              tags={[isUpcoming(e) ? { label: pick(UI.upcoming, lang), tone: 'upcoming' as const } : { label: pick(UI.completed, lang), tone: 'done' as const }]}
+              meta={pick(e.dateLabel, lang)}
+              summary={pick(e.summary, lang)}
+              cta={e.page ? pick(UI.viewDetails, lang) : pick(UI.viewAll, lang)}
+            />
+          ))}
+        </ul>
+      )}
+
+      {series.frequency === 'monthly' && editions.length > 0 && (
+        <ol class="act-log">
+          {editions.map((e) => (
+            <li class="act-log__row">
+              <div class="act-log__date">{pick(e.dateLabel, lang)}</div>
+              <div class="act-log__body">
+                <h3>{pick(e.title, lang)}</h3>
+                <p>{pick(e.summary, lang)}</p>
+                <ActGallery photos={e.photos} lang={lang} label={pick(e.title, lang)} />
+              </div>
+            </li>
+          ))}
+        </ol>
+      )}
+
+      {series.frequency === 'yearly' && !hasUpcoming && (
+        <div class="act-note act-note--next">
+          <h3>{pick(UI.nextTitle, lang)}</h3>
+          <p>{pick(UI.nextBody, lang)}</p>
+        </div>
+      )}
+    </div>
+  </section>
+</ActivityPage>

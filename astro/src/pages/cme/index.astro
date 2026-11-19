@@ -79,8 +79,11 @@ const config = {
           {cmeIsOver ? (
             <div class="cme-closed">
               <h2>Registration is closed</h2>
-              <p class="cme-card__sub">Thank you for your interest in {CME.name}. We look forward to seeing you at our next programme.</p>
-              <p><a class="cme-btn cme-btn--outline-ink" href="/">Back to home</a></p>
+              <p class="cme-card__sub">{CME.name} has taken place. Thank you to everyone who joined us. Samanvayam is held every year, and the next edition will be announced on our website.</p>
+              <p class="cme-closed__actions">
+                <a class="cme-btn cme-btn--mint" href="/activities/samanvayam/2026/">See the {CME.name} recap</a>
+                <a class="cme-btn cme-btn--outline-ink" href="/activities/samanvayam/">About Samanvayam</a>
+              </p>
             </div>
           ) : (
             <>

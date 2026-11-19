@@ -1,0 +1,164 @@
+---
+/**
+ * Archive page for one edition, e.g. /activities/samanvayam/2026/ and /ml/activities/samanvayam/2026/.
+ * Uses the Samanvayam mint/ink look. Everything comes from the edition in src/data/activities.ts,
+ * so the page stays correct after the registration data in src/data/cme.ts moves on to the next year.
+ */
+import { existsSync } from 'node:fs';
+import { join } from 'node:path';
+import ActivityPage from '../../layouts/ActivityPage.astro';
+import CmeProgramme from '../CmeProgramme.astro';
+import CmeSpeakers from '../CmeSpeakers.astro';
+import ActGallery from './ActGallery.astro';
+import { SITE, PHONE_DISPLAY, PHONE_TEL } from '../../data/site';
+import {
+  UI, pick, base, seriesHref, editionHref, isUpcoming, sortedEditions, type Lang, type Series, type Edition,
+} from '../../data/activities';
+interface Props { lang: Lang; series: Series; edition: Edition }
+const { lang, series, edition: e } = Astro.props;
+const path = editionHref(series, e, lang);
+const altPath = editionHref(series, e, lang === 'en' ? 'ml' : 'en');
+const title = pick(e.title, lang);
+const upcoming = isUpcoming(e);
+const [first, ...rest] = title.split(' ');
+const image = e.cover ?? series.cover;
+const hasPhoto = Boolean(image) && existsSync(join(process.cwd(), 'public', image as string));
+const wa = `https://wa.me/${PHONE_TEL.replace('+', '')}`;
+const isLatest = sortedEditions(series)[0]?.slug === e.slug;
+
+const rows = (e.schedule ?? []).map((r) => ({ time: r.time, title: pick(r.title, lang), note: r.note ? pick(r.note, lang) : undefined, session: r.session }));
+const speakers = e.speakers ?? [];
+const talks = speakers.map((s) => ({ session: s.session, name: s.name, topic: s.topic }));
+
+const pageTitle = lang === 'ml'
+  ? `${title} | ${pick(series.name, lang)} | സമ്പദ VR`
+  : `${title}: ${pick(e.theme ?? series.tagline, 'en')} | Sampada VR`;
+const description = pick(e.summary, lang);
+const jsonLd = [
+  {
+    '@context': 'https://schema.org', '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: `${SITE}/` },
+      { '@type': 'ListItem', position: 2, name: pick(UI.pageTitle, lang), item: `${SITE}${base(lang)}` },
+      { '@type': 'ListItem', position: 3, name: pick(series.name, lang), item: `${SITE}${seriesHref(series, lang)}` },
+      { '@type': 'ListItem', position: 4, name: title, item: `${SITE}${path}` },
+    ],
+  },
+  {
+    '@context': 'https://schema.org', '@type': 'Event',
+    name: title, description: pick(e.summary, 'en'),
+    startDate: e.startISO, ...(e.endISO ? { endDate: e.endISO } : {}),
+    eventStatus: 'https://schema.org/EventScheduled',
+    eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
+    location: { '@type': 'Place', name: pick(e.venue ?? { en: 'Tirur', ml: 'Tirur' }, 'en') },
+    organizer: { '@type': 'Organization', name: 'Sampada VR Speciality Eye Care', url: SITE },
+    ...(image ? { image: [`${SITE}${image}`] } : {}),
+  },
+];
+---
+<ActivityPage title={pageTitle} description={description} lang={lang} path={path} altPath={altPath} image={image} jsonLd={jsonLd} look="event">
+  <section class:list={['cme-hero', { 'has-photo': hasPhoto }]} style={hasPhoto ? `--hero:url('${image}')` : undefined}>
+    <div class="svr-wrap cme-hero__in">
+      <div class="cme-hero__text">
+        <nav class="act-ev-crumb" aria-label="Breadcrumb">
+          <a href={base(lang)}>{pick(UI.pageTitle, lang)}</a> &rsaquo; <a href={seriesHref(series, lang)}>{pick(series.name, lang)}</a>
+        </nav>
+        {series.emblem && <div class="cme-hero__mark"><div class="cme__orb cme__orb--sm"><img src={series.emblem} alt="" width="400" height="400" /></div></div>}
+        <p class="cme__badge"><span class="cme__dot" aria-hidden="true"></span>{upcoming ? pick(UI.upcoming, lang) : pick(UI.completed, lang)} &middot; {pick(UI.pageTitle, lang)}</p>
+        <h1>{first}{" "}<em>{rest.join(' ')}</em></h1>
+        {series.nameAlt && lang === 'en' && <p class="cme__ml" lang="ml">{series.nameAlt}</p>}
+        {e.theme && <p class="cme__theme">&ldquo;{pick(e.theme, lang)}&rdquo;</p>}
+        <ul class="cme-chips">
+          <li>{pick(e.dateLabel, lang)}</li>
+          {e.timeLabel && <li>{pick(e.timeLabel, lang)}</li>}
+          {e.venue && <li>{e.mapUrl ? <a href={e.mapUrl} target="_blank" rel="noopener">{pick(e.venue, lang).split(',')[0]}, Tirur</a> : pick(e.venue, lang)}</li>}
+        </ul>
+        {upcoming && e.registerHref && <p class="cme-hero__cta"><a class="cme-btn cme-btn--mint" href={e.registerHref}>{pick(UI.register, lang)} <span aria-hidden="true">&rarr;</span></a></p>}
+        <p class="act-ev-lang"><a href={altPath} hreflang={lang === 'en' ? 'ml' : 'en'} lang={lang === 'en' ? 'ml' : 'en'}>{pick(UI.toggle, lang)}</a></p>
+      </div>
+    </div>
+  </section>
+
+  <div class="cme-body act-ev-body"><div class="svr-wrap">
+    <div class="act-ev-grid">
+      <div class="cme-panel act-ev-about">
+        <h2>{pick(UI.about, lang)}</h2>
+        <p class="cme-panel__p">{pick(e.about ?? e.summary, lang)}</p>
+        {e.pillars && (
+          <ul class="act-pillars">{e.pillars.map((p) => <li>{pick(p, lang)}</li>)}</ul>
+        )}
+        {e.stats && e.stats.length > 0 && (
+          <dl class="act-stats" aria-label={pick(UI.highlights, lang)}>
+            {e.stats.map((s) => <div><dt>{pick(s.label, lang)}</dt><dd>{s.value}</dd></div>)}
+          </dl>
+        )}
+      </div>
+      <div class="cme-panel act-ev-facts">
+        <h2>{pick(UI.date, lang)} &amp; {pick(UI.venue, lang)}</h2>
+        <dl class="act-facts">
+          <div><dt>{pick(UI.date, lang)}</dt><dd>{pick(e.dateLabel, lang)}</dd></div>
+          {e.timeLabel && <div><dt>{pick(UI.time, lang)}</dt><dd>{pick(e.timeLabel, lang)}</dd></div>}
+          {e.venue && <div><dt>{pick(UI.venue, lang)}</dt><dd>{pick(e.venue, lang)}{e.mapUrl && <> <a href={e.mapUrl} target="_blank" rel="noopener">{pick(UI.viewMap, lang)}</a></>}</dd></div>}
+          {e.theme && <div><dt>{pick(UI.theme, lang)}</dt><dd>{pick(e.theme, lang)}</dd></div>}
+        </dl>
+        {e.audience && e.audience.length > 0 && (
+          <>
+            <h3 class="act-facts__h">{pick(UI.forWhom, lang)}</h3>
+            <ul class="cme-aud cme-aud--light">{e.audience.map((a) => <li>{pick(a, lang)}</li>)}</ul>
+          </>
+        )}
+      </div>
+    </div>
+  </div></div>
+
+  {(speakers.length > 0 || rows.length > 0) && (
+    <section class="cme act-ev-band" aria-label={`${pick(UI.speakers, lang)}, ${pick(UI.schedule, lang)}`}>
+      <div class="svr-wrap">
+        {speakers.length > 0 && (
+          <div>
+            <h2 class="cme__sub">{pick(UI.speakers, lang)}</h2>
+            <CmeSpeakers speakers={speakers} sessionLabel={pick(UI.session, lang)} tbaLabel={pick(UI.tba, lang)} />
+          </div>
+        )}
+        {rows.length > 0 && (
+          <div class="cme__block">
+            <h2 class="cme__sub">{pick(UI.schedule, lang)}</h2>
+            <CmeProgramme rows={rows} talks={talks} />
+          </div>
+        )}
+      </div>
+    </section>
+  )}
+
+  {e.photos.length > 0 && (
+    <section class="act-ev-gallery" aria-labelledby="act-gal-h">
+      <div class="svr-wrap">
+        <h2 id="act-gal-h" class="act-ev-h">{pick(UI.gallery, lang)}</h2>
+        <ActGallery photos={e.photos} lang={lang} label={pick(UI.gallery, lang)} />
+      </div>
+    </section>
+  )}
+
+  <section class="act-ev-next">
+    <div class="svr-wrap">
+      <div class="cme__cta act-ev-cta">
+        {series.frequency === 'yearly' && isLatest && !upcoming ? (
+          <>
+            <h2 class="cme__cta-t">{pick(UI.nextTitle, lang)}</h2>
+            <p class="cme__cta-d">{pick(UI.nextBody, lang)}</p>
+          </>
+        ) : (
+          <>
+            <h2 class="cme__cta-t">{pick(UI.askTitle, lang)}</h2>
+            <p class="cme__cta-d">{pick(UI.askBody, lang)}</p>
+          </>
+        )}
+        <p class="act-ev-cta__actions">
+          <a class="cme-btn cme-btn--ink" href={`tel:${PHONE_TEL}`}>{PHONE_DISPLAY}</a>
+          <a class="cme-btn cme-btn--outline-ink" href={wa} rel="noopener">WhatsApp</a>
+          <a class="cme-btn cme-btn--outline-ink" href={seriesHref(series, lang)}>&larr; {pick(series.name, lang)}</a>
+        </p>
+      </div>
+    </div>
+  </section>
+</ActivityPage>

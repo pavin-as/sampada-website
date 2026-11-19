@@ -1,0 +1,67 @@
+---
+/**
+ * Photo gallery with a simple lightbox (native <dialog>). Works without JS: each thumbnail is a plain link to the full image.
+ * Renders nothing when there are no photos.
+ */
+import { pick, UI, type Photo, type Lang } from '../../data/activities';
+interface Props { photos: Photo[]; lang: Lang; label?: string }
+const { photos, lang, label } = Astro.props;
+---
+{photos.length > 0 && (
+  <ul class="act-gal" data-act-gallery data-close={pick(UI.closeLabel, lang)} aria-label={label}>
+    {photos.map((p, i) => (
+      <li class:list={['act-gal__item', { 'is-wide': i === 0 && photos.length > 2 }]}>
+        <a href={p.src} data-alt={pick(p.alt, lang)} data-cap={p.caption ? pick(p.caption, lang) : ''}>
+          <img src={p.src} alt={pick(p.alt, lang)} loading="lazy" decoding="async" />
+        </a>
+      </li>
+    ))}
+  </ul>
+)}
+<script>
+  // One lightbox shared by every gallery on the page.
+  const galleries = document.querySelectorAll<HTMLElement>('[data-act-gallery]');
+  if (galleries.length) {
+    const dlg = document.createElement('dialog');
+    dlg.className = 'act-lb';
+    dlg.innerHTML =
+      '<button class="act-lb__x" type="button"></button>' +
+      '<button class="act-lb__nav act-lb__prev" type="button" aria-label="Previous">&larr;</button>' +
+      '<figure class="act-lb__fig"><img alt="" /><figcaption></figcaption></figure>' +
+      '<button class="act-lb__nav act-lb__next" type="button" aria-label="Next">&rarr;</button>';
+    document.body.appendChild(dlg);
+    const img = dlg.querySelector('img')!;
+    const cap = dlg.querySelector('figcaption')!;
+    const x = dlg.querySelector<HTMLButtonElement>('.act-lb__x')!;
+    let links: HTMLAnchorElement[] = [];
+    let i = 0;
+    const show = (n: number) => {
+      i = (n + links.length) % links.length;
+      const a = links[i];
+      img.src = a.href;
+      img.alt = a.dataset.alt || '';
+      cap.textContent = a.dataset.cap || a.dataset.alt || '';
+    };
+    galleries.forEach((g) => {
+      const mine = Array.from(g.querySelectorAll<HTMLAnchorElement>('a'));
+      g.addEventListener('click', (e) => {
+        const a = (e.target as HTMLElement).closest('a');
+        if (!a) return;
+        e.preventDefault();
+        links = mine;
+        x.textContent = '×';
+        x.setAttribute('aria-label', g.dataset.close || 'Close');
+        show(mine.indexOf(a as HTMLAnchorElement));
+        dlg.showModal();
+      });
+    });
+    dlg.addEventListener('click', (e) => { if (e.target === dlg) dlg.close(); });
+    x.addEventListener('click', () => dlg.close());
+    dlg.querySelector('.act-lb__prev')!.addEventListener('click', () => show(i - 1));
+    dlg.querySelector('.act-lb__next')!.addEventListener('click', () => show(i + 1));
+    dlg.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowLeft') show(i - 1);
+      if (e.key === 'ArrowRight') show(i + 1);
+    });
+  }
+</script>

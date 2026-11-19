@@ -1,0 +1,35 @@
+---
+/** One activity card (a series on /activities/, an edition on the homepage strip and upcoming list). The whole card is one link. */
+interface Tag { label: string; tone?: 'upcoming' | 'done' | 'plain' }
+interface Props {
+  href: string;
+  title: string;
+  tags?: Tag[];
+  image?: string;
+  /** Short line under the title, e.g. date and venue. */
+  meta?: string;
+  summary?: string;
+  cta: string;
+  /** Attribute used by the filter chips on /activities/. */
+  freq?: string;
+}
+const { href, title, tags = [], image, meta, summary, cta, freq } = Astro.props;
+---
+<li class="act-card" data-freq={freq}>
+  <div class="act-card__media">
+    {image
+      ? <img src={image} alt="" width="640" height="400" loading="lazy" decoding="async" />
+      : <div class="act-card__ph" aria-hidden="true"><span>{title.charAt(0)}</span></div>}
+    {tags.length > 0 && (
+      <ul class="act-card__tags">
+        {tags.map((t) => <li class:list={['act-tag', t.tone ? `act-tag--${t.tone}` : '']}>{t.label}</li>)}
+      </ul>
+    )}
+  </div>
+  <div class="act-card__body">
+    <h3 class="act-card__title"><a class="act-card__link" href={href}>{title}</a></h3>
+    {meta && <p class="act-card__meta">{meta}</p>}
+    {summary && <p class="act-card__sum">{summary}</p>}
+    <p class="act-card__cta">{cta} <span aria-hidden="true">&rarr;</span></p>
+  </div>
+</li>

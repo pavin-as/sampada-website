@@ -1,0 +1,11 @@
+---
+import EditionPage from '../../../../components/activities/EditionPage.astro';
+import { SERIES } from '../../../../data/activities';
+export function getStaticPaths() {
+  return SERIES.flatMap((series) =>
+    series.editions.filter((edition) => edition.page).map((edition) => ({ params: { series: series.slug, edition: edition.slug }, props: { series, edition } })),
+  );
+}
+const { series, edition } = Astro.props;
+---
+<EditionPage lang="ml" series={series} edition={edition} />

@@ -1,0 +1,9 @@
+---
+import SeriesPage from '../../../../components/activities/SeriesPage.astro';
+import { SERIES } from '../../../../data/activities';
+export function getStaticPaths() {
+  return SERIES.map((series) => ({ params: { series: series.slug }, props: { series } }));
+}
+const { series } = Astro.props;
+---
+<SeriesPage lang="ml" series={series} />

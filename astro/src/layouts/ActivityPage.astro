@@ -1,0 +1,68 @@
+---
+/**
+ * Shared shell for /activities/ and /ml/activities/ pages: head (title, canonical, hreflang, Open Graph, JSON-LD),
+ * header, footer and fonts. Pass `lang="ml"` for the Malayalam pages (loads Noto Sans Malayalam).
+ * Header and footer stay English on the Malayalam pages, as on the Malayalam blog.
+ */
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import SiteHead from '../components/SiteHead.astro';
+import '../styles/site.css';
+import '../styles/cme.css';
+import '../styles/activities.css';
+import { SITE } from '../data/site';
+import type { Lang } from '../data/activities';
+
+interface Props {
+  title: string;
+  description: string;
+  lang: Lang;
+  /** Path of this page in the current language, e.g. /activities/samanvayam/2026/ */
+  path: string;
+  /** Path of the same page in the other language. */
+  altPath: string;
+  image?: string;
+  jsonLd?: object[];
+  /** 'event' = Samanvayam mint/ink look (archive page); 'site' = main navy/orange look. */
+  look?: 'site' | 'event';
+}
+const { title, description, lang, path, altPath, image, jsonLd = [], look = 'site' } = Astro.props;
+const enPath = lang === 'en' ? path : altPath;
+const mlPath = lang === 'ml' ? path : altPath;
+const og = image ? `${SITE}${image}` : undefined;
+const families = look === 'event'
+  ? ['Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500', 'DM+Sans:wght@400;500;600']
+  : [];
+if (lang === 'ml') families.push('Noto+Sans+Malayalam:wght@400;500;600;700');
+---
+<!DOCTYPE html>
+<html lang={lang === 'ml' ? 'ml' : 'en-IN'}>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{title}</title>
+  <meta name="description" content={description} />
+  <meta name="robots" content="max-image-preview:large" />
+  <link rel="canonical" href={`${SITE}${path}`} />
+  <link rel="alternate" hreflang="en" href={`${SITE}${enPath}`} />
+  <link rel="alternate" hreflang="ml" href={`${SITE}${mlPath}`} />
+  <link rel="alternate" hreflang="x-default" href={`${SITE}${enPath}`} />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Sampada VR Speciality Eye Care" />
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:url" content={`${SITE}${path}`} />
+  {og && <meta property="og:image" content={og} />}
+  {og && <meta name="twitter:card" content="summary_large_image" />}
+  {og && <meta name="twitter:image" content={og} />}
+  <SiteHead extraFamilies={families} />
+  {jsonLd.map((d) => <script type="application/ld+json" set:html={JSON.stringify(d)} />)}
+</head>
+<body>
+  <Header />
+  <main class:list={['svr-page', 'act', look === 'event' ? 'cme-scope act--event' : 'act--site']}>
+    <slot />
+  </main>
+  <Footer />
+</body>
+</html>
