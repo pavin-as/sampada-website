@@ -7,9 +7,10 @@
 import ActivityPage from '../../layouts/ActivityPage.astro';
 import ActCard from './ActCard.astro';
 import ActGallery from './ActGallery.astro';
+import ActVideo from './ActVideo.astro';
 import { SITE, PHONE_DISPLAY, PHONE_TEL } from '../../data/site';
 import {
-  FREQUENCY_LABEL, UI, pick, base, seriesHref, editionLink, sortedEditions, isUpcoming, type Lang, type Series,
+  FREQUENCY_LABEL, UI, pick, base, seriesHref, editionLink, sortedEditions, isUpcoming, latestVideoEdition, videoJsonLd, type Lang, type Series,
 } from '../../data/activities';
 interface Props { lang: Lang; series: Series }
 const { lang, series } = Astro.props;
@@ -19,6 +20,8 @@ const editions = sortedEditions(series);
 const hasUpcoming = editions.some(isUpcoming);
 const name = pick(series.name, lang);
 const wa = `https://wa.me/${PHONE_TEL.replace('+', '')}`;
+// Highlights of the newest edition that has a video; next year's video replaces it automatically.
+const videoEd = latestVideoEdition(series);
 
 const title = lang === 'ml'
   ? `${name} | ഞങ്ങളുടെ പ്രവർത്തനങ്ങൾ | സമ്പദ VR`
@@ -30,7 +33,7 @@ const jsonLd = [{
     { '@type': 'ListItem', position: 2, name: pick(UI.pageTitle, lang), item: `${SITE}${base(lang)}` },
     { '@type': 'ListItem', position: 3, name, item: `${SITE}${path}` },
   ],
-}];
+}, ...(videoEd ? [videoJsonLd(videoEd, SITE)] : [])];
 ---
 <ActivityPage title={title} description={pick(series.tagline, lang)} lang={lang} path={path} altPath={altPath} image={series.cover} jsonLd={jsonLd}>
   <section class="svr-hero act-hero">
@@ -54,6 +57,18 @@ const jsonLd = [{
       </div>
     </div>
   </section>
+
+  {videoEd?.video && (
+    <section class="svr-sec svr-sec--navy act-sec act-sec--video" aria-labelledby="act-vid-h">
+      <div class="svr-wrap">
+        <div class="act-video-wrap">
+          <span class="svr-eyebrow act-video-eyebrow">{pick(videoEd.title, lang)}</span>
+          <h2 class="svr-h2" id="act-vid-h">{pick(UI.highlightsVideo, lang)}</h2>
+          <ActVideo video={videoEd.video} lang={lang} />
+        </div>
+      </div>
+    </section>
+  )}
 
   <section class="svr-sec svr-sec--mist act-sec" aria-labelledby="act-ed-h">
     <div class="svr-wrap">

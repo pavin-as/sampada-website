@@ -1,0 +1,48 @@
+---
+/**
+ * Click-to-play YouTube video. Shows a self-hosted poster with a play button; the YouTube player
+ * (youtube-nocookie.com, ~1 MB of JS and cookies) only loads after the visitor presses play.
+ * Without JS the button is a plain link to the video on YouTube.
+ */
+import { pick, UI, youtubeWatchUrl, type Lang, type Video } from '../../data/activities';
+interface Props { video: Video; lang: Lang }
+const { video, lang } = Astro.props;
+const title = pick(video.title, lang);
+const watch = youtubeWatchUrl(video.youtubeId);
+const m = video.duration?.match(/^PT(?:(\d+)M)?(?:(\d+)S)?$/);
+const length = m ? `${m[1] ?? 0}:${(m[2] ?? '0').padStart(2, '0')}` : '';
+---
+<figure class="act-video">
+  <div class="act-video__frame" data-act-video={video.youtubeId} data-title={title}>
+    <a class="act-video__play" href={watch} target="_blank" rel="noopener">
+      <img src={video.poster} alt="" width="1280" height="720" loading="lazy" decoding="async" />
+      <span class="act-video__btn">
+        <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M8 5.5v13l11-6.5z" fill="currentColor" /></svg>
+        <span>{pick(UI.playVideo, lang)}{length && <span class="act-video__len"> &middot; {length}</span>}</span>
+      </span>
+      <span class="act-video__sr">: {title}</span>
+    </a>
+  </div>
+  <figcaption class="act-video__cap">
+    {title} &middot; <a href={watch} target="_blank" rel="noopener">{pick(UI.watchOnYouTube, lang)}</a>
+  </figcaption>
+</figure>
+<script>
+  document.querySelectorAll<HTMLElement>('[data-act-video]').forEach((box) => {
+    const link = box.querySelector('a');
+    link?.addEventListener('click', (e) => {
+      // Let modified clicks (new tab, etc.) go to YouTube as normal.
+      if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return;
+      e.preventDefault();
+      const f = document.createElement('iframe');
+      f.src = `https://www.youtube-nocookie.com/embed/${box.dataset.actVideo}?autoplay=1&rel=0&playsinline=1`;
+      f.title = box.dataset.title || 'Video';
+      f.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen';
+      f.referrerPolicy = 'strict-origin-when-cross-origin';
+      f.allowFullscreen = true;
+      box.replaceChildren(f);
+      box.classList.add('is-playing');
+      f.focus();
+    });
+  });
+</script>

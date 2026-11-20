@@ -10,9 +10,10 @@ import ActivityPage from '../../layouts/ActivityPage.astro';
 import CmeProgramme from '../CmeProgramme.astro';
 import CmeSpeakers from '../CmeSpeakers.astro';
 import ActGallery from './ActGallery.astro';
+import ActVideo from './ActVideo.astro';
 import { SITE, PHONE_DISPLAY, PHONE_TEL } from '../../data/site';
 import {
-  UI, pick, base, seriesHref, editionHref, isUpcoming, sortedEditions, type Lang, type Series, type Edition,
+  UI, pick, base, seriesHref, editionHref, isUpcoming, sortedEditions, videoJsonLd, type Lang, type Series, type Edition,
 } from '../../data/activities';
 interface Props { lang: Lang; series: Series; edition: Edition }
 const { lang, series, edition: e } = Astro.props;
@@ -54,6 +55,7 @@ const jsonLd = [
     organizer: { '@type': 'Organization', name: 'Sampada VR Speciality Eye Care', url: SITE },
     ...(image ? { image: [`${SITE}${image}`] } : {}),
   },
+  ...(e.video ? [videoJsonLd(e, SITE)] : []),
 ];
 ---
 <ActivityPage title={pageTitle} description={description} lang={lang} path={path} altPath={altPath} image={image} jsonLd={jsonLd} look="event">
@@ -126,6 +128,15 @@ const jsonLd = [
             <CmeProgramme rows={rows} talks={talks} />
           </div>
         )}
+      </div>
+    </section>
+  )}
+
+  {e.video && (
+    <section class="act-ev-video" aria-labelledby="act-vid-h">
+      <div class="svr-wrap">
+        <h2 id="act-vid-h" class="act-ev-h">{pick(UI.highlightsVideo, lang)}</h2>
+        <ActVideo video={e.video} lang={lang} />
       </div>
     </section>
   )}

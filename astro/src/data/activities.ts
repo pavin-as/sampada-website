@@ -22,6 +22,18 @@ export type Frequency = 'yearly' | 'monthly' | 'once';
 export interface Photo { src: string; alt: L; caption?: L }
 export interface Stat { value: string; label: L }
 export interface ScheduleRow { time: string; title: L; note?: L; session?: number }
+/** A YouTube video, shown click-to-play (nothing loads from YouTube until the visitor presses play). */
+export interface Video {
+  /** The id in the YouTube link: youtu.be/<youtubeId> */
+  youtubeId: string;
+  title: L;
+  /** Self-hosted poster (webp under public/wp-content/uploads/...). */
+  poster: string;
+  /** ISO date the video was published on YouTube (for VideoObject JSON-LD). */
+  uploadDate: string;
+  /** ISO 8601 duration, e.g. 'PT5M57S'. */
+  duration?: string;
+}
 export interface Speaker { session: number; name: string; role: string; org: string; topic: string; photo?: string }
 
 export interface Edition {
@@ -46,6 +58,8 @@ export interface Edition {
   speakers?: Speaker[];
   /** Gallery. Empty until the photos are added. */
   photos: Photo[];
+  /** Highlights video. Also shown on the series page while this is the newest edition with a video. */
+  video?: Video;
   cover?: string;
   /** Build a dedicated archive page for this edition. */
   page: boolean;
@@ -108,6 +122,9 @@ export const UI = {
   speakers: { en: 'Speakers', ml: 'പ്രഭാഷകർ' },
   session: { en: 'Session', ml: 'സെഷൻ' },
   gallery: { en: 'Photos', ml: 'ചിത്രങ്ങൾ' },
+  highlightsVideo: { en: 'Watch the highlights', ml: 'ഹൈലൈറ്റുകൾ കാണുക' },
+  playVideo: { en: 'Play video', ml: 'വീഡിയോ പ്ലേ ചെയ്യുക' },
+  watchOnYouTube: { en: 'Watch on YouTube', ml: 'YouTube-ൽ കാണുക' },
   highlights: { en: 'At a glance', ml: 'ഒറ്റനോട്ടത്തിൽ' },
   nextTitle: { en: 'Next edition', ml: 'അടുത്ത പതിപ്പ്' },
   nextBody: {
@@ -204,6 +221,13 @@ const samanvayam2026: Edition = {
    * The gallery section stays hidden while this list is empty.
    */
   photos: [],
+  video: {
+    youtubeId: 'bWMKsD5QoEw',
+    title: { en: 'Samanvayam 2026 highlights', ml: 'സമന്വയം 2026 ഹൈലൈറ്റുകൾ' },
+    poster: `${U}/samanvayam-2026-highlights.webp`,
+    uploadDate: '2026-11-20T05:01:59-08:00',
+    duration: 'PT5M57S',
+  },
   cover: `${U}/samanvayam-hero.webp`,
   page: true,
 };
@@ -270,6 +294,26 @@ export function recentEditions(limit?: number) {
   const all = SERIES.flatMap((series) => series.editions.map((edition) => ({ series, edition })));
   all.sort((a, b) => Date.parse(b.edition.startISO) - Date.parse(a.edition.startISO));
   return limit ? all.slice(0, limit) : all;
+}
+
+/** The newest edition of a series that has a highlights video, if any. */
+export const latestVideoEdition = (s: Series) => sortedEditions(s).find((e) => e.video);
+
+export const youtubeWatchUrl = (id: string) => `https://www.youtube.com/watch?v=${id}`;
+
+/** schema.org VideoObject for an edition's video. */
+export function videoJsonLd(e: Edition, site: string) {
+  const v = e.video!;
+  return {
+    '@context': 'https://schema.org', '@type': 'VideoObject',
+    name: pick(v.title, 'en'),
+    description: pick(e.summary, 'en'),
+    thumbnailUrl: [`${site}${v.poster}`],
+    uploadDate: v.uploadDate,
+    ...(v.duration ? { duration: v.duration } : {}),
+    embedUrl: `https://www.youtube.com/embed/${v.youtubeId}`,
+    contentUrl: youtubeWatchUrl(v.youtubeId),
+  };
 }
 
 export function latestEdition(s: Series) {
