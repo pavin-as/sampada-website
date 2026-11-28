@@ -14,6 +14,8 @@ import { INSTAGRAM_URL, INSTAGRAM_HANDLE } from '../data/site';
 // category, date and URL come from the blog collection, and the build fails if a post goes missing.
 const blogPosts = await getCollection('blog');
 const featured = [
+  { slug: 'retina-health-warning-signs', title: 'Retina Health: Know the Warning Signs',
+    excerpt: 'Know which retina warning signs need immediate care.' },
   { slug: 'diabetic-retinopathy-retinal-imaging', title: 'Diabetic Retinopathy Screening in Tirur',
     excerpt: 'Diabetic eye damage is often silent. Quick, painless retinal imaging catches it early, before vision is affected.' },
   { slug: 'oct-essential-eye-exam-tool', title: 'OCT: The Essential Eye Exam Tool',
